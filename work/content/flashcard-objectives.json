@@ -1,0 +1,326 @@
+[
+  {
+    "id": "fc-manage-01",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure email notifications in Microsoft Defender XDR, including incidents, actions, and threat analytics"
+  },
+  {
+    "id": "fc-manage-02",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure alert notifications in Microsoft Defender XDR, including tuning, suppression, and correlation"
+  },
+  {
+    "id": "fc-manage-03",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure Microsoft Defender for Endpoint advanced features"
+  },
+  {
+    "id": "fc-manage-04",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure rules settings in Microsoft Defender for Endpoint"
+  },
+  {
+    "id": "fc-manage-05",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure custom data collection in Microsoft Defender for Endpoint"
+  },
+  {
+    "id": "fc-manage-06",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure security policies for Microsoft Defender for Endpoint, including attack surface reduction (ASR) rules"
+  },
+  {
+    "id": "fc-manage-07",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Manage automated investigation and response capabilities in Microsoft Defender XDR"
+  },
+  {
+    "id": "fc-manage-08",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure automatic attack disruption in Microsoft Defender XDR"
+  },
+  {
+    "id": "fc-manage-09",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure and manage device groups, permissions, and automation levels in Microsoft Defender for Endpoint"
+  },
+  {
+    "id": "fc-manage-10",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Create and configure automation rules in Microsoft Sentinel"
+  },
+  {
+    "id": "fc-manage-11",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Create and configure Microsoft Sentinel playbooks"
+  },
+  {
+    "id": "fc-manage-12",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Specify Microsoft Sentinel roles"
+  },
+  {
+    "id": "fc-manage-13",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Manage data retention for XDR and Microsoft Sentinel tables, including Analytics, Data lake, and XDR tiers"
+  },
+  {
+    "id": "fc-manage-14",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Create and configure Microsoft Sentinel workbooks"
+  },
+  {
+    "id": "fc-manage-15",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Optimize the Microsoft Sentinel platform, including SOC optimization recommendations"
+  },
+  {
+    "id": "fc-manage-16",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Select data connectors based on data source requirements, including Windows logs and security events"
+  },
+  {
+    "id": "fc-manage-17",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Configure collection of Windows Security events by using Windows Security Events via AMA, including data collection rules"
+  },
+  {
+    "id": "fc-manage-18",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Plan and configure collection of Windows Security events by using Windows Event Forwarding (WEF)"
+  },
+  {
+    "id": "fc-manage-19",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Plan and configure Syslog via AMA and Common Event Format (CEF) via AMA connectors"
+  },
+  {
+    "id": "fc-manage-20",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Configure collection of Azure activity logs by using Azure Policy and resource diagnostic settings"
+  },
+  {
+    "id": "fc-manage-21",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Ingest threat indicators into Microsoft Sentinel"
+  },
+  {
+    "id": "fc-manage-22",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Create custom log tables in the workspace to store ingested data"
+  },
+  {
+    "id": "fc-manage-23",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Create custom detection rules by using Advanced Hunting in Microsoft Defender XDR"
+  },
+  {
+    "id": "fc-manage-24",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Manage custom detection rules in Microsoft Defender XDR"
+  },
+  {
+    "id": "fc-manage-25",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Configure and manage analytics rules in Microsoft Sentinel SIEM, including scheduled, near-real time (NRT), threat intelligence, and machine learning"
+  },
+  {
+    "id": "fc-manage-26",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Analyze attack vector coverage by using the MITRE ATT&CK matrix"
+  },
+  {
+    "id": "fc-manage-27",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Configure anomalies in Microsoft Sentinel"
+  },
+  {
+    "id": "fc-respond-01",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate threats by using Microsoft Defender for Office 365, including automatic attack disruption"
+  },
+  {
+    "id": "fc-respond-02",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate threats or compromised entities identified by Microsoft Purview"
+  },
+  {
+    "id": "fc-respond-03",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate alerts and incidents identified by Microsoft Defender for Cloud workload protections"
+  },
+  {
+    "id": "fc-respond-04",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate security risks identified by Microsoft Defender for Cloud Apps"
+  },
+  {
+    "id": "fc-respond-05",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate compromised identities that are identified by Microsoft Entra ID"
+  },
+  {
+    "id": "fc-respond-06",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate security alerts from Microsoft Defender for Identity"
+  },
+  {
+    "id": "fc-respond-07",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate alerts and incidents identified by Microsoft Sentinel"
+  },
+  {
+    "id": "fc-respond-08",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate incidents by using agentic AI, including embedded Microsoft Security Copilot"
+  },
+  {
+    "id": "fc-respond-09",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate complex attacks, such as multi-stage, multi-domain, and lateral movement"
+  },
+  {
+    "id": "fc-respond-10",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Manage security incidents by using case management"
+  },
+  {
+    "id": "fc-respond-11",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Investigate device timelines"
+  },
+  {
+    "id": "fc-respond-12",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Perform actions on the device, including live response and collecting investigation packages"
+  },
+  {
+    "id": "fc-respond-13",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Perform evidence and entity investigation"
+  },
+  {
+    "id": "fc-respond-14",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Investigate and remediate incidents identified by automatic attack disruption"
+  },
+  {
+    "id": "fc-respond-15",
+    "domain": "respond",
+    "group": "Investigate Microsoft 365 activities to identify threats",
+    "front": "Investigate threats by using Microsoft Purview Audit"
+  },
+  {
+    "id": "fc-respond-16",
+    "domain": "respond",
+    "group": "Investigate Microsoft 365 activities to identify threats",
+    "front": "Investigate threats by using Content search in Microsoft Purview eDiscovery"
+  },
+  {
+    "id": "fc-respond-17",
+    "domain": "respond",
+    "group": "Investigate Microsoft 365 activities to identify threats",
+    "front": "Investigate threats by using Microsoft Graph activity logs"
+  },
+  {
+    "id": "fc-hunt-01",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Identify the appropriate table to use in a KQL query"
+  },
+  {
+    "id": "fc-hunt-02",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Identify threats by using Kusto Query Language (KQL)"
+  },
+  {
+    "id": "fc-hunt-03",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Create Advanced Hunting queries"
+  },
+  {
+    "id": "fc-hunt-04",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Interpret threat analytics in Microsoft Defender XDR"
+  },
+  {
+    "id": "fc-hunt-05",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Create hunting graphs, including blast radius"
+  },
+  {
+    "id": "fc-hunt-06",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Analyze relationships between entities by using Sentinel Graph"
+  },
+  {
+    "id": "fc-hunt-07",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Create and monitor hunting queries"
+  },
+  {
+    "id": "fc-hunt-08",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Create and manage KQL jobs in Data lake"
+  },
+  {
+    "id": "fc-hunt-09",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Create and manage Summary rule tables for querying"
+  },
+  {
+    "id": "fc-hunt-10",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Hunt for threats by using Notebooks, including connection to the Sentinel MCP Server"
+  }
+]

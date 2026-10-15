@@ -1,0 +1,27 @@
+{
+  "reviewed":"October 15, 2026",
+  "blueprintDate":"October 21, 2026",
+  "blueprint":"https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/sc-200",
+  "exam":"https://learn.microsoft.com/en-us/credentials/certifications/security-operations-analyst/",
+  "experience":"https://learn.microsoft.com/en-us/credentials/support/exam-duration-exam-experience",
+  "practice":"https://learn.microsoft.com/en-us/credentials/certifications/practice-assessments-for-microsoft-certifications",
+  "sandbox":"https://aka.ms/examdemo",
+  "labs":"https://microsoftlearning.github.io/SC-200T00A-Microsoft-Security-Operations-Analyst/",
+  "reddit":[
+    {"title":"A short post about passing SC-200","period":"October 2026 report","url":"https://www.reddit.com/r/AzureCertification/comments/1wx29m9/a_short_post_about_passing_sc200/","finding":"The author emphasized roles, permissions, scoping, and knowing the product workflows alongside KQL. This is one person's report, not a frequency estimate.","topics":["sentinel-rbac","endpoint-configuration","sentinel-automation"]},
+    {"title":"I passed the SC-200 exam! Here are some tips and tricks","period":"October 2026 report","url":"https://www.reddit.com/r/AzureCertification/comments/1wtspzk/i_passed_the_sc200_exam_here_are_some_tips_and/","finding":"The author described scenario-based tool selection and KQL, and warned that repeating practice questions can become memorization without learning the underlying mistakes.","topics":["kql-foundations","workbooks-optimization","sentinel-hunting-asim"]},
+    {"title":"SC-200 Passed — strategy for beginners","period":"September 2026 report","url":"https://www.reddit.com/r/AzureCertification/comments/1w4ez8g/sc200_passed_strategy_for_beginners/","finding":"This preparation account calls out KQL syntax and operators. It reinforces practicing query meaning instead of recognizing a saved answer.","topics":["kql-correlation","kql-dynamic-reuse"]},
+    {"title":"I passed SC-200 yesterday","period":"2026 report","url":"https://www.reddit.com/r/AzureCertification/comments/1tduiof/i_passed_sc200_yesterday/","finding":"The preparation account includes substantial KQL practice. Its usefulness is qualitative; study time and prior experience differ between candidates.","topics":["kql-foundations","hunting-schema"]},
+    {"title":"Passed the SC-200 recently. It was tough.","period":"2026 report","url":"https://www.reddit.com/r/AzureCertification/comments/1r78o16/passed_the_sc200_recently_it_was_tough/","finding":"The author reported nuanced scenarios and time pressure. Comments stress workflows, KQL construction, and networking fundamentals; comments are not independent exam samples.","topics":["kql-time-network","incident-triage","sentinel-cases"]},
+    {"title":"Passed the SC-200 — phew","period":"October 31, 2025","url":"https://www.reddit.com/r/microsoftcertified/comments/1okso47/passed_the_sc200_phew/","finding":"The author highlighted KQL, ASIM parsers, tenant practice, and pacing. This older report supports practice priorities but cannot establish current exam coverage.","topics":["sentinel-hunting-asim","kql-correlation"]},
+    {"title":"SC-200 PASSED today 21st June","period":"June 21, 2025","url":"https://www.reddit.com/r/AzureCertification/comments/1lgzrtm/sc200_passed_today_21st_june/","finding":"The author described extensive KQL and practical preparation. Later comments mention ordering code blocks, which informed the original ordering exercises in this app.","topics":["kql-foundations","kql-dynamic-reuse"]},
+    {"title":"Passed SC-200 — full of surprises","period":"June 21, 2025","url":"https://www.reddit.com/r/AZURE/comments/1lgsuzg/passed_sc200/","finding":"The author singled out RBAC, KQL, and Defender for Cloud Apps. A cross-post in another subreddit was treated as the same account, not a second independent report.","topics":["sentinel-rbac","cloud-apps","kql-foundations"]}
+  ],
+  "signals":[
+    {"topic":"KQL that you can explain","evidence":"Recurring across several reports","action":"Read pipelines, choose tables, count the right thing, correlate keys, and construct code blocks.","lessons":["kql-foundations","kql-aggregation","kql-correlation","hunting-schema"]},
+    {"topic":"Roles, scopes & workflow choices","evidence":"Especially visible in a recent October report","action":"Choose the least-privileged role and distinguish a workbook, playbook, automation rule, hunt, and detector.","lessons":["sentinel-rbac","sentinel-automation","workbooks-optimization"]},
+    {"topic":"Scenario reasoning under time pressure","evidence":"Several reports describe practical nuance","action":"Extract the required outcome, source, constraints, and permissions before choosing an action.","lessons":["incident-triage","endpoint-response","sentinel-cases"]},
+    {"topic":"ASIM and data pipelines","evidence":"Specific ASIM mention plus official scope","action":"Understand normalization, collection paths, schema differences, and how a result becomes a detection.","lessons":["sentinel-hunting-asim","windows-ama-wef","syslog-cef"]},
+    {"topic":"Data lake, graphs & AI","evidence":"Explicit in the published blueprint","action":"Study these even though older Reddit reports provide little reliable emphasis.","lessons":["lake-jobs-summary","threat-analytics-graphs","notebooks-mcp","security-copilot"]}
+  ]
+}
