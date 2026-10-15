@@ -1,0 +1,296 @@
+[
+  {
+    "id": "fc-hunt-01",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Identify the appropriate table to use in a KQL query",
+    "explanation": "Choose the table that records the fact the question asks you to establish. DeviceProcessEvents records process creation; DeviceNetworkEvents records connections; DeviceFileEvents records file activity. EmailEvents concerns message processing, EmailUrlInfo concerns embedded URLs, and UrlClickEvents supplies Safe Links click telemetry. AlertInfo describes detections and AlertEvidence links alerts to entities; neither replaces raw activity when reconstructing execution. Inventory and vulnerability tables answer different questions again. The correct choice changes with the evidence required: a URL inside an email does not establish a click, and a device inventory row does not establish a connection. Check the built-in schema, event-time column, source deployment, and permissions before interpreting zero results. In unified hunting, Sentinel tables can use TimeGenerated while XDR event tables commonly use Timestamp.",
+    "soc": "A SOC needs accurate table selection to avoid both missed activity and unsupported conclusions. Configure the relevant service or data connector, grant the required hunting access, and inspect the schema reference for columns and ActionType values. Start with a narrow time interval and one known entity, then preserve the identifiers needed for the next pivot. For a phishing incident, query EmailEvents for NetworkMessageId and recipients, use EmailUrlInfo for the suspect destination, then inspect UrlClickEvents for user interaction rather than treating URL presence as a click. For endpoint command and control, use DeviceNetworkEvents with RemoteIP, RemotePort, and initiating-process fields, then pivot into process creation. During daily checks, distinguish a genuinely quiet source from a disabled connector or an analyst whose scope excludes the affected device.",
+    "lessons": [
+      "hunting-schema"
+    ],
+    "sources": [
+      {
+        "title": "Advanced hunting schema",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-tables"
+      },
+      {
+        "title": "URL click evidence",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-urlclickevents-table"
+      },
+      {
+        "title": "Message URL evidence",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-emailurlinfo-table"
+      },
+      {
+        "title": "Network evidence",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-devicenetworkevents-table"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-02",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Identify threats by using Kusto Query Language (KQL)",
+    "explanation": "KQL expresses an investigation as a pipeline that filters, transforms, groups, and correlates telemetry. The correct query follows the requested meaning: where keeps matching rows; project selects columns; extend creates calculations; summarize changes the row into a group. Use count for events, dcount for an acceptable estimate of distinct values, and arg_max when the latest record must keep its evidence fields. String choices are scenario dependent: == is case sensitive whole-string equality, =~ ignores case for whole strings, has matches terms, and contains matches substrings. A join correlates matching keys; union appends streams. Explicit inner preserves matching pairs, while the default innerunique can deduplicate left keys. Correct syntax is necessary, but the grouping, time interval, and correlation keys determine whether the hunt answers the intended security question.",
+    "soc": "The SOC uses KQL to test behavior that fixed alerts may miss and to explain suspicious results precisely. In the relevant query editor, select populated tables, set a defensible time boundary, apply selective filters early, retain entity keys, and inspect representative output before trusting a threshold. For password spraying, restrict SigninLogs to failed results before counting attempts and distinct users by origin; otherwise successful users can inflate the apparent target population. For suspected ransomware, examine process commands and file modifications on the same device within the incident interval instead of flagging every PowerShell launch. Review the effect of grouping and joins on row count, compare suspicious activity with expected administration, and record both findings and gaps. Promote stable, validated behavior into a detector only after checking noise, latency, entity mapping, and response requirements.",
+    "lessons": [
+      "kql-foundations",
+      "kql-aggregation",
+      "kql-correlation"
+    ],
+    "sources": [
+      {
+        "title": "String operator meaning",
+        "url": "https://learn.microsoft.com/en-us/kusto/query/datatypes-string-operators"
+      },
+      {
+        "title": "Grouping and counts",
+        "url": "https://learn.microsoft.com/en-us/kusto/query/tutorials/use-aggregation-functions?view=azure-data-explorer"
+      },
+      {
+        "title": "Default join behavior",
+        "url": "https://learn.microsoft.com/en-us/kusto/query/join-innerunique?view=microsoft-fabric"
+      },
+      {
+        "title": "Latest record evidence",
+        "url": "https://learn.microsoft.com/en-us/kusto/query/arg-max-aggregation-function"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-03",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Create Advanced Hunting queries",
+    "explanation": "An Advanced Hunting query is an ad hoc or saved investigation over available security telemetry, written in advanced KQL mode or assembled in guided mode. The exam decision is to choose the right source, time window, predicates, entity identifiers, and output for the investigation. Saving or sharing the query does not automatically create a recurring alert; custom detection is a separate configuration step. Required service deployment, data permissions, device scope, and retention determine which events are available. Scope each side of a correlation deliberately and preserve the original event identifiers if the result will later support detection or response. When the objective is to find recent process execution, use process-event data; when it is to establish an email interaction, select email and click sources instead of forcing every problem into an endpoint query.",
+    "soc": "Analysts open Investigation & response > Hunting > Advanced hunting, inspect the schema, build a small query, run it, and validate output before saving it with a clear purpose. A practical starter is `DeviceProcessEvents | where Timestamp > ago(1d) | where FileName =~ \"powershell.exe\" | project Timestamp, DeviceId, ProcessCommandLine`; the results need context before any malicious verdict. During a phishing response, a second query can trace the suspicious domain through message and click tables, then correlate the affected identity with endpoint activity. Save reusable investigation logic, document required sources, and share it with the appropriate team. In daily operations, tune expensive queries using execution feedback and narrow filters; if older events are required, choose the configured Sentinel retention or lake workflow rather than assuming the editor can recover data that was never retained.",
+    "lessons": [
+      "hunting-schema",
+      "kql-foundations",
+      "xdr-custom-detections"
+    ],
+    "sources": [
+      {
+        "title": "Advanced hunting modes and access",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-overview"
+      },
+      {
+        "title": "Learn the query language",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-query-language"
+      },
+      {
+        "title": "Query performance",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-best-practices"
+      },
+      {
+        "title": "Go hunt pivots",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-go-hunt"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-04",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Interpret threat analytics in Microsoft Defender XDR",
+    "explanation": "Threat analytics connects researched threat context with the organization’s impact, exposure, and recommended defenses. Read the analyst narrative to understand the actor, technique, campaign, or vulnerability, then examine related incidents, affected assets, endpoint exposure, and relevant recommendations. The correct priority depends on the scenario: active compromise of a critical asset requires incident response, while exposed but unexploited devices call for preventative mitigation and hunting. A high global threat profile does not automatically make it the highest local priority. A suggested hunting query can reveal candidates requiring investigation; its presence does not prove every match is malicious or that a recommended mitigation is already enforced. Product licensing and data permissions affect which environmental tabs are populated, and some newer report categories do not provide every tenant-specific view.",
+    "soc": "A SOC reviews Threat intelligence > Threat analytics to decide which emerging threats merit action in its environment. Configure the needed permissions for security data and, where required, exposure and vulnerability information; enable appropriate notifications for relevant report updates. For a newly exploited vulnerability, compare exposed endpoints with business criticality, ask endpoint owners to deploy the applicable fix, and hunt for the report’s described behavior. For a ransomware campaign with related incidents, pivot into those incidents, identify impacted identities and devices, and prioritize containment over reading every report sequentially. During daily handover, record the report version, local exposure, verified mitigations, and unresolved findings. Recheck actual device configuration and evidence after remediation so the team can distinguish a completed control change from a recommendation that someone merely acknowledged.",
+    "lessons": [
+      "threat-analytics-graphs"
+    ],
+    "sources": [
+      {
+        "title": "Threat analytics views and access",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/threat-analytics"
+      },
+      {
+        "title": "Research report interpretation",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/threat-analytics-analyst-reports"
+      },
+      {
+        "title": "SOC response workflow",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/plan-incident-response"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-05",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Create hunting graphs, including blast radius",
+    "explanation": "A hunting graph lets you explore relationships among entities visually instead of relying only on flat query rows. Nodes represent assets such as identities and devices; edges represent the relevant relationships. Blast radius adds a risk question: from a compromised entity, which critical targets might an attacker reach through available paths? The correct answer changes with intent: use an incident graph for the observed attack story, hunting relationships for exploratory pivots, and blast radius for possible propagation and response priority. A possible route does not prove that the attacker traversed it. Access and availability depend on documented lake onboarding eligibility, exposure permissions, data coverage, and feature rollout. An empty or incomplete graph therefore cannot establish that no risk exists; validate critical-asset definitions and the underlying evidence.",
+    "soc": "The SOC uses this view to spot a small number of high-value containment points in a complicated incident. In Advanced hunting, open the hunting graph experience with the required data and read permissions; in an incident or supported incident case, select the relevant attack graph entity and inspect available blast-radius paths. Confirm that critical servers, identities, and sensitive assets are correctly represented. For example, a compromised employee account may have a relationship to an administration workstation that reaches a finance server: investigate the path and consider revoking the affected privilege or containing the intermediate host. In another daily use case, compare a newly privileged account’s reachable assets with its business purpose. Corroborate paths with sign-ins, process activity, and access logs, then document observed compromise separately from assets prioritized because they are potentially reachable.",
+    "lessons": [
+      "threat-analytics-graphs",
+      "sentinel-cases"
+    ],
+    "sources": [
+      {
+        "title": "Hunting graph",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-graph"
+      },
+      {
+        "title": "Incident-case attack graph and blast radius",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-incident-cases"
+      },
+      {
+        "title": "Legacy graph prerequisites and scope",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-incidents"
+      },
+      {
+        "title": "Sentinel Graph platform",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-graph-overview"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-06",
+    "domain": "hunt",
+    "group": "Detect threats by using Microsoft Defender XDR",
+    "front": "Analyze relationships between entities by using Sentinel Graph",
+    "explanation": "Sentinel Graph represents security entities and their relationships so analysts can investigate paths spanning identities, devices, cloud resources, and data. It underlies several embedded graph experiences; custom graphs are a distinct preview capability with their own authoring and publication lifecycle. Choose graph analysis when the question concerns connected access, propagation, or relationships that are hard to understand from isolated table rows. For a custom graph, define the source data and relationship model, materialize it with a graph job, and query the published graph in the supported graph experience. A notebook-only graph is not automatically a published asset. Do not confuse Sentinel Graph with Microsoft Graph activity logs, which record API requests. Freshness, permissions, and missing relationships can change the result, so verify those before making a security conclusion.",
+    "soc": "A SOC can use graph analysis to explain which compromised identities can reach sensitive assets, or to relate message senders, recipients, and URLs across a campaign. For custom work, use the Sentinel VS Code extension and supported notebook workflow to define meaningful node identities and edges, publish the graph job, and review refresh behavior before relying on the Defender portal’s Graphs page. A useful example is a campaign model linking a sender to several recipients and a common phishing URL; another is an identity-to-resource model highlighting an unexpected privilege route. During daily triage, inspect the graph alongside source records, validate entity resolution, and review job status if relationships are stale or a graph disappears. A scheduled graph should rebuild on its configured schedule, while an on-demand materialization has a different retention lifecycle. Restrict access according to the documented graph and data permissions.",
+    "lessons": [
+      "threat-analytics-graphs",
+      "notebooks-mcp"
+    ],
+    "sources": [
+      {
+        "title": "Sentinel Graph overview",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-graph-overview"
+      },
+      {
+        "title": "Published custom graph visualization",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/graph-visualization"
+      },
+      {
+        "title": "AI-assisted graph authoring example",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/create-graphs-with-ai"
+      },
+      {
+        "title": "Graph job management",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/kql-manage-jobs"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-07",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Create and monitor hunting queries",
+    "explanation": "A hunting query tests a hypothesis against collected telemetry; monitoring means reviewing its results and behavior over time, not assuming that saving the query creates a detector. Sentinel’s hunting experience can organize queries by ATT&CK, show result changes, and identify missing data sources. Use a structured hunt to document the hypothesis and findings, then convert reliable behavior into an analytics rule if recurring alerting is required. Bookmark support depends on the interface: Sentinel-specific Hunting supports bookmarks, while unified Advanced hunting does not expose the same feature. Current documentation says livestreams are no longer available, so older advice to use a livestream should not determine the answer; choose supported analytics rules, KQL jobs, and automation according to whether you need alerts, persisted analysis, or notifications.",
+    "soc": "SOC analysts configure a custom hunt with its description, query, entity mappings, ATT&CK context, and required sources, then run it against an appropriate investigation interval. Review result counts and changes, validate unusual rows, and preserve findings in the tools available in that interface. For example, a rare-process hunt may reveal a new administrative tool after a software rollout; inspect ownership and command lines before escalating. A second hunt might look for repeated failed sign-ins followed by a successful access pattern and then pivot into the affected identity’s activity. In daily operations, track whether the hypothesis was supported, which source gaps remain, and who owns follow-up. If the behavior deserves continuous detection, test an analytics rule and its latency handling; if it requires retrospective lake analysis, schedule the appropriate job rather than leaving an ad hoc query tab open.",
+    "lessons": [
+      "sentinel-hunting-asim",
+      "sentinel-analytics"
+    ],
+    "sources": [
+      {
+        "title": "Hunting query lifecycle and current feature changes",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/hunting"
+      },
+      {
+        "title": "Sentinel hunting training",
+        "url": "https://learn.microsoft.com/en-us/training/modules/hunt-threats-sentinel/"
+      },
+      {
+        "title": "Normalized hunting content",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/normalization-content"
+      },
+      {
+        "title": "Scheduled detections",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/scheduled-rules-overview"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-08",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Create and manage KQL jobs in Data lake",
+    "explanation": "A lake KQL job runs supported KQL asynchronously, once or on a schedule, to analyze retained historical data and write selected results to an appropriate destination. It fits retrospective multi-table investigations, indicator sweeps, and enrichment. Choose a summary rule when the goal is frequent precomputed aggregates, and a search job for the supported large single-table retrieval scenario; these are not interchangeable. Onboarding, permissions, source availability, output schema, and query support matter. Current lake jobs have specific unsupported functions and do not support user-defined functions, so a query that runs elsewhere may need adaptation. When promoting old events, preserve the original source timestamp in a separate field because destination ingestion can replace TimeGenerated for older records. A job produces data, not automatically an incident or proof that every result is malicious.",
+    "soc": "Configure a job from the lake KQL editor or Microsoft Sentinel > Data lake exploration > Jobs: choose the bounded query, destination workspace and table, output tier, and one-time or scheduled execution. Preview the result and project only fields needed for follow-up. For example, join six months of endpoint and identity history to a new indicator set, then promote a small evidence table for current investigation. For a second use case, schedule a recurring scan of historical network activity and review its output before opening cases. Account for lake ingestion readiness and inspect run history, errors, output volume, and schema compatibility. If a source workspace is removed, update or disable the dependent job rather than leaving a failing schedule. Use the Jobs management page for KQL lifecycle changes; notebook and graph jobs are changed through their authoring workflows.",
+    "lessons": [
+      "lake-jobs-summary"
+    ],
+    "sources": [
+      {
+        "title": "Create and configure lake jobs",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/kql-jobs"
+      },
+      {
+        "title": "Compare analysis mechanisms",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/kql-jobs-summary-rules-search-jobs"
+      },
+      {
+        "title": "Manage job lifecycle",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/kql-manage-jobs"
+      },
+      {
+        "title": "Lake query overview",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/kql-overview"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-09",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Create and manage Summary rule tables for querying",
+    "explanation": "A summary rule periodically aggregates or transforms verbose records into a custom table that downstream queries can read efficiently. The decision depends on the required result: use a summary when repeated analysis needs counts, dimensions, first/last observations, or a reduced dataset; keep access to raw records when an investigation needs the exact event details. Sentinel summary outputs use the Analytics data plan. A summary table does not create alerts by itself, so add an analytics rule if the scenario requires detection. Choose grouping keys carefully: summarizing only by day cannot later answer which account contacted a destination unless that identity was retained. Frequency, bin size, delay, source tier, supported query operations, and output schema affect both completeness and cost. Aggregation cannot reconstruct columns discarded by the query.",
+    "soc": "The SOC configures Microsoft Sentinel > Configuration > Summary rules, sets the query and destination custom table, previews its schema, and selects the processing schedule and delay. Enable the relevant SummaryLogs diagnostics when operational monitoring is needed, and inspect failed or incomplete runs before relying on the output. A practical firewall summary can retain SourceIP, DestinationIP, event count, and first and last observed times per interval; a dashboard or detector then queries the smaller dataset to locate suspicious traffic quickly. Another example is summarizing authentication failures by account and origin for a daily hunt, while retaining raw logs for detailed reconstruction. Validate the aggregation against a small raw-data sample and test late-arriving records. Treat a change to grouping or destination schema as a change to every downstream workbook, hunting query, or detector that depends on it.",
+    "lessons": [
+      "lake-jobs-summary",
+      "workbooks-optimization"
+    ],
+    "sources": [
+      {
+        "title": "Summary rule setup and diagnostics",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/summary-rules"
+      },
+      {
+        "title": "Summary rules for Sentinel solutions",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/sentinel-summary-rules-creation"
+      },
+      {
+        "title": "Summary, search, and KQL job comparison",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/kql-jobs-summary-rules-search-jobs"
+      }
+    ]
+  },
+  {
+    "id": "fc-hunt-10",
+    "domain": "hunt",
+    "group": "Detect threats by using the Microsoft Sentinel platform",
+    "front": "Hunt for threats by using Notebooks, including connection to the Sentinel MCP Server",
+    "explanation": "A notebook combines executable analysis, narrative, evidence, and visualizations for investigations that need more than one query grid. The established Sentinel notebook experience uses Azure Machine Learning and security libraries such as MSTICPy; Sentinel data lake notebooks use the VS Code extension and PySpark with managed compute. Select the setup that the scenario names rather than assuming every notebook requires the same infrastructure. The Sentinel MCP server is a separate hosted tool interface through which compatible AI clients can explore security data and use supported hunting tools with Entra-based access. It is not the notebook kernel and does not bypass authorization. Choose notebooks for reproducible transformations, enrichment, custom visualization, or machine learning; choose MCP-assisted exploration when a supported client needs structured security tools. Generated conclusions still require source and time-range validation.",
+    "soc": "SOC engineers first establish the required data access and compute, start from an official notebook example, and document the tables, parameters, investigation interval, and output. For a slow password-spray investigation, a lake notebook can join long-term identity records with device context, plot the pattern, and save a focused results table. For another use case, an analyst can enrich suspicious IPs and visualize a process timeline using the supported security libraries. Connect a compatible client to Sentinel MCP using the documented server setup and the appropriate Entra identity; inspect the tool’s retrieved evidence instead of treating its prose as a verdict. Run notebook cells in a known order and validate from clean state before scheduling. Monitor job health and protect any external-service credentials using supported secret management, since a shared notebook should remain reproducible without embedding secrets.",
+    "lessons": [
+      "notebooks-mcp"
+    ],
+    "sources": [
+      {
+        "title": "Lake notebook analysis",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/notebooks-overview"
+      },
+      {
+        "title": "Established Sentinel notebook workflow",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/notebooks"
+      },
+      {
+        "title": "MCP client/server model",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-mcp-overview"
+      },
+      {
+        "title": "MCP connection setup",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-mcp-get-started"
+      },
+      {
+        "title": "Concrete lake notebook examples",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/notebook-examples"
+      }
+    ]
+  }
+]

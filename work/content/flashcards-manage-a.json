@@ -1,0 +1,346 @@
+[
+  {
+    "id": "fc-manage-01",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure email notifications in Microsoft Defender XDR, including incidents, actions, and threat analytics",
+    "explanation": "Email notifications route different kinds of security information to people: incident notifications concern an attack investigation, Actions notifications concern supported response operations and their outcomes, and Threat analytics notifications concern Microsoft research reports. For an exam scenario, identify the requested event before selecting the tab. A request to know that isolation failed belongs to Actions; a request to learn about a newly published ransomware report belongs to Threat analytics. Incident rules can filter alert severity, source, and device-group scope, whereas research subscriptions can track report types or tags. An email recipient is not thereby granted investigation permissions. Response-action email currently excludes custom detections containing response actions, so do not assume every automated operation produces that notification. Several notification capabilities have prerelease notices; supported choices can vary with deployed workloads.",
+    "soc": "The SOC uses selective notifications to connect the right owner to a timely decision. In the Defender portal, open Settings > Microsoft Defender XDR > Email notifications and configure the Incidents, Actions, and Threat analytics tabs separately. Use an account with the required settings permissions, respect device-group management scope, add recipients, and send a test email before relying on the rule. For example, send high-severity endpoint incidents affecting retail workstations to the regional on-call address, and send failed isolation actions to the response lead who can investigate connectivity. Separately, subscribe the hunting team to relevant ransomware research updates so they can check exposure and plan a hunt. Review delivery filtering and recipient membership during shift handover. Follow the email into the incident or action record to establish what happened; notification delivery alone cannot establish remediation success.",
+    "lessons": [
+      "air-disruption-notifications"
+    ],
+    "sources": [
+      {
+        "title": "Get incident notifications by email",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-notifications-incidents"
+      },
+      {
+        "title": "Get email notifications for response actions",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-response-actions-notifications"
+      },
+      {
+        "title": "Get email notifications for Threat analytics updates",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-threat-analytics-notifications"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-02",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure alert notifications in Microsoft Defender XDR, including tuning, suppression, and correlation",
+    "explanation": "Alert notification, alert tuning, and incident correlation solve different problems. Email rules notify recipients about new alerts within selected severity and device scopes. Tuning applies evidence-based conditions to expected activity: Hide alert is endpoint-specific and retains AlertInfo/AlertEvidence records; Resolve alert produces resolved alerts and associated incidents; supported Set as behavior output remains huntable in behavior tables. Those choices do not have identical effects, and not every source supports every action. Correlation instead combines related signals into an incident so the analyst can reconstruct the attack. The correct exam decision depends on whether the requirement is delivery, queue-noise reduction, or an attack story. Custom detections require tuning their detection logic rather than relying on suppression compatibility, and built-in tuning excludes custom detection and custom threat-intelligence alerts.",
+    "soc": "Reducing repeated benign alerts protects analyst attention, but a broad exception can conceal a changed tool or attacker imitation. Configure endpoint alert emails under Settings > Endpoints > General > Email notifications, choose severity and device scope, add recipients, and test delivery. Create tuning rules under Settings > Microsoft Defender XDR > Alert tuning after inspecting representative evidence and the selected service source. For example, constrain a rule for an authorized inventory executable to its verified file/process evidence rather than suppressing all PowerShell activity. During daily review, inspect affected alerts and hunt retained evidence to check whether the rule still describes expected activity. In a separate phishing-to-endpoint case, keep the correlated incident intact to see how the email and device signals connect. Changing who receives an email cannot correct an overbroad tuning rule or a detection-query false positive.",
+    "lessons": [
+      "air-disruption-notifications",
+      "incident-triage"
+    ],
+    "sources": [
+      {
+        "title": "Configure email alert notifications",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/configure-email-notifications"
+      },
+      {
+        "title": "Investigate alerts and configure tuning",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-alerts"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-03",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure Microsoft Defender for Endpoint advanced features",
+    "explanation": "Advanced features are Defender for Endpoint capability switches, distinct from the endpoint policies that set individual protection rules. Examples include live response, custom network indicators, device discovery, and EDR in block mode. Select a feature by the operational requirement and then verify its prerequisites. EDR in block mode is useful for post-breach remediation when a supported Windows device uses another antivirus and Defender Antivirus is passive; it does not supply all protections that require Defender Antivirus to be active. Enabling live response makes the capability available, but the analyst still needs appropriate response permissions and device scope. Some features are tenant-wide while certain configurations also support policy targeting. Restricting correlation to scoped device groups changes future incident correlation and can split a global attack story, so its appropriateness depends on local SOC access requirements.",
+    "soc": "The SOC maintains these settings so responders have tools ready before a serious incident. Open Settings > Endpoints > Advanced features, review the intended capability, save preferences, and validate it on supported onboarded devices. For example, an organization retaining a third-party antivirus can evaluate EDR in block mode, confirm Defender Antivirus and cloud protection prerequisites, and inspect completed remediation in Action center. A different team needing an interactive forensic session enables live response, enables server live response where relevant, and assigns basic or advanced command permissions to the intended analysts. Document which feature and role each response procedure depends on, then test using a harmless investigation. When an analyst cannot start a session, check the feature, device support, connectivity, and permissions separately. Repeatedly enabling unrelated switches will not fix a missing role or an unsupported endpoint.",
+    "lessons": [
+      "endpoint-configuration",
+      "endpoint-response"
+    ],
+    "sources": [
+      {
+        "title": "Configure Defender for Endpoint advanced features",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/advanced-features"
+      },
+      {
+        "title": "EDR in block mode and its prerequisites",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/edr-in-block-mode"
+      },
+      {
+        "title": "Live response prerequisites and permissions",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/live-response"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-04",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure rules settings in Microsoft Defender for Endpoint",
+    "explanation": "Endpoint Rules settings cover several operational rule families, so first decide whether the scenario concerns an indicator, file submission, an investigation exclusion, or additional telemetry. Indicators can prescribe supported allow, warn, or block behavior for a file, certificate, IP address, domain, or URL; the available action and enforcement prerequisites depend on indicator type and platform. Automation uploads select file extensions eligible for content submission during the documented investigation workflow. Automation folder exclusions exclude content from that workflow and can prevent live-response examination; they are not antivirus scanning exclusions. This distinction matters when an exam asks to preserve malware scanning while limiting investigation handling. Custom data collection and ASR prevention rules have separate purposes and configuration paths. Current AIR retirement notices also mean older investigation-rule instructions must not be mistaken for proof of a still-available standalone AIR experience.",
+    "soc": "The SOC uses precise rules to implement an evidenced response decision without weakening unrelated protection. In Settings > Endpoints > Rules, choose the relevant rule family and verify its prerequisites before applying scope, expiration, and rationale. For example, after confirming a malicious payload hash, create a supported block indicator for a pilot device group, then verify enforcement before broadening its scope. A URL indicator requires the corresponding network protections; a file indicator has its own antivirus and cloud requirements. Separately, if a business process prohibits automated submission of a proprietary file type, review automation-upload settings rather than adding an antivirus exclusion. Analysts should track the supporting incident, rule owner, and review date and recheck rules when an application changes. An allow decision for one validated artifact should not become an unrestricted folder exception that lets unrelated malware evade scanning.",
+    "lessons": [
+      "endpoint-configuration",
+      "air-disruption-notifications"
+    ],
+    "sources": [
+      {
+        "title": "Manage endpoint indicators",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/indicator-manage"
+      },
+      {
+        "title": "Manage automation file uploads",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/manage-automation-file-uploads"
+      },
+      {
+        "title": "Configure automation folder exclusions",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/automation-folder-exclusions-configure"
+      },
+      {
+        "title": "Automation levels and the AIR lifecycle notice",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/automation-levels"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-05",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure custom data collection in Microsoft Defender for Endpoint",
+    "explanation": "Custom data collection is a prerelease Defender for Endpoint capability for collecting selected events beyond standard telemetry into a connected Sentinel workspace. It adds evidence; it does not replace normal collection or automatically create a detection. Its DeviceCustom tables cover process, image-load, file, network, and script activity. Current requirements include Defender for Endpoint Plan 2, supported Windows clients/servers, and dynamic tags created through Asset Rule Management; manual tags are insufficient. The workspace must also be explicitly selected during rule creation. For scenario questions, choose collection rules when required events are absent, a hunting query when events already exist, and a custom detection when matching events must generate alerts. Extremely broad collection is not a reliable shortcut: each rule has a per-device limit of 75,000 events per rolling 24 hours, after which that rule's telemetry pauses until reset.",
+    "soc": "Targeted collection lets the SOC investigate an evidence gap while controlling volume. At Settings > Endpoints > Rules > Custom Data Collection, select the Sentinel workspace, choose the event table and actions, add conditions, and target applicable devices using the supported dynamic scope. Pilot the rule, allow deployment time, and query for DeviceId, RuleName, and rule-modification metadata to confirm the intended endpoints actually send records. For example, during suspected DLL side-loading, collect the relevant image loads for a small engineering workstation cohort and correlate them with process launches. For a separate sensitive application investigation, collect narrowly defined file activity instead of every file event across the company. Review daily event counts, dynamic-tag membership, and Sentinel ingestion charges, then disable temporary collection when the investigative need ends. If data stops abruptly, check the per-rule threshold and targeting before concluding the endpoint has become clean.",
+    "lessons": [
+      "endpoint-configuration",
+      "azure-custom-ingestion"
+    ],
+    "sources": [
+      {
+        "title": "Custom data collection overview and tables",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/custom-data-collection"
+      },
+      {
+        "title": "Create, monitor, and manage custom collection rules",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/create-custom-data-collection-rules"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-06",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure security policies for Microsoft Defender for Endpoint, including attack surface reduction (ASR) rules",
+    "explanation": "Security policies configure endpoint prevention; attack surface reduction rules restrict risky behaviors such as Office launching child processes or attempts to steal credentials. Unlike a hash block, ASR can stop a technique even when the executable is new. Exam decisions depend on the required rule, supported platform, antivirus/cloud prerequisites, and enforcement state. Audit records what would have been blocked while allowing execution; Block enforces prevention; Warn supports a temporary 24-hour bypass on eligible rules/platforms; current platforms require administrator approval for Unblock. Do not assume Warn is universally available or creates a permanent exception. Policies can be delivered through supported channels such as Intune, Group Policy, or configuration management, so choose the channel described in the scenario. Exceptions also differ by rule: a general antivirus exclusion is not automatically an ASR exclusion or the narrowest compatibility fix.",
+    "soc": "The SOC works with endpoint administrators to convert observed attack methods into tested prevention. For an Intune deployment, use Endpoint security > Attack surface reduction, select the supported profile, configure individual rules, assign a pilot group, and inspect deployment and event results. For example, test the rule blocking Office child processes against real finance macros in Audit before enforcing it; review any legitimate dependency and remediate or narrowly exempt it with documented evidence. In another use case, investigate credential-theft behavior and validate whether the relevant ASR rule is supported on that population. During daily operations, use ASR reports and hunting telemetry to separate blocked attacks from application breakage, confirm which device received which policy, and expand rollout in controlled rings. A configured policy is only useful when the endpoint applies it and the chosen state provides the intended protection.",
+    "lessons": [
+      "endpoint-configuration"
+    ],
+    "sources": [
+      {
+        "title": "Attack surface reduction rules overview",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-overview"
+      },
+      {
+        "title": "Test an ASR rules deployment",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-deployment-test"
+      },
+      {
+        "title": "ASR rule support and exclusions reference",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-07",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Manage automated investigation and response capabilities in Microsoft Defender XDR",
+    "explanation": "Automated investigation and response historically examined alert-related artifacts and applied remediation according to automation levels. Full automation permits supported malicious-artifact remediation automatically; semi-automation introduces approval requirements for specified folder categories or all files. Action center records pending and completed operations. The time context is essential: Microsoft states that, from September 1, 2026, Defender for Endpoint AIR no longer runs as a separate investigation experience and cannot be manually triggered; its detection/response capabilities run through the default antivirus stack. The published exam objective still names AIR, so understand the older approval model while rejecting an instruction that requires a retired manual endpoint investigation in a current tenant. This notice concerns that endpoint experience, not a universal retirement of every workload's automation. For a current on-demand endpoint investigation need, Microsoft directs operators to run a full antivirus scan as needed.",
+    "soc": "The SOC needs to know whether an action is waiting for a person, has completed, or failed rather than equating alert closure with cleanup. Review current endpoint protection configuration and the documented device-group automation settings, then use Action center Pending to evaluate supported approval decisions and History to verify outcomes or available undo operations. For example, if suspicious software was removed automatically, record the actual action status and continue investigating persistence or related accounts; the removal is one piece of evidence. If a supported action is awaiting approval, assess the entity, business impact, and investigator permissions before deciding. When an older runbook says to start a standalone MDE AIR investigation, update that step to the current supported workflow instead of searching for a missing button. Keep response-action email routing aligned with failures that need human attention, and review each deployed Defender workload's own automation prerequisites separately.",
+    "lessons": [
+      "air-disruption-notifications",
+      "endpoint-response"
+    ],
+    "sources": [
+      {
+        "title": "Endpoint automation levels and September 2026 lifecycle notice",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/automation-levels"
+      },
+      {
+        "title": "Unified Action center pending actions and history",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-action-center"
+      },
+      {
+        "title": "Get notifications for supported response actions",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-response-actions-notifications"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-08",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure automatic attack disruption in Microsoft Defender XDR",
+    "explanation": "Automatic attack disruption is built-in incident-level containment that uses high-confidence correlated signals to interrupt an active attack. It is different from a Sentinel playbook that the SOC authors and from the historical artifact-remediation approval model. Available responses depend on deployed Defender products and their configuration: endpoint capabilities, identity sensors/actions, and email or cloud-app protections provide different detection and response coverage. Standard device discovery is required for the documented unmanaged-device containment action. Current automatic workstation isolation is preview and has onboarding, scope, and safeguard requirements. Semi-automation does not universally require manual approval before disruption; assess the documented action rather than generalizing from AIR file approvals. Exclusions may affect devices, identities, or IPs, so the correct exam answer changes with the asset and response to be prevented or enabled.",
+    "soc": "The SOC prepares disruption by checking licensing, product deployment, sensor health, action prerequisites, device-group settings, and carefully justified exclusions. Inspect configuration under Defender XDR Automated response and the relevant endpoint or identity settings, then review containment through the incident and Action center. For example, when an attacker uses a compromised workstation and stolen account for lateral movement, analysts inspect which device or identity was contained, investigate related evidence, and restore access only after resolving the compromise. For a critical service account whose disabling could interrupt a plant, evaluate a narrowly documented exclusion with compensating monitoring and an owner instead of disabling disruption across the tenant. In daily review, distinguish a contained unmanaged source from an isolated onboarded workstation; the mechanisms and required coverage differ. A successful containment buys investigation time but does not remove the need to rotate exposed credentials, remove persistence, and verify recovery.",
+    "lessons": [
+      "air-disruption-notifications",
+      "endpoint-response"
+    ],
+    "sources": [
+      {
+        "title": "Configure automatic attack disruption and prerequisites",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/configure-attack-disruption"
+      },
+      {
+        "title": "Attack disruption exclusions and permission requirements",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/automatic-attack-disruption-exclusions"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-09",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Configure and manage device groups, permissions, and automation levels in Microsoft Defender for Endpoint",
+    "explanation": "Device groups organize endpoint management scope, authorized visibility, and documented remediation settings. Matching can use names, domains, tags, and operating systems; when several groups match, the highest-ranked group wins, with rank 1 highest. A device does not inherit the combined automation levels of every matching group. Permissions determine what a person can do, while group scope determines which devices the assignment covers. A tag alone therefore does not implement least-privilege access. New Defender for Endpoint customers use Unified RBAC, while existing tenants can retain their earlier permissions model, so read the scenario's access model before choosing its configuration steps. Automation-level terminology remains relevant to the objective, but it must be interpreted alongside the September 2026 standalone AIR retirement. Group membership also differs from attack-disruption exclusion policy and should not be treated as a universal containment-approval switch.",
+    "soc": "The SOC uses groups to give regional analysts appropriate access and to separate device populations with different operational handling. Under Settings > Endpoints > Permissions > Device groups, define conditions, preview matched devices, set the documented remediation level, associate the relevant Entra groups with their roles, and rank the group deliberately. For example, place payment terminals in a more specific group above a general Windows group so their intended handling is not overridden by the broad match. Separately, give a regional response team the necessary operations and device scope instead of assigning a tenant-wide administrator role. Test effective access as that team and inspect a sample device's actual winning group. During daily onboarding, investigate ungrouped devices and stale tags, and after changes check notification dependencies and propagation. An empty or incorrectly scoped user-group assignment can leave access broader than intended even when the device-matching condition looks correct.",
+    "lessons": [
+      "endpoint-configuration",
+      "air-disruption-notifications"
+    ],
+    "sources": [
+      {
+        "title": "Create and manage endpoint device groups",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/machine-groups"
+      },
+      {
+        "title": "Endpoint RBAC and Unified RBAC transition",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/rbac"
+      },
+      {
+        "title": "Endpoint automation levels and lifecycle",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/automation-levels"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-10",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Create and configure automation rules in Microsoft Sentinel",
+    "explanation": "A Sentinel automation rule expresses a trigger, conditions, and ordered actions. It handles straightforward incident changes directly and can invoke a playbook for external or more complex work. Choose incident creation for initial routing, incident updates for supported lifecycle changes, and supported alert creation when action must occur without an incident. Native actions can assign an owner, adjust severity/status, add tags or tasks, and run playbooks according to the trigger. Rule order affects results because later rules evaluate state changed by earlier actions. An exam scenario involving external reputation lookup needs a workflow; one requiring only assignment and tagging usually needs the simpler native rule. Alert-source support and unified-portal behavior matter: legacy Sentinel alert automation does not automatically cover all XDR alerts. Current case flows and enhanced alert triggers are distinct supported experiences to evaluate when the scenario uses them.",
+    "soc": "The SOC uses automation rules for consistent triage and auditable handoffs. From Sentinel Automation, create the rule, select its trigger, constrain its source and conditions, add actions in deliberate order, and set priority and expiration where appropriate. For example, route newly created high-severity incidents from a privileged-sign-in detection to the identity responder, tag them for escalation, and add a verification task. During an approved scanner maintenance window, use a tightly bounded temporary rule with an expiry rather than leaving a permanent blanket closure rule. Test with sample incidents and inspect the resulting owner, tags, status, and any workflow run. If a later high-severity rule does not match, check whether an earlier rule lowered severity first. When synchronizing updates to an external ticket, avoid loops and duplicate creation by testing the update conditions and using the incident identifier as a stable key.",
+    "lessons": [
+      "sentinel-automation"
+    ],
+    "sources": [
+      {
+        "title": "Automation rule triggers, conditions, and ordering",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automate-incident-handling-with-automation-rules"
+      },
+      {
+        "title": "Attach and run playbooks with automation rules",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/run-playbooks"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-11",
+    "domain": "manage",
+    "group": "Configure automation for Microsoft Defender XDR and Microsoft Sentinel",
+    "front": "Create and configure Microsoft Sentinel playbooks",
+    "explanation": "A Sentinel playbook is an Azure Logic Apps workflow that enriches or responds to an incident, alert, or entity through connector actions. The initiating rule and workflow must have compatible triggers; renaming an entity-trigger workflow does not make it incident-triggered. A template must become a configured active workflow before it can do useful work. Consumption authoring uses Logic App Contributor; Standard has separate Developer, Operator, and Contributor roles and requires a stateful workflow. Human authoring rights, Sentinel's authority to invoke the workflow, and each connector identity's downstream permissions are separate decisions. Current Defender UI can call a case trigger what Logic Apps still calls Microsoft Sentinel incident. For an exam, identify the trigger, hosting model, actor, target resource, and scope before selecting a permission or troubleshooting step.",
+    "soc": "The SOC builds playbooks for repeatable enrichment and controlled cross-system response. Create the Logic App from Sentinel Automation or an appropriate template, configure the trigger and authenticated connectors, and prefer a managed identity where supported. Grant Sentinel's service identity Automation Contributor on the playbook resource group for the incident invocation path; grant the workflow identity the actual target permissions it needs, such as incident-write access for adding a comment. For example, an enrichment workflow can extract an IP, query a reputation service, and append the result without blocking anything. A separate approved workflow might disable an account only after its defined validation or approval step. Test with harmless input and inspect each action's run-history status. If invocation succeeds but a comment fails with authorization denied, fix the identity executing that connector action. Recreating the trigger or elevating the human author will not repair that downstream grant.",
+    "lessons": [
+      "sentinel-automation",
+      "sentinel-rbac"
+    ],
+    "sources": [
+      {
+        "title": "Create playbooks, hosting models, and compatible triggers",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/create-playbooks"
+      },
+      {
+        "title": "Authenticate playbooks to Microsoft Sentinel",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/authenticate-playbooks-to-sentinel"
+      },
+      {
+        "title": "Run playbooks and authorize the Sentinel service",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/run-playbooks"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-12",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Specify Microsoft Sentinel roles",
+    "explanation": "Sentinel permissions should be chosen by actor, action, resource, and scope. Reader views SIEM data and resources; Responder adds incident management; Contributor adds creation and editing of Sentinel resources and content. Playbook Operator permits listing and manual execution rather than workflow authoring, and Automation Contributor is for the Sentinel service invocation path, not a routine analyst assignment. Logic Apps authoring requires its own hosting-model permissions. An exam asking an analyst to assign and close incidents without engineering detections points to Responder; editing analytics rules needs Contributor. Workspace and resource-group scope are not interchangeable in every deployment, and Azure grants are cumulative rather than cancelled by adding Reader. Lake-wide data access uses Entra roles; workspace-scoped Azure roles and unified Defender permissions offer supported scoped alternatives. A SIEM role name does not authorize every platform operation.",
+    "soc": "The SOC maps jobs to permissions before onboarding staff or service identities. Assign SIEM roles through Azure IAM at the appropriate workspace/resource-group scope, review inherited grants, and test using the intended identity. Resource-group assignments commonly cover related Sentinel resources more predictably; direct workspace assignments can require additional assignments on associated resources. For example, a tier-one responder can own and close incidents while a detection engineer can update rules, with workflow editing delegated separately to an automation maintainer. For a read-only regional dashboard, verify the reader can query only the intended resource-context data rather than assigning broad workspace access merely to remove an error. Check guest-user directory lookup requirements when incident assignment fails. During access reviews, remove stale group memberships and inspect both human and managed-identity permissions. Giving someone Reader at a child scope cannot undo Contributor they still inherit from the subscription.",
+    "lessons": [
+      "sentinel-rbac"
+    ],
+    "sources": [
+      {
+        "title": "Microsoft Sentinel platform roles and permissions",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/roles"
+      },
+      {
+        "title": "Manage Sentinel data access by resource context",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/resource-context-rbac"
+      },
+      {
+        "title": "Built-in Azure security role definitions",
+        "url": "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/security"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-13",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Manage data retention for XDR and Microsoft Sentinel tables, including Analytics, Data lake, and XDR tiers",
+    "explanation": "Retention controls how long evidence survives; tier selection controls how it can be used. Analytics retention supports operational queries and detections, while total retention includes history retained in the data lake. Data Lake-only storage serves historical jobs and supported analysis, not automatic feature parity with real-time Sentinel rules or operational hunting. XDR hunting has a distinct default 30-day window; supported tables can be ingested into Sentinel for longer retention, with costs depending on the chosen tier and period. Changing a query's time picker does not retain older evidence. Current central management supports table-specific eligibility: some XDR or solution tables cannot change tiers, and Basic Logs configuration can require the Log Analytics workspace. An exam answer must meet the required detection window and historical investigation window together, rather than selecting the cheapest tier without checking its consumers.",
+    "soc": "The SOC plans retention from actual use cases and records which rules, dashboards, and investigators consume each table. In Defender, open Microsoft Sentinel > Configuration > Tables, select the workspace and table, choose Manage table, then review retention, tier, warnings, and required permissions. For example, keep a sign-in table in Analytics for the organization's active detection horizon while retaining a longer historical copy for delayed account-compromise investigations. A verbose source used only for quarterly forensics can be evaluated for lake storage and accessed through an appropriate job instead. Budget XDR ingestion and historical processing explicitly; default XDR availability is not a free unlimited archive. After a change, validate both a representative detection and a historical query. Increasing retention preserves qualifying data that still exists; it cannot reconstruct events already deleted. Review actual table settings and dependencies before shortening periods or promoting a cost recommendation into production.",
+    "lessons": [
+      "retention-data-tiers",
+      "platform-architecture"
+    ],
+    "sources": [
+      {
+        "title": "Manage Sentinel data tiers and retention",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/manage-data-overview"
+      },
+      {
+        "title": "Configure table settings and required permissions",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/manage-table-tiers-retention"
+      },
+      {
+        "title": "Configure Log Analytics retention",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-retention-configure"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-14",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Create and configure Microsoft Sentinel workbooks",
+    "explanation": "A Sentinel workbook is an interactive Azure resource containing queries, parameters, text, and visualizations. It turns existing telemetry into an operational view; saving the workbook does not ingest logs, preserve an immutable evidence copy, or create an analytics rule. Start from an installed Content hub template or create a custom definition and save it in the intended resource group. For exam scenarios, distinguish permission to read or edit the workbook from permission to query its data sources. A chart can be blank because the connector has no data, the reader lacks source access, a parameter points to the wrong workspace, or the query filters exclude the events. The right answer therefore depends on the failing dependency. Choose a workbook for visual exploration or reporting and a detection rule when the requirement is generating alerts from matching events.",
+    "soc": "The SOC uses workbooks to make patterns and operational gaps visible during daily review. Install the relevant solution/template, verify the required tables contain recent records, save the workbook, and customize its KQL and charts. Add meaningful time, workspace, account, or device parameters and bind them to every applicable query. For example, a sign-in workbook can compare failed authentications by account and location for a selected shift, allowing the analyst to drill into an emerging password-spray pattern. A separate ingestion-health view can show the latest event time by source so an apparently quiet environment is not mistaken for a healthy one. Grant Workbook Reader or Contributor as appropriate alongside the required source-data permissions and test as the intended audience. Compare a chart's totals with a direct query, filter early for performance, and document hardcoded exclusions so the next shift understands what the visual omits.",
+    "lessons": [
+      "workbooks-optimization",
+      "sentinel-hunting-asim"
+    ],
+    "sources": [
+      {
+        "title": "Visualize and monitor Sentinel data with workbooks",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/monitor-your-data"
+      },
+      {
+        "title": "Azure Monitor Workbooks overview",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/visualize/workbooks-overview"
+      }
+    ]
+  }
+]

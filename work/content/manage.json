@@ -1,0 +1,2541 @@
+[
+  {
+    "id": "platform-architecture",
+    "domain": "manage",
+    "title": "Sentinel, Defender XDR, and the security data platform",
+    "subtitle": "Choose the right layer for ingestion, detection, investigation, and historical analysis.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "Architecture",
+      "Content hub",
+      "Data lake"
+    ],
+    "intro": "SC-200 scenarios often describe a requirement rather than name the feature that satisfies it. Start by drawing a data path: source, ingestion, table, detection, incident, response. Microsoft Sentinel supplies SIEM coverage for Microsoft, third-party, cloud, and on-premises sources. Defender XDR correlates signals from deployed Defender workloads. The Defender portal brings those workflows together, while the Sentinel data lake adds economical historical analysis and graph capabilities. A unified screen does not remove the need to configure connectors, permissions, tables, and response resources. Learn what each layer contributes so you can identify the missing prerequisite instead of choosing a familiar product name.",
+    "sections": [
+      {
+        "title": "Build the operational path",
+        "body": "A Log Analytics workspace becomes a Sentinel workspace when Sentinel is enabled on it. Start with the workspace region, access model, retention needs, and data sources. A connector makes a supported source available, but the source may still need diagnostic settings, an agent, API credentials, or collection configuration. Inspect the connector instructions and destination tables. An installed solution packages useful content; it does not prove telemetry is arriving. For a firewall investigation, verify actual recent records before enabling a detection that expects them. A successful deployment and a successful data flow are different checkpoints."
+      },
+      {
+        "title": "Use the unified portal deliberately",
+        "body": "Connecting Sentinel workspaces to the Defender portal enables combined incident handling and hunting with Defender XDR where those services are deployed. A tenant can have a primary Sentinel workspace and connected secondary workspaces. Select the intended workspace and check its connection state when a feature appears empty. Portal access does not itself grant every Azure or Defender permission. Sentinel can be used in the Defender portal without purchasing an XDR license simply for that portal experience. Product-specific telemetry and response actions still depend on their own deployment, licensing, configuration, and permissions."
+      },
+      {
+        "title": "Understand the lake and graph layer",
+        "body": "The Sentinel data lake separates long-term storage from the compute used to analyze it. Analytics data supports operational detection and interactive investigation; lake-only data serves historical analysis through the supported lake query, job, and notebook experiences. Graph uses relationships and asset context to help investigate connected risk. Onboarding requires a connected primary workspace and appropriate setup roles; choose the supported region and billing resources carefully. For the exam, distinguish adding a workspace to the portal from completing lake onboarding. Neither operation magically supplies missing endpoint, identity, or third-party telemetry."
+      },
+      {
+        "title": "Move from content to validated capability",
+        "body": "Content hub is the starting point for packaged connectors, workbook templates, analytics templates, and automation content. Install the relevant solution, configure its connector, validate tables, and then create active content from templates. Templates require adaptation to your environment, including entity mapping and exceptions. Track updates and verify that customizations still behave correctly. When a scenario says an analyst installed a solution but has no incidents, ask whether data arrived, the rule was activated, its query returned results, and its incident settings permit incident creation. This sequence is more reliable than reinstalling everything."
+      }
+    ],
+    "remember": [
+      "Sentinel workspace, Defender portal connection, and lake onboarding are distinct steps.",
+      "A content template is not necessarily an active rule or saved workbook.",
+      "A unified portal still uses the permissions and deployment prerequisites of underlying products."
+    ],
+    "pitfalls": [
+      "Do not assume Defender XDR automatically collects every third-party log.",
+      "Do not assume lake-only storage supports every real-time SIEM feature."
+    ],
+    "lab": {
+      "title": "Trace one complete detection path",
+      "steps": [
+        "Use a training or test Sentinel workspace and identify its region and portal connection.",
+        "Install one Microsoft solution from Content hub and read its connector prerequisites.",
+        "Find a recent row in the documented destination table.",
+        "Open the related detection template and list what must be configured before activation."
+      ],
+      "done": "You can trace one real event from source to destination table and explain how a rule would create an incident."
+    },
+    "sources": [
+      {
+        "title": "Onboard to Microsoft Sentinel",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/quickstart-onboard"
+      },
+      {
+        "title": "Connect Sentinel to the Defender portal",
+        "url": "https://learn.microsoft.com/en-us/unified-secops/microsoft-sentinel-onboard"
+      },
+      {
+        "title": "Sentinel data lake overview",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-lake-overview"
+      },
+      {
+        "title": "Deploy out-of-the-box content",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/sentinel-solutions-deploy"
+      },
+      {
+        "title": "Onboard the Sentinel data lake",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-lake-onboard-defender"
+      }
+    ],
+    "questions": [
+      {
+        "id": "platform-architecture-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A SOC installed a firewall solution from Content hub. Its analytics template exists, but no firewall records appear in the destination table. What should the engineer do first?",
+        "options": [
+          "Enable every analytics template.",
+          "Configure and validate the solution’s data connector and source forwarding.",
+          "Increase incident retention.",
+          "Create a graph query to generate missing logs."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "A query cannot detect records that were never ingested.",
+          "Correct. Validate the source-to-table ingestion path before troubleshooting detection behavior.",
+          "Retention preserves existing records; it does not collect absent logs.",
+          "A relationship query analyzes available data and cannot replace source ingestion."
+        ],
+        "takeaway": "Check ingestion before detection configuration.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/quickstart-onboard"
+      },
+      {
+        "id": "platform-architecture-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A tenant needs unified incident handling and economical historical analysis. Choose TWO distinct configuration steps that directly enable these experiences.",
+        "options": [
+          "Connect the Sentinel workspace to the Defender portal.",
+          "Replace all source connectors with workbook templates.",
+          "Complete Sentinel data lake onboarding with the required roles and billing resources.",
+          "Grant every analyst Global Administrator permanently."
+        ],
+        "answer": [
+          0,
+          2
+        ],
+        "explanations": [
+          "Correct. Connecting the workspace enables the unified Sentinel portal experience.",
+          "Workbooks visualize data; they do not replace connectors.",
+          "Correct. Lake onboarding enables the additional lake experiences.",
+          "Broad permanent access is unnecessary and does not provision the required platform."
+        ],
+        "takeaway": "Portal connection and lake onboarding solve different requirements.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-lake-onboard-defender"
+      },
+      {
+        "id": "platform-architecture-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An organization needs to retain rarely consulted network telemetry for later historical analysis. It does not require real-time alerts on that data. Which design best matches the requirement?",
+        "options": [
+          "Keep every record only in a workbook JSON resource.",
+          "Use lake-only storage and supported lake queries or jobs for the historical investigation.",
+          "Delete the source data after each analytics rule run.",
+          "Use an alert email mailbox as the primary log store."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "A saved workbook stores its definition, not a copy of its query results as a security log repository.",
+          "Correct. The lake is designed for cost-conscious historical data analysis where operational real-time features are unnecessary.",
+          "Deleting evidence prevents the required later investigation.",
+          "Notifications contain selected alert details rather than the complete source telemetry."
+        ],
+        "takeaway": "Storage tier follows operational access and detection needs.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/datalake/sentinel-lake-overview"
+      },
+      {
+        "id": "platform-architecture-q4",
+        "type": "order",
+        "difficulty": "Analyze",
+        "stem": "Arrange the normal rollout of packaged Sentinel detection content after selecting the product integration.",
+        "options": [
+          "Validate recent records in the expected table.",
+          "Create and tune an active analytics rule from its template.",
+          "Install the product solution from Content hub.",
+          "Configure connector prerequisites and source forwarding."
+        ],
+        "answer": [
+          2,
+          3,
+          0,
+          1
+        ],
+        "explanations": [
+          "Validation follows collection setup and establishes that the rule has input.",
+          "Activate and tune after the required input has been verified.",
+          "Install the content package first to obtain the supported connector and templates.",
+          "Configure the actual ingestion path before expecting records."
+        ],
+        "takeaway": "Install, connect, validate, then detect.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/sentinel-solutions-deploy"
+      }
+    ]
+  },
+  {
+    "id": "sentinel-rbac",
+    "domain": "manage",
+    "title": "Sentinel RBAC and playbook permissions",
+    "subtitle": "Separate analyst access, engineering rights, workflow authoring, and service execution.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "RBAC",
+      "Least privilege",
+      "Logic Apps"
+    ],
+    "intro": "Permission questions become manageable when you identify the actor, action, resource, and scope. Reading an incident, changing a rule, editing a Logic App, and letting Sentinel invoke a playbook are separate operations. A role that is sufficient for one need might intentionally omit another. SC-200 expects you to choose a workable combination with limited privilege and to diagnose why an existing assignment fails. Also distinguish Azure RBAC on the SIEM workspace from Microsoft Entra and Defender permission models used by the wider platform. A person’s permissions are not automatically the permissions of Sentinel’s service identity or a playbook’s managed identity.",
+    "sections": [
+      {
+        "title": "Assign analyst and engineer roles",
+        "body": "Sentinel Reader supports viewing Sentinel resources and data. Responder adds incident management, such as assignment and status changes. Contributor adds creation and editing of Sentinel resources such as analytics rules and content management. Choose the least powerful role that supports the actual task. A triage analyst who must resolve incidents generally needs Responder rather than Reader; an engineer editing detections needs Contributor. Role scope matters as much as the name. Resource-group assignments commonly cover the workspace and associated resources more predictably than assigning permissions to a single object and overlooking related resources."
+      },
+      {
+        "title": "Keep workflow authority separate",
+        "body": "Playbooks are Azure Logic Apps resources. Sentinel Contributor does not, by itself, grant Logic Apps authoring rights. Use Logic App Contributor when a person must create or modify the workflow. A person who only lists and manually runs playbooks can use Sentinel Playbook Operator alongside the access needed to open the incident. When a run is unavailable, verify the workflow trigger, location, and permissions rather than adding subscription Owner reflexively. An account can have enough authority to change an incident while having no authority to edit the workflow attached to it. These Logic App Contributor examples apply to Consumption playbooks; Standard workflows use the corresponding Logic Apps Standard Developer, Operator, or Contributor roles for their required operations."
+      },
+      {
+        "title": "Check service and connector identities",
+        "body": "Sentinel uses its own service account to execute incident playbooks. That identity needs Sentinel Automation Contributor on the resource group containing the playbook. An administrator with role-assignment authority grants this access; granting the human Contributor on the workspace does not substitute for it. The workflow then calls target systems through connector connections or managed identities, which need their own target permissions. For example, permission to start an enrichment workflow does not automatically authorize its identity to read secrets. Troubleshoot execution permission and downstream API authorization as separate stages in run history."
+      },
+      {
+        "title": "Understand scope and cumulative access",
+        "body": "Azure role assignments are additive. Assigning Reader cannot reduce rights inherited from Contributor at a parent scope. Review inherited assignments when access appears broader than intended. For workspace logs, distinguish workspace-wide access from supported resource-context access and table controls. Lake-wide roles can be broader than a workspace-only analyst requires; the current platform supports scoped workspace read access and separate system-table permissions. Ask which workspace, data collection, or resource the person needs before choosing a role. For an exam scenario, a correct role at the wrong scope is still an incomplete configuration."
+      }
+    ],
+    "remember": [
+      "Responder manages incidents; Contributor engineers Sentinel resources.",
+      "Logic App Contributor is for workflow authoring; Playbook Operator supports manual execution.",
+      "Sentinel’s service identity needs Automation Contributor on the playbook resource group.",
+      "Inherited Azure RBAC permissions are cumulative."
+    ],
+    "pitfalls": [
+      "Automation Contributor is a service permission, not the normal analyst role.",
+      "A workflow’s downstream connector authorization is separate from permission to start it."
+    ],
+    "lab": {
+      "title": "Map permissions without broad elevation",
+      "steps": [
+        "Create an actor/action/resource matrix for a triage analyst, detection engineer, Sentinel service, and playbook identity.",
+        "Inspect effective assignments at workspace and resource-group scopes in a test tenant.",
+        "Check playbook permissions and one connector identity.",
+        "Explain a failed run using both invocation permission and target API authorization."
+      ],
+      "done": "Your permission map grants each actor only the operations needed and identifies both execution and connector dependencies."
+    },
+    "sources": [
+      {
+        "title": "Roles and permissions in Sentinel",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/roles"
+      },
+      {
+        "title": "Built-in security roles",
+        "url": "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/security"
+      },
+      {
+        "title": "Manage Sentinel access by resource",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/resource-context-rbac"
+      },
+      {
+        "title": "Run Sentinel playbooks",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/run-playbooks"
+      },
+      {
+        "title": "Create playbooks and hosting-model roles",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/create-playbooks"
+      }
+    ],
+    "questions": [
+      {
+        "id": "sentinel-rbac-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A tier-one analyst must assign and close Sentinel incidents but must not edit analytics rules. What is the minimum appropriate built-in Sentinel role?",
+        "options": [
+          "Reader",
+          "Responder",
+          "Contributor",
+          "Automation Contributor"
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Reader can inspect resources but cannot perform the required incident changes.",
+          "Correct. Responder adds incident management while avoiding detection-authoring rights.",
+          "Contributor works but grants unnecessary ability to modify Sentinel resources.",
+          "This role enables Sentinel service execution of playbooks; it is not the incident analyst role."
+        ],
+        "takeaway": "Use Responder for operational incident management.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/roles"
+      },
+      {
+        "id": "sentinel-rbac-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A responder can open an incident but cannot manually run its existing incident playbook. The person must not edit workflows. Choose TWO permission checks.",
+        "options": [
+          "Verify the person has Sentinel Playbook Operator over the playbook resource group.",
+          "Verify Sentinel’s service account has Automation Contributor over that resource group.",
+          "Assign the person Logic App Contributor so all workflow edits are allowed.",
+          "Assign Automation Contributor only to the person and remove all service permissions."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. This grants the human the intended manual run capability.",
+          "Correct. Incident-trigger playbook execution also relies on the Sentinel service identity’s explicit permission.",
+          "Workflow authoring is beyond the stated requirement.",
+          "The human assignment does not replace the service identity requirement."
+        ],
+        "takeaway": "Manual incident execution can involve both user and service permissions.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/automation/run-playbooks"
+      },
+      {
+        "id": "sentinel-rbac-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An engineer has Sentinel Contributor on the workspace. They can change analytics rules but cannot edit an existing Consumption Logic Apps playbook in another resource group. Which additional role directly addresses the missing capability?",
+        "options": [
+          "Logic App Contributor on the playbook’s resource group.",
+          "Sentinel Reader on the workspace.",
+          "Directory Reader on the tenant.",
+          "Sentinel Automation Contributor on the engineer’s user account."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. The missing operation is authoring a Logic App at its actual resource scope.",
+          "Reader adds no workflow write capability.",
+          "Directory visibility does not authorize Azure Logic Apps editing.",
+          "Automation Contributor is intended for the Sentinel service to execute automation, not for workflow authoring."
+        ],
+        "takeaway": "Identify the resource being edited before choosing its role.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/roles"
+      },
+      {
+        "id": "sentinel-rbac-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A user inherits Contributor on a subscription and receives Reader directly on one workspace. They can still modify resources. What best explains this?",
+        "options": [
+          "The Reader assignment requires a restart.",
+          "Azure RBAC combines applicable grants; Reader does not negate inherited Contributor.",
+          "Sentinel ignores all direct workspace role assignments.",
+          "Every workspace user automatically becomes Owner."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Role propagation does not turn a Reader grant into a deny against a broader grant.",
+          "Correct. Remove or narrow the broader assignment if reduced access is intended.",
+          "Direct assignments are relevant, but do not cancel parent grants.",
+          "Workspace membership does not automatically assign ownership."
+        ],
+        "takeaway": "Least privilege requires reviewing effective inherited access.",
+        "source": "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/security"
+      }
+    ]
+  },
+  {
+    "id": "windows-ama-wef",
+    "domain": "manage",
+    "title": "Windows Security Events, AMA, and WEF",
+    "subtitle": "Select the collection path, DCR, and destination table your detections actually need.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "AMA",
+      "DCR",
+      "WEF",
+      "SecurityEvent"
+    ],
+    "intro": "An empty Windows detection is frequently an ingestion or table mismatch rather than a faulty query. Windows Security Events via Azure Monitor Agent writes security events to SecurityEvent. Windows Event Forwarding centralizes selected events at a Windows Event Collector, where AMA can ingest them through the Windows Forwarded Events connector into WindowsEvent. Generic Azure Monitor Windows event collection can use Event instead. These distinctions are exam-relevant because many built-in Sentinel rules query a specific table. Learn the collection path, the association that targets machines, the event filter, and the table schema before tuning a threshold or assuming forwarding failed.",
+    "sections": [
+      {
+        "title": "Choose direct AMA collection",
+        "body": "Use the Windows Security Events via AMA connector when machines can run the supported agent and you want Sentinel’s SecurityEvent-oriented security content. Non-Azure servers generally need Azure Arc integration for this extension-based collection path. A data collection rule defines what to collect and the workspace destination. A data collection rule association determines which machines use the rule. Installing an agent alone does not mean that the intended DCR applies. Validate the machine identity, association, event generation, network access, and destination before concluding that Sentinel is dropping an event."
+      },
+      {
+        "title": "Filter events where it makes sense",
+        "body": "Common, Minimal, All, and custom selections represent different coverage and volume decisions. Minimal is not a promise of a complete audit trail. With custom XPath, choose the correct channel and event identifiers; test the expression against actual event data. An event filter cannot create records that audit policy never generates on the source. Align the selected event set with the analytics templates and investigation requirements. For example, excluding logon failure records undermines a password-spray use case even if the agent and workspace connection are healthy. Reducing ingestion should preserve the evidence your detections need."
+      },
+      {
+        "title": "Plan WEF and WEC as a separate hop",
+        "body": "WEF forwards selected source events to a Windows Event Collector. Source-initiated subscriptions can be distributed through Group Policy, and source audit policy and channel access must permit the expected collection. The collector runs the Windows Event Collection service and AMA for the Sentinel connection. This architecture can meet a requirement that individual sources cannot each host the monitoring agent. Check both hops: source to WEC, then WEC to Azure. Seeing events on the collector proves only the first hop. Examine collector capacity, subscription health, and the DCR when planning scale or troubleshooting missing data."
+      },
+      {
+        "title": "Validate the correct table and fields",
+        "body": "The Windows Forwarded Events connector stores events in WindowsEvent, including forwarded Security-channel events. It does not automatically populate SecurityEvent. A built-in rule reading SecurityEvent therefore needs a compatible ingestion path or an adapted query and mapping. Generic Azure Monitor event collection can instead populate Event. Query recent counts by computer and event identifier, inspect a sample event, and check the timestamps. Schema-aware parsers help normalize fields across sources, but a parser is not a forwarding configuration. Always match the connector’s destination schema with the detection query before enabling production alerting."
+      }
+    ],
+    "remember": [
+      "DCR defines collection; DCR association targets the machine.",
+      "Windows Security Events via AMA → SecurityEvent.",
+      "Windows Forwarded Events → WindowsEvent; generic Windows events can use Event.",
+      "Audit policy controls whether the source produces the desired event."
+    ],
+    "pitfalls": [
+      "Events visible at WEC do not prove ingestion to Sentinel.",
+      "Security-channel origin does not guarantee the SecurityEvent destination table."
+    ],
+    "lab": {
+      "title": "Compare direct and forwarded records",
+      "steps": [
+        "In an official training lab, inspect a Windows Security Events via AMA DCR and machine association.",
+        "Generate or identify a known permitted Security event and locate it in SecurityEvent.",
+        "Inspect a WEF subscription and its collector ForwardedEvents channel.",
+        "Compare the WindowsEvent schema against a SecurityEvent-based rule before adapting the query."
+      ],
+      "done": "You can identify both transport hops and explain exactly which table a detection must query."
+    },
+    "sources": [
+      {
+        "title": "Windows agent-based connectors",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-services-windows-based"
+      },
+      {
+        "title": "Windows security event sets",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/windows-security-event-id-reference"
+      },
+      {
+        "title": "Collect Windows events using AMA",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-windows-events"
+      },
+      {
+        "title": "Use WEF for intrusion detection",
+        "url": "https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/use-windows-event-forwarding-to-assist-in-intrusion-detection"
+      }
+    ],
+    "questions": [
+      {
+        "id": "windows-ama-wef-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A new WEF deployment shows Security events in the collector’s ForwardedEvents channel and in WindowsEvent. A built-in Sentinel rule queries SecurityEvent and returns no matches. What is the best next step?",
+        "options": [
+          "Reinstall WEC because forwarding must have failed.",
+          "Adapt and test the rule for WindowsEvent, or use the Windows Security Events via AMA path required by the existing content.",
+          "Increase the threshold so the missing rows become visible.",
+          "Rename WindowsEvent to SecurityEvent in the workspace."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "The collector and WindowsEvent evidence demonstrate successful forwarding and ingestion.",
+          "Correct. The rule and ingestion path use different destination schemas.",
+          "A threshold does not repair a table mismatch.",
+          "Managed table naming is not a substitute for choosing a supported connector or adapting a query."
+        ],
+        "takeaway": "The destination schema matters more than the source channel name.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/connect-services-windows-based"
+      },
+      {
+        "id": "windows-ama-wef-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A supported Azure VM has AMA installed but no expected logon failure records arrive. Choose TWO checks that directly address collection configuration.",
+        "options": [
+          "Confirm the intended DCR is associated with this VM.",
+          "Confirm audit policy generates the event and the DCR XPath includes it.",
+          "Grant the analyst workbook editing permissions.",
+          "Create an incident automation rule that renames the VM."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. The installed agent needs the intended rule association.",
+          "Correct. Both source generation and event filtering must permit the record.",
+          "Workbook authoring rights do not control agent collection.",
+          "Incident automation acts after detection; it cannot generate missing source logs."
+        ],
+        "takeaway": "Validate source generation, filtering, and rule association.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-windows-events"
+      },
+      {
+        "id": "windows-ama-wef-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A policy prevents installing AMA on each branch Windows server, but permits built-in Windows event forwarding and an agent on a central collector. Which design fits?",
+        "options": [
+          "Install AMA only on analyst laptops.",
+          "Use WEF subscriptions to a WEC server, then AMA and the Windows Forwarded Events connector on the collector.",
+          "Use a CEF connector to query each Windows Security channel directly.",
+          "Use workbook auto-refresh to pull events from the branch servers."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Analyst laptops do not become collectors simply by having the agent.",
+          "Correct. WEF centralizes the first hop and AMA handles the collector-to-workspace hop.",
+          "CEF is not a native direct subscription to Windows event channels.",
+          "A workbook reads ingested data rather than replacing event transport."
+        ],
+        "takeaway": "Use WEF when the collector can host the agent but sources cannot.",
+        "source": "https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/use-windows-event-forwarding-to-assist-in-intrusion-detection"
+      },
+      {
+        "id": "windows-ama-wef-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A team selects the Minimal event set to reduce volume. Later it needs a complete Windows audit trail. Which conclusion is accurate?",
+        "options": [
+          "Minimal guarantees all audit events needed by any investigation.",
+          "Minimal is a selected subset; review audit policy and expand collection to meet the complete evidence requirement.",
+          "Switching to Minimal automatically enables every source audit category.",
+          "A longer workbook time range reconstructs excluded events."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Minimal intentionally omits events and cannot promise complete auditing.",
+          "Correct. Coverage must be designed against the evidence requirement rather than the collection preset’s name.",
+          "A connector filter and source audit generation are separate controls.",
+          "Query time ranges cannot recover events that were never ingested."
+        ],
+        "takeaway": "Collection presets trade coverage against volume.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/windows-security-event-id-reference"
+      }
+    ]
+  },
+  {
+    "id": "syslog-cef",
+    "domain": "manage",
+    "title": "Syslog and CEF through Azure Monitor Agent",
+    "subtitle": "Trace appliance logs through a Linux forwarder, DCR filtering, and the right table.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "Syslog",
+      "CEF",
+      "AMA",
+      "CommonSecurityLog"
+    ],
+    "intro": "Network appliances often cannot run AMA themselves. A Linux forwarder receives their Syslog traffic, and AMA sends selected messages onward to the workspace. CEF adds a structured event format on top of the transport so Sentinel can populate normalized CommonSecurityLog fields; ordinary Syslog commonly lands in Syslog. SC-200 can test connector choice, forwarding prerequisites, filtering, duplicate ingestion, and failure isolation. Follow the message through each boundary instead of assuming that an open network port proves the entire integration works. Source formatting, local daemon behavior, rule association, facility and severity selection, and cloud connectivity can each break a different part of the path.",
+    "sections": [
+      {
+        "title": "Select format and collector architecture",
+        "body": "Syslog is the transport and message ecosystem; CEF is a security event format that can be carried by Syslog. A CEF header identifies vendor, product, event class, and severity, followed by extension fields. Use the CEF via AMA connector for compatible security appliance output and expect CommonSecurityLog. Use Syslog via AMA for ordinary Syslog and expect Syslog. The forwarder is a supported Linux machine with rsyslog or syslog-ng and AMA. When it is outside Azure, check the Azure Arc prerequisite. Install the relevant solution and follow the vendor’s appliance configuration instructions."
+      },
+      {
+        "title": "Configure both network boundaries",
+        "body": "The appliance sends to the Linux daemon’s configured listening address, port, and transport. The daemon then forwards selected messages to AMA, which uses outbound connectivity to Azure. These are different connections; allowing appliance traffic alone does not authorize cloud egress. Confirm the daemon is listening on the interface that the appliance can reach, and verify actual received messages with an approved test or packet capture. Then verify the daemon-to-agent handoff and agent health. Use the documented current agent configuration rather than assuming a port from an older blog still applies."
+      },
+      {
+        "title": "Make the DCR match the intended logs",
+        "body": "A data collection rule chooses facilities, severities, destinations, and associated forwarders. A severity threshold includes that severity and more serious levels; debug is more verbose than error. A facility mismatch can silently exclude an otherwise well-formed message. Distinguish the Syslog severity used by collection filtering from a security product’s own event severity field. If the same facility is collected through overlapping Syslog and CEF rules, investigate duplicate collection and separate the selections where needed. Reducing noise is useful only if you can show that required firewall or authentication events still arrive."
+      },
+      {
+        "title": "Troubleshoot with evidence from each hop",
+        "body": "Begin at the appliance: confirm output format, destination, and a recent event. On the forwarder, confirm network arrival, daemon handling, and valid CEF syntax when using that connector. Check pipe delimiters and required escaping in CEF headers and extension values. Next inspect AMA operation, the DCR association, filtering, and destination workspace. Finally query the expected table by a narrow time range and host or vendor. If Syslog arrives but parsed CEF fields do not, focus on format and connector routing before rebuilding the whole agent. Keep troubleshooting changes temporary and return filters to the required scope."
+      }
+    ],
+    "remember": [
+      "CEF via AMA normally populates CommonSecurityLog; Syslog via AMA populates Syslog.",
+      "Appliance → Linux daemon → AMA → workspace are separate checkpoints.",
+      "Facility and severity filters must include the actual source messages.",
+      "Avoid overlapping rules that ingest the same traffic twice."
+    ],
+    "pitfalls": [
+      "CEF event severity and Syslog transport severity are different fields.",
+      "A listening forwarder does not prove AMA can reach Azure."
+    ],
+    "lab": {
+      "title": "Trace a controlled Syslog event",
+      "steps": [
+        "Use a test Linux forwarder with a documented AMA connector and DCR.",
+        "Record the configured facility, severity, transport, and listening port.",
+        "Send a harmless approved test message from a permitted source.",
+        "Verify its arrival locally and then in the correct destination table.",
+        "Compare one valid CEF message with ordinary Syslog fields."
+      ],
+      "done": "You can name the failing hop when local receipt succeeds but workspace ingestion does not."
+    },
+    "sources": [
+      {
+        "title": "Syslog and CEF architecture",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/cef-syslog-ama-overview"
+      },
+      {
+        "title": "Ingest Syslog and CEF using AMA",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-syslog-ama"
+      },
+      {
+        "title": "Collect Syslog using AMA",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-syslog"
+      },
+      {
+        "title": "Troubleshoot Syslog and CEF connectors",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/cef-syslog-ama-troubleshooting"
+      }
+    ],
+    "questions": [
+      {
+        "id": "syslog-cef-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A firewall emits correctly formatted CEF over Syslog. Analysts need parsed source and destination fields in Sentinel’s standard security-event table. Which connector and table should they select?",
+        "options": [
+          "Syslog via AMA and Event.",
+          "CEF via AMA and CommonSecurityLog.",
+          "Windows Forwarded Events and SecurityEvent.",
+          "Azure Activity and AzureActivity."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Event is not the ordinary Syslog connector’s destination, and this does not select the CEF parsing path.",
+          "Correct. CEF collection maps supported fields into CommonSecurityLog.",
+          "This Windows collection path does not ingest the appliance CEF feed.",
+          "Azure Activity contains Azure control-plane operations, not the firewall’s CEF stream."
+        ],
+        "takeaway": "Match the wire format to its connector and schema.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/cef-syslog-ama-overview"
+      },
+      {
+        "id": "syslog-cef-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "The Linux forwarder receives a test message, but no row reaches Sentinel. Choose TWO useful next checks after local receipt has been proven.",
+        "options": [
+          "Verify AMA health, DCR association, and destination workspace.",
+          "Verify the DCR includes the message’s facility and severity.",
+          "Change incident ownership to the network team.",
+          "Increase the workbook chart height."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. These components govern the remaining agent-to-cloud path.",
+          "Correct. A filter can exclude a locally received message.",
+          "Ownership affects case workflow after ingestion and detection.",
+          "Display settings have no effect on transport or collection."
+        ],
+        "takeaway": "Local receipt narrows troubleshooting to downstream collection and routing.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/cef-syslog-ama-troubleshooting"
+      },
+      {
+        "id": "syslog-cef-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An appliance sends informational messages using local4. A DCR collects local5 at error and above. The network path is healthy. What should be changed to collect the intended informational events?",
+        "options": [
+          "Only increase retention.",
+          "Select local4 and an appropriate informational-or-more-verbose collection threshold.",
+          "Keep local5 and change the analytics incident title.",
+          "Convert every informational message into a critical security alert at the source."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Retention cannot affect which incoming messages are selected.",
+          "Correct. Both the facility and the severity selection currently exclude the target events.",
+          "Incident naming does not fix collection filters.",
+          "Changing event meaning is unnecessary; collect the required messages accurately."
+        ],
+        "takeaway": "A valid message still needs to match facility and severity selection.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-syslog"
+      },
+      {
+        "id": "syslog-cef-q4",
+        "type": "order",
+        "difficulty": "Analyze",
+        "stem": "Place these validation steps in source-to-destination order for a CEF integration.",
+        "options": [
+          "Confirm the record in CommonSecurityLog with expected parsed fields.",
+          "Confirm the appliance sends valid CEF to the intended destination.",
+          "Verify the Linux daemon receives and hands the message to AMA.",
+          "Verify the associated DCR allows the event and routes it to the workspace."
+        ],
+        "answer": [
+          1,
+          2,
+          3,
+          0
+        ],
+        "explanations": [
+          "The final table check proves that all earlier stages worked together.",
+          "Start by establishing that the source emitted the intended format.",
+          "The collector is the next physical and logical hop.",
+          "The agent’s rule and destination determine cloud routing after local receipt."
+        ],
+        "takeaway": "Troubleshoot each boundary in the actual direction of data flow.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-syslog-ama"
+      }
+    ]
+  },
+  {
+    "id": "azure-custom-ingestion",
+    "domain": "manage",
+    "title": "Azure diagnostics and custom log ingestion",
+    "subtitle": "Use policy for scale and DCR-based schemas for custom events.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "AzureActivity",
+      "Diagnostic settings",
+      "DCR",
+      "Custom tables"
+    ],
+    "intro": "A cloud resource can exist without its security-relevant logs appearing in Sentinel. Azure Activity captures management operations, resource logs capture service-specific operations, and custom applications may require a dedicated ingestion path. SC-200 scenarios ask you to choose the right mechanism, deploy it consistently, and troubleshoot the missing link. Understand the distinction between a diagnostic setting and an agent rule, and between a table definition and the API that supplies rows. For custom ingestion, think of the DCR as a contract: incoming stream schema, optional transformation, destination workspace, and output table must agree. Correct authentication alone cannot repair an incompatible schema.",
+    "sections": [
+      {
+        "title": "Separate control plane from data plane",
+        "body": "Azure Activity records management-plane operations such as resource creation and configuration changes. Export the relevant subscription activity through diagnostic settings to the Sentinel workspace and query AzureActivity. Resource logs describe operations inside a service, such as a Key Vault secret access, and typically require that resource’s diagnostic settings. A subscription Activity log export does not automatically collect every resource’s data-plane audit stream. In a scenario, identify what the attacker actually did before selecting the source. Reading a secret and changing a vault’s resource configuration require different evidence even though both involve the same vault."
+      },
+      {
+        "title": "Use Azure Policy for coverage at scale",
+        "body": "Diagnostic settings specify which log categories or category groups are sent to destinations such as Log Analytics, Event Hubs, or Storage. Azure Policy can enforce or deploy appropriate settings across many resources or subscriptions. A deployIfNotExists assignment uses its managed identity and required permissions; existing noncompliant resources can require a remediation task. Scope the policy to the intended environment and verify the destination workspace parameter. Policy compliance means the expected configuration exists, so still verify fresh records. A mistaken workspace selection can produce an apparently healthy deployment while the SOC continues querying a different workspace."
+      },
+      {
+        "title": "Define the custom ingestion contract",
+        "body": "Create a custom table with the required column names and types, including TimeGenerated. Custom table names use the _CL suffix. A DCR stream declaration describes the incoming shape; a data flow selects that stream, applies any supported transformation, and sends the transformed output to a destination. The output stream names the target table. Use the DCR ingestion endpoint or a data collection endpoint as required by the current architecture, including private-link requirements. An Entra application sending through the Logs Ingestion API needs authorized access to the DCR; this is not the same as possessing a workspace shared key."
+      },
+      {
+        "title": "Transform and validate before activation",
+        "body": "Use an ingestion transformation to parse, rename, cast, or filter supported incoming data so the output matches the destination schema. The transformation uses the source input, and its output must include the required columns in their expected types. Verify the DCR immutable identifier and stream name used by the client, its token audience and role assignment, network reachability, and returned error details. Then query a known test event in the custom table. A successful HTTP submission is one checkpoint; inspect the row’s timestamp, parsed fields, and workspace before allowing detections to depend on it."
+      }
+    ],
+    "remember": [
+      "AzureActivity is control-plane evidence; resource logs capture service-specific data-plane events.",
+      "Policy can deploy diagnostic settings; existing resources may need remediation.",
+      "DCR stream schema, transformation output, destination, and table schema must agree.",
+      "Logs Ingestion API uses Entra authorization on the DCR."
+    ],
+    "pitfalls": [
+      "A custom table definition does not itself ingest any rows.",
+      "Activity log export does not replace Key Vault resource audit logging.",
+      "A DCR immutable ID is different from a workspace ID."
+    ],
+    "lab": {
+      "title": "Validate a small custom stream",
+      "steps": [
+        "Create a test custom table using Microsoft’s Logs Ingestion API tutorial and record its schema.",
+        "Inspect the DCR input stream, transformation, destination, and output stream.",
+        "Authorize the test application narrowly and submit a harmless synthetic event.",
+        "Query by its unique test identifier and inspect TimeGenerated and parsed columns.",
+        "Inspect a diagnostic-settings policy assignment and an existing-resource remediation task."
+      ],
+      "done": "You can prove which source, DCR, workspace, and table contain your test event."
+    },
+    "sources": [
+      {
+        "title": "Azure Activity log",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/activity-log"
+      },
+      {
+        "title": "Diagnostic settings",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/diagnostic-settings"
+      },
+      {
+        "title": "Deploy diagnostic settings with Policy",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/diagnostic-settings-policy"
+      },
+      {
+        "title": "Logs Ingestion API overview",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview"
+      },
+      {
+        "title": "DCR structure",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-rule-structure"
+      },
+      {
+        "title": "Create custom tables",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/create-custom-table"
+      }
+    ],
+    "questions": [
+      {
+        "id": "azure-custom-ingestion-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An investigator needs evidence that an administrator changed a virtual network configuration. Which source should be exported to Sentinel for this control-plane operation?",
+        "options": [
+          "Azure Activity log.",
+          "Only the VM’s process-creation events.",
+          "Only firewall packet payload logs.",
+          "A workbook template with no data connection."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Resource management changes are Azure Activity control-plane events.",
+          "Process telemetry does not establish the Azure Resource Manager operation.",
+          "Traffic logs describe data traffic rather than who changed the Azure resource configuration.",
+          "A visualization template does not generate audit evidence."
+        ],
+        "takeaway": "Select logs based on the operation being investigated.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/activity-log"
+      },
+      {
+        "id": "azure-custom-ingestion-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A policy must deploy required diagnostic settings to new resources and repair existing noncompliant resources. Choose TWO implementation requirements.",
+        "options": [
+          "Provide the policy assignment’s managed identity the required deployment permissions.",
+          "Run an appropriate remediation task for existing noncompliant resources.",
+          "Give every log reader permission to change policy assignments.",
+          "Rely on workbook refresh to create diagnostic settings."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Deployment policy needs an identity authorized to make the required change.",
+          "Correct. Existing resources commonly require remediation after assignment.",
+          "Readers do not need policy-authoring authority to consume logs.",
+          "Refresh runs visualization queries and does not deploy source settings."
+        ],
+        "takeaway": "Policy scope, identity, and remediation together support scaled configuration.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/diagnostic-settings-policy"
+      },
+      {
+        "id": "azure-custom-ingestion-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A Logs Ingestion API client authenticates successfully, but submitted data fails schema validation. The input contains EventTime as a string while the destination requires TimeGenerated as datetime. What should the engineer inspect?",
+        "options": [
+          "The DCR stream declaration and transformation that produces the destination schema.",
+          "Incident grouping settings only.",
+          "The analyst’s email notification rules.",
+          "The workbook’s color palette."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Input schema and output transformation must yield the table’s expected names and types.",
+          "Incident grouping occurs after ingestion and does not alter the API contract.",
+          "Notifications do not transform incoming rows.",
+          "Display settings have no bearing on schema validation."
+        ],
+        "takeaway": "A valid token and a valid data contract solve different problems.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-rule-structure"
+      },
+      {
+        "id": "azure-custom-ingestion-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A company already exports subscription Activity logs. It now needs to investigate individual Key Vault secret reads. What additional configuration is appropriate?",
+        "options": [
+          "Enable the relevant Key Vault resource diagnostic audit logs to the workspace.",
+          "Increase the Activity log chart’s refresh rate.",
+          "Query AzureActivity and assume all secret contents are recorded there.",
+          "Rename the AzureActivity table."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Secret access is a service data-plane operation captured through the relevant resource logs.",
+          "Refreshing cannot create an uncollected event type.",
+          "Activity log is management-plane evidence, not a complete record of service data-plane reads.",
+          "Renaming a table neither changes its source nor creates missing audit data."
+        ],
+        "takeaway": "Management-plane and data-plane logging must be planned separately.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/diagnostic-settings"
+      }
+    ]
+  },
+  {
+    "id": "threat-intelligence",
+    "domain": "manage",
+    "title": "Threat intelligence ingestion and matching",
+    "subtitle": "Bring in relevant indicators, manage their lifecycle, and correlate them with observed activity.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "STIX",
+      "TAXII",
+      "Indicators",
+      "ThreatIntelIndicators"
+    ],
+    "intro": "Threat intelligence is useful when a trustworthy claim about an observable can be connected to activity in your environment. Ingesting a feed is only the first step. You must understand its format, delivery mechanism, freshness, confidence, and coverage, then choose a matching or enrichment workflow. SC-200 scenarios can distinguish TAXII collection from a custom upload API, one-time bulk import from ongoing synchronization, and an intelligence object from a confirmed compromise. Current Sentinel uses ThreatIntelIndicators and ThreatIntelObjects, so recognize legacy ThreatIntelligenceIndicator examples without assuming that an old schema is the correct place to troubleshoot a new integration.",
+    "sections": [
+      {
+        "title": "Choose an import method",
+        "body": "STIX structures threat intelligence; TAXII transports it between compatible systems. Use Sentinel’s TAXII connector when a provider offers a supported TAXII server and collection. Obtain the API root, collection identifier, and required credentials. A TIP or custom service can submit STIX objects through the upload API without requiring a data connector. A file import can add a prepared CSV or JSON set in bulk, with explicit handling of invalid entries. Choose based on the provider’s capability and the refresh requirement. A one-time file upload does not create a continuously maintained subscription to a vendor feed."
+      },
+      {
+        "title": "Preserve intelligence context and lifecycle",
+        "body": "An indicator can contain an IP, domain, URL, or file hash plus validity, confidence, description, and source context. These attributes determine whether a match deserves urgent investigation. An expired or revoked indicator should not be treated like an active high-confidence threat. Review the latest version and use current lifecycle fields in queries. Threat actors, campaigns, attack patterns, and relationships are richer STIX objects rather than simple observable lists. Linking those objects can explain why a domain is interesting, but a relationship in intelligence is still not proof that a local account or device was compromised."
+      },
+      {
+        "title": "Use the current tables and schema",
+        "body": "ThreatIntelIndicators holds indicator data, while ThreatIntelObjects supports broader STIX intelligence objects. Current management and hunting experiences use these schemas. Older content may query ThreatIntelligenceIndicator, so inspect and migrate the query rather than assuming an empty legacy table means ingestion failed. Field structures differ and may contain dynamic STIX data. Inspect sample records, extract typed fields, select the latest version of an object where appropriate, and preserve provenance. If a query joins IP indicators to network telemetry, ensure that both sides represent the same address meaning and use compatible types before interpreting the result."
+      },
+      {
+        "title": "Turn intelligence into detection and enrichment",
+        "body": "A threat indicator match can raise an alert when a configured analytics rule correlates an active observable with local logs. The required telemetry must exist; importing a malicious IP does not produce a firewall connection event. Use supported threat-intelligence rules or carefully tested custom matches, map entities, and include useful evidence. Enrichment playbooks can retrieve additional context during triage without changing the underlying detection. Reduce low-value indicators through source selection and ingestion controls, then validate known test observables. The operational goal is a defensible investigation lead with source, time, and entity context, rather than the largest possible feed."
+      }
+    ],
+    "remember": [
+      "STIX describes intelligence; TAXII is a transfer protocol.",
+      "The upload API can ingest STIX without a data connector.",
+      "Current intelligence queries use ThreatIntelIndicators and ThreatIntelObjects.",
+      "A match requires relevant local telemetry and valid indicator lifecycle handling."
+    ],
+    "pitfalls": [
+      "An intelligence hit is an investigation lead, not automatic proof of compromise.",
+      "Bulk file import does not continuously synchronize the source.",
+      "Do not troubleshoot a new feed only through a legacy table name."
+    ],
+    "lab": {
+      "title": "Follow a harmless indicator through the lifecycle",
+      "steps": [
+        "Use a training workspace and a harmless reserved test observable.",
+        "Inspect TAXII connection parameters or the official upload API prerequisites.",
+        "Find the resulting object in the current intelligence management view and table.",
+        "Inspect its source, validity, confidence, and STIX fields.",
+        "Review a matching template and identify the local telemetry it requires."
+      ],
+      "done": "You can explain how the observable would become an evidence-backed alert, and how expiry should affect matching."
+    },
+    "sources": [
+      {
+        "title": "Understand Sentinel threat intelligence",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/understand-threat-intelligence"
+      },
+      {
+        "title": "Connect TAXII feeds",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-threat-intelligence-taxii"
+      },
+      {
+        "title": "Connect using the upload API",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-threat-intelligence-upload-api"
+      },
+      {
+        "title": "Import intelligence by file",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/indicators-bulk-file-import"
+      },
+      {
+        "title": "Work with STIX objects and indicators",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-stix-objects-indicators"
+      },
+      {
+        "title": "Manage threat indicators",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-threat-indicators"
+      }
+    ],
+    "questions": [
+      {
+        "id": "threat-intelligence-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A provider offers a supported TAXII 2.x collection and credentials. The SOC wants ongoing import using Sentinel’s built-in client. Which configuration is appropriate?",
+        "options": [
+          "Configure the TAXII connector with the API root and collection ID.",
+          "Paste the provider’s homepage into a workbook parameter.",
+          "Install AMA on every threat-intelligence vendor server.",
+          "Import a CSV once and assume it refreshes automatically."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. These are the endpoint and collection details needed for the built-in TAXII import path.",
+          "A homepage URL is not a TAXII feed configuration.",
+          "The supported feed is a service integration and does not require agents on provider infrastructure.",
+          "A file import does not create an ongoing feed subscription."
+        ],
+        "takeaway": "Select the connector from the provider’s actual delivery mechanism.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/connect-threat-intelligence-taxii"
+      },
+      {
+        "id": "threat-intelligence-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A new feed appears in Sentinel’s intelligence management view, but an old query returns no results from ThreatIntelligenceIndicator. Choose TWO appropriate next actions.",
+        "options": [
+          "Inspect ThreatIntelIndicators and the current STIX-based schema.",
+          "Review and migrate field extraction and lifecycle logic in the old query.",
+          "Delete all newly imported intelligence because ingestion must have failed.",
+          "Disable source network logging because indicators replace it."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. New intelligence uses the current indicator and object tables.",
+          "Correct. A renamed table alone may be insufficient because schema and object handling differ.",
+          "Visible imported intelligence is evidence that the legacy query, rather than ingestion, may be the problem.",
+          "Indicators describe observables and do not replace observed network telemetry."
+        ],
+        "takeaway": "Schema migration is part of maintaining threat-intelligence detections.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-stix-objects-indicators"
+      },
+      {
+        "id": "threat-intelligence-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A custom TIP can push STIX objects but has no TAXII endpoint. The team wants a programmatic integration directly into one workspace. Which approach fits?",
+        "options": [
+          "Use the threat-intelligence upload API with the required Entra application authorization.",
+          "Require the TIP to send CEF to every Windows server.",
+          "Store the objects only in workbook text blocks.",
+          "Create an Azure Activity diagnostic setting on the TIP vendor’s website."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. The upload API supports programmatic STIX ingestion without a data connector.",
+          "CEF is not the required STIX upload path and does not address the described capability.",
+          "Workbook text is not an operational intelligence store.",
+          "Azure Activity diagnostic settings do not turn an arbitrary website into a threat-intelligence source."
+        ],
+        "takeaway": "The upload API fits custom push integrations.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/connect-threat-intelligence-upload-api"
+      },
+      {
+        "id": "threat-intelligence-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An analyst finds a network connection matching a domain from an old feed. The indicator has expired and has low confidence. What is the most defensible response?",
+        "options": [
+          "Declare the host compromised solely because the strings match.",
+          "Review current indicator validity, source context, and supporting host/network evidence before deciding severity.",
+          "Delete all domain logs to reduce future matches.",
+          "Treat every expired indicator as currently malicious forever."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "A match without lifecycle and contextual validation can be misleading.",
+          "Correct. Intelligence quality and corroborating local evidence guide the investigation.",
+          "Deleting evidence damages investigation and does not validate the match.",
+          "Expiry exists because indicator relevance changes; it must be considered."
+        ],
+        "takeaway": "Evaluate indicator quality and context rather than treating every hit equally.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-threat-indicators"
+      }
+    ]
+  },
+  {
+    "id": "retention-data-tiers",
+    "domain": "manage",
+    "title": "Analytics, Data Lake, XDR retention, and table plans",
+    "subtitle": "Keep operational detections fast while preserving the history investigators need.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "Retention",
+      "Data tiers",
+      "XDR",
+      "Cost"
+    ],
+    "intro": "Retention questions combine three decisions: how data enters the platform, how long it remains available to operational analytics, and how long it is retained overall. The lowest storage price is not useful if a required real-time detection stops working. Current SC-200 explicitly includes Analytics, Data Lake, and XDR tiers, while Log Analytics table plans remain relevant to existing tables and older scenarios. Distinguish these settings instead of using “retention” as one undifferentiated number. A good design states which tables support active detections, which support historical forensics, and how analysts will access records after they leave the interactive period.",
+    "sections": [
+      {
+        "title": "Separate analytics retention from total retention",
+        "body": "Analytics retention is the period during which a table’s operational data remains available for the normal real-time SIEM experience. Total retention includes the historical period kept beyond it. In the current Sentinel platform, analytics data is mirrored into the lake, and total retention can extend the historical horizon. For a table that needs a recent investigation window and several years of evidence, configure both values deliberately. Increasing retention cannot resurrect data already removed. Before shortening it, evaluate investigation, compliance, and downstream detection dependencies; a cost-only change can eliminate evidence that the organization still needs."
+      },
+      {
+        "title": "Choose the tier for the use case",
+        "body": "Keep data required by real-time analytics rules, operational hunting, and Sentinel dashboards in the Analytics tier. Use Data Lake for lower-touch history and supported lake queries, scheduled jobs, notebooks, and summarized analysis. Moving a table to lake-only storage affects real-time features that depended on that table. If only a small portion needs immediate analysis, assess supported filtering or split capabilities rather than blindly treating every row identically. Write down the exact consumer before changing a tier: an overnight historical trend job and an incident alert with a short response target have different requirements."
+      },
+      {
+        "title": "Understand XDR’s default window and extension",
+        "body": "Defender XDR hunting data has a default 30-day window. Supported XDR tables can be ingested into Sentinel for longer Analytics or Data Lake retention, with ingestion and possible storage or processing charges depending on the chosen design. Extending a supported table beyond the default is a data-management operation, not simply a change to the hunting query’s time picker. Some XDR tables remain view-only for retention management in the portal, so check table support. Preserve the default XDR window as a distinct concept from Sentinel retention and verify licensing and cost implications before relying on older history."
+      },
+      {
+        "title": "Keep table-plan terminology precise",
+        "body": "Log Analytics exposes Analytics, Basic, and Auxiliary/Lake table plans, whose supported tables, billing, querying, and operational features differ. Sentinel’s current centralized tier-management experience is related but is not just a synonym for every older table-plan setting. For example, Basic tables can be visible in the Defender portal while their configuration still requires Log Analytics; current documentation describes changing eligible tables to Analytics for centralized management. Check the exact table’s capabilities instead of assuming every low-cost plan has identical limitations. Validate both a historical query and a detection after a retention or plan change."
+      }
+    ],
+    "remember": [
+      "Analytics retention and total retention answer different questions.",
+      "Lake-only data is not a drop-in replacement for real-time analytics-rule input.",
+      "Defender XDR’s default hunting window is 30 days; supported extension can incur Sentinel costs.",
+      "Check table eligibility and portal-specific management support before changing plans."
+    ],
+    "pitfalls": [
+      "Extending retention cannot recover records already deleted.",
+      "A longer query time range does not provision a longer retention window.",
+      "Do not conflate Azure Monitor table plans with every Sentinel data-tier setting."
+    ],
+    "lab": {
+      "title": "Design a defensible retention matrix",
+      "steps": [
+        "List three tables and the detections, workbook queries, and investigation use cases that consume them.",
+        "Assign operational analytics and total retention requirements separately.",
+        "Inspect current table-tier options and XDR table eligibility in a test workspace.",
+        "Estimate ingestion, storage, and lake-query implications using the current official model.",
+        "Document how to query or promote older lake data."
+      ],
+      "done": "Your matrix preserves required detection capability and names a workable path for historical investigations."
+    },
+    "sources": [
+      {
+        "title": "Manage Sentinel tiers and retention",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/manage-data-overview"
+      },
+      {
+        "title": "Configure Sentinel table settings",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/manage-table-tiers-retention"
+      },
+      {
+        "title": "Azure Monitor table plans",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-platform-logs"
+      },
+      {
+        "title": "Configure Log Analytics retention",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-retention-configure"
+      },
+      {
+        "title": "Filter and split Sentinel data",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/transformation-filter-split"
+      }
+    ],
+    "questions": [
+      {
+        "id": "retention-data-tiers-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "Firewall records must support real-time Sentinel detections for 90 days and historical investigations for one year. Which design best expresses the requirement?",
+        "options": [
+          "Set only the workbook’s time picker to one year.",
+          "Configure suitable Analytics retention for the operational window and total retention for the full year.",
+          "Move the table to lake-only storage and assume every existing real-time rule continues unchanged.",
+          "Delete the table after 90 days and rely on alert emails for the remaining period."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "The time picker does not retain data.",
+          "Correct. Separate operational and historical windows meet the two requirements.",
+          "Lake-only storage affects real-time analytics consumers and must not be assumed equivalent.",
+          "Selected emails are not a complete historical event store."
+        ],
+        "takeaway": "Configure analytics and total retention independently.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/manage-data-overview"
+      },
+      {
+        "id": "retention-data-tiers-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A cost proposal moves a frequently ingested table to Data Lake only. Choose TWO reviews that must occur before implementation.",
+        "options": [
+          "Identify real-time rules and operational views that depend on the table.",
+          "Confirm how investigators will query historical lake data and account for relevant costs.",
+          "Assume every current SIEM feature will continue without validation.",
+          "Remove all table permissions because cold data has no access controls."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Tier changes can break required operational consumers.",
+          "Correct. Data access workflow and cost remain design requirements.",
+          "Feature parity is not guaranteed by keeping the same table name.",
+          "Stored historical security data still requires controlled access."
+        ],
+        "takeaway": "A tier decision must account for consumers, access, and cost.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/manage-table-tiers-retention"
+      },
+      {
+        "id": "retention-data-tiers-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An analyst selects a 120-day range for an XDR table that has only its default hunting retention. No older records appear. What is the best explanation?",
+        "options": [
+          "The time picker automatically buys historical storage but requires a browser refresh.",
+          "The default window does not expand through query selection; supported longer retention must be configured and data retained.",
+          "All XDR tables retain events forever but hide them by default.",
+          "Incident ownership controls table retention."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Query selection neither purchases nor provisions retention.",
+          "Correct. Retention determines what historical data exists to query.",
+          "The default hunting service does not provide indefinite history.",
+          "Owner assignment is an incident workflow field rather than a retention setting."
+        ],
+        "takeaway": "Query range and retained history are distinct.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/manage-data-overview"
+      },
+      {
+        "id": "retention-data-tiers-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A team increases total retention today after old records have already been removed. Which expectation is correct?",
+        "options": [
+          "The increased period restores all previously deleted rows.",
+          "It can preserve data that still exists under the new policy but cannot recover already removed records.",
+          "It changes every source system’s audit policy.",
+          "It automatically converts every Basic table into Analytics."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Retention changes do not recreate deleted source data.",
+          "Correct. Plan the longer period before the needed evidence is removed.",
+          "Workspace retention does not configure source event generation.",
+          "Table plans are separate settings, subject to supported operations."
+        ],
+        "takeaway": "Retention policy is preventive evidence preservation.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-retention-configure"
+      }
+    ]
+  },
+  {
+    "id": "workbooks-optimization",
+    "domain": "manage",
+    "title": "Workbooks and SOC optimization",
+    "subtitle": "Build useful operational views and improve the value of ingested telemetry.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "Workbooks",
+      "SOC optimization",
+      "KQL",
+      "Cost"
+    ],
+    "intro": "A workbook answers an operational question through queries and visual elements. It is not an ingestion pipeline, detection engine, or immutable copy of the data it displays. SOC optimization adds recommendations about underused data and detection coverage, but analysts must evaluate the business purpose and dependencies before acting. SC-200 can test the difference between saving a template and having the right data, between permission to open a workbook and permission to query its sources, and between cutting cost and improving security value. Practice explaining which query, parameter, table, and role support each chart so that an attractive visualization remains operationally trustworthy.",
+    "sections": [
+      {
+        "title": "Create and customize a useful workbook",
+        "body": "Install a solution or standalone workbook template from Content hub, verify its required data types, and save a workbook resource before customizing it. A workbook stores its definition, queries, parameters, and layout; saving it does not copy the underlying logs into that Azure resource. Choose tables and visualizations that answer a specific question, such as failed sign-ins by location over a selected interval. Build parameters for time, workspace, account, or device as needed. Use appropriate normalization where practical so a view is less dependent on one vendor’s raw schema."
+      },
+      {
+        "title": "Treat queries and permissions as dependencies",
+        "body": "Workbook access and access to the queried data are separate requirements. An analyst may open a saved workbook yet see errors or empty results because the workspace, table, or external source is unavailable to that identity. Test as the intended reader, not only as the author. Filter early, use an appropriate time range, and summarize to the granularity needed by the chart. A parameter should actually bind to each relevant query; changing a displayed time label alone cannot alter a hardcoded query window. Validate numbers against a direct query before reporting trends to leadership."
+      },
+      {
+        "title": "Use recommendations to improve coverage",
+        "body": "SOC optimization can identify missing detections for ingested sources, missing sources for useful detections, and opportunities to improve the value of costly data. Treat a recommendation as a starting point for an engineering decision. If useful authentication data has no active detections, enabling and tuning relevant templates might improve coverage more than stopping collection. If a required source is missing, a rule alone cannot solve the gap. Review the stated threat, required telemetry, current coverage, and recommended actions. Track completion and confirm the intended protection after implementing the change."
+      },
+      {
+        "title": "Optimize cost without losing evidence",
+        "body": "Unused or lightly used tables can signal opportunities to adjust ingestion, plans, retention, or detection content. However, query usage is not the only measure of business value. Compliance evidence and rare incident investigations can justify retaining data that analysts seldom open. Consider ingestion volume, dependencies, investigation needs, and commitment-tier fit together. Establish a baseline, change one well-understood setting, and compare costs and detection health afterward. A smaller bill paired with a blind spot is not a successful optimization. Workbooks and table insights can help show whether ingestion and security outcomes changed as intended."
+      }
+    ],
+    "remember": [
+      "A saved workbook stores its definition, not a separate log archive.",
+      "Workbook visibility does not automatically grant access to every data source.",
+      "Optimization recommendations can improve detections as well as reduce cost.",
+      "Validate compliance and investigation requirements before stopping ingestion."
+    ],
+    "pitfalls": [
+      "A workbook’s empty chart does not prove the source generated no events.",
+      "A data-value recommendation is not permission to delete required evidence."
+    ],
+    "lab": {
+      "title": "Build and validate one SOC view",
+      "steps": [
+        "Save a workbook from an installed template in a test environment.",
+        "Add or inspect a time parameter and confirm which queries consume it.",
+        "Compare one chart’s total with a direct KQL query over the same window.",
+        "Inspect a SOC optimization recommendation and identify its evidence and dependencies.",
+        "Document a safe change and how its result will be measured."
+      ],
+      "done": "The workbook’s values match direct queries and the optimization proposal preserves required security and evidence use cases."
+    },
+    "sources": [
+      {
+        "title": "Sentinel workbooks",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/monitor-your-data"
+      },
+      {
+        "title": "Azure Monitor Workbooks overview",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/visualize/workbooks-overview"
+      },
+      {
+        "title": "SOC optimization recommendation types",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/soc-optimization/soc-optimization-reference"
+      },
+      {
+        "title": "Use SOC optimization",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/soc-optimization/soc-optimization-access"
+      }
+    ],
+    "questions": [
+      {
+        "id": "workbooks-optimization-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An analyst saves an installed workbook template, but the firewall chart is empty. What should be checked first?",
+        "options": [
+          "Whether the required firewall data type is ingested and the query and time scope match it.",
+          "Whether saving the workbook copied all firewall packets into its JSON.",
+          "Whether the workbook resource is named after the firewall.",
+          "Whether the chart has an animated background."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. The visualization depends on actual accessible records and a matching query scope.",
+          "Workbook definitions do not contain a copied archive of the source logs.",
+          "The resource name does not establish data ingestion or query validity.",
+          "Cosmetic settings do not determine whether records exist."
+        ],
+        "takeaway": "Verify workbook data dependencies before changing presentation.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/monitor-your-data"
+      },
+      {
+        "id": "workbooks-optimization-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A workbook author sees results, but an intended reader receives a data-access error. Choose TWO checks.",
+        "options": [
+          "Verify the reader can access the workbook resource.",
+          "Verify the reader has access to the workspaces or other data sources queried by the workbook.",
+          "Assign Global Administrator to all workbook readers automatically.",
+          "Reinstall AMA on the author’s laptop."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. The saved resource has its own access requirements.",
+          "Correct. Queries execute against data sources that must be separately accessible.",
+          "Broad elevation is unnecessary and bypasses the least-privilege design.",
+          "The described failure is identity-specific data access, not collection from the author’s laptop."
+        ],
+        "takeaway": "Test both resource access and query authorization as the intended persona.",
+        "source": "https://learn.microsoft.com/en-us/azure/azure-monitor/visualize/workbooks-overview"
+      },
+      {
+        "id": "workbooks-optimization-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "SOC optimization identifies a billable authentication table that is ingested but unused by active analytics rules. The organization needs it for attack detection. What is the best response?",
+        "options": [
+          "Stop ingestion immediately because no rule currently reads it.",
+          "Review relevant rule templates, enable and tune suitable detections, and verify the resulting coverage.",
+          "Assume the recommendation means Microsoft found no security value in authentication logs.",
+          "Replace the table with a screenshot of its daily count."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "The stated requirement favors using the data for detection rather than immediately removing it.",
+          "Correct. Data-value optimization can mean improving the security use of an existing source.",
+          "Low current use is not a judgment that a source cannot be valuable.",
+          "A screenshot cannot support event-level detection and investigation."
+        ],
+        "takeaway": "Improve data value by adding the missing detection consumer when justified.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/soc-optimization/soc-optimization-reference"
+      },
+      {
+        "id": "workbooks-optimization-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A rarely queried table is required for regulatory evidence and occasional historical investigations. An optimization suggests reducing its cost. Which action is most appropriate?",
+        "options": [
+          "Delete it because recent query frequency is low.",
+          "Evaluate a suitable retention/tier design that preserves the required evidence and access workflow.",
+          "Keep only its workbook title.",
+          "Disable all related data-source audit settings without review."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Low usage alone does not override evidence requirements.",
+          "Correct. Cost changes must preserve the required purpose and a workable investigation path.",
+          "A title does not preserve event evidence.",
+          "Stopping source auditing can destroy the required future record."
+        ],
+        "takeaway": "Optimize the cost of required evidence before assuming it is dispensable.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/soc-optimization/soc-optimization-access"
+      }
+    ]
+  },
+  {
+    "id": "sentinel-analytics",
+    "domain": "manage",
+    "title": "Sentinel analytics rules and detection scheduling",
+    "subtitle": "Choose scheduled or NRT execution, map entities, and handle latency and grouping.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "Analytics rules",
+      "NRT",
+      "Entity mapping",
+      "Ingestion delay"
+    ],
+    "intro": "A good detection is more than a query that once returned an interesting row. It must run at an appropriate cadence, evaluate the right time window, produce useful entities and evidence, and create manageable incidents. Sentinel supports scheduled, near-real-time, threat-intelligence, and machine-learning-related detection experiences; current Microsoft guidance also promotes unified custom detections across the Defender portal. SC-200 still expects the Sentinel analytics distinctions in its published objectives. Learn the operational meaning of frequency, lookback, threshold, grouping, and suppression. Then use those controls to explain why a scenario misses delayed events, repeats alerts, or produces an incident with weak investigation context.",
+    "sections": [
+      {
+        "title": "Choose the execution model",
+        "body": "Scheduled rules run a KQL query at a configurable frequency over a defined lookback window. NRT rules run frequently using ingestion-time handling to detect suitable recently ingested events with low latency. NRT is not simply a scheduled rule whose interval an author types as one minute, and supported query behavior must be checked against current documentation. Threat-intelligence matching correlates observable intelligence with local activity. Machine-learning and correlation features combine signals differently from a deterministic threshold query. Choose the model based on detection latency, source arrival patterns, required query logic, and available telemetry rather than assuming faster is always better."
+      },
+      {
+        "title": "Keep frequency and lookback distinct",
+        "body": "Frequency answers how often the query runs. Lookback answers how much event history that execution evaluates. The interval must not exceed the lookback, because that creates gaps. Overlap can help accommodate correlation windows but can also repeat results unless the logic accounts for it. Scheduled rules have built-in scheduling delay, yet sources may arrive later than that allowance. Measure ingestion delay and design a sufficiently broad event window with an appropriate ingestion-time boundary to avoid both missed and repeated results. Do not hardcode an overly narrow time filter inside a query that defeats the intended rule lookback."
+      },
+      {
+        "title": "Produce alerts that support investigation",
+        "body": "Entity mapping identifies meaningful accounts, hosts, IPs, and other assets from returned fields; use strong identifiers where possible. Custom details preserve additional context, while alert-detail overrides can make titles and severity useful for the returned activity. The alert threshold evaluates the query results, so understand whether each row is an event or an aggregate before selecting a count threshold. Event grouping determines whether results become one alert or separate alerts. Incident grouping governs how alerts are collected into incidents, subject to the portal’s correlation behavior. These controls act at different stages and should be tested independently."
+      },
+      {
+        "title": "Validate and operate the detection",
+        "body": "Start from supported templates where practical, inspect required sources, run the query over representative data, and test expected matches and benign activity. Use simulation and preview features where available. After activation, monitor execution health, errors, data volume, latency, alert quality, and coverage. Suppression temporarily stops rule execution after a match; it is not the same as grouping related alerts or narrowly excluding a known benign entity in the query. If onboarding to the Defender portal changes incident correlation, evaluate the resulting incidents there rather than assuming every legacy grouping behavior remains identical."
+      }
+    ],
+    "remember": [
+      "Frequency is cadence; lookback is evaluated history.",
+      "A query interval longer than lookback leaves uncovered time.",
+      "Entity mapping and custom details enrich alerts; grouping controls alert/incident packaging.",
+      "NRT uses ingestion-time logic and has its own supported behavior."
+    ],
+    "pitfalls": [
+      "Suppression can hide later genuine activity while the rule is paused.",
+      "A threshold on aggregate rows is not automatically a threshold on underlying events.",
+      "Source latency can exceed the built-in scheduling allowance."
+    ],
+    "lab": {
+      "title": "Test a detection’s timing assumptions",
+      "steps": [
+        "Choose a harmless official template in a training workspace and identify its source table.",
+        "Explain its frequency, lookback, threshold, and entity mappings.",
+        "Compare TimeGenerated with ingestion_time() for sample records.",
+        "Simulate an expected match and a benign nonmatch.",
+        "Inspect health and alert context after a controlled activation."
+      ],
+      "done": "You can explain why every evaluated row creates or does not create an alert and identify the latency assumption."
+    },
+    "sources": [
+      {
+        "title": "Scheduled analytics rule behavior",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/scheduled-rules-overview"
+      },
+      {
+        "title": "NRT analytics rules",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/near-real-time-rules"
+      },
+      {
+        "title": "Handle ingestion delay",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/ingestion-delay"
+      },
+      {
+        "title": "Threat detection rule types",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/threat-detection"
+      },
+      {
+        "title": "Monitor analytics rule integrity",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/monitor-analytics-rule-integrity"
+      }
+    ],
+    "questions": [
+      {
+        "id": "sentinel-analytics-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A scheduled rule must evaluate the preceding hour every 15 minutes. Which settings express that requirement?",
+        "options": [
+          "Frequency 1 hour; lookback 15 minutes.",
+          "Frequency 15 minutes; lookback 1 hour.",
+          "Frequency 1 day; lookback 1 minute.",
+          "Frequency and lookback both mean the same setting."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "This reverses the intended cadence and leaves gaps because the interval exceeds the lookback.",
+          "Correct. The cadence is 15 minutes, while each run considers an hour of history.",
+          "This creates substantial gaps and does not satisfy the required response cadence.",
+          "They control different aspects of scheduled execution."
+        ],
+        "takeaway": "Read frequency and lookback as separate clocks.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/scheduled-rules-overview"
+      },
+      {
+        "id": "sentinel-analytics-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A query matches expected activity but its alerts have poor investigation context. Choose TWO changes that directly improve alert content without changing the matching condition.",
+        "options": [
+          "Map returned strong account, host, or IP identifiers to entities.",
+          "Add relevant returned evidence as custom details or alert-detail overrides.",
+          "Remove all returned identifiers after aggregation.",
+          "Set the query interval longer than its lookback."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Entity mapping enables meaningful investigation pivots.",
+          "Correct. Useful alert fields and custom details carry context into triage.",
+          "Removing identifiers makes investigation harder.",
+          "This damages time coverage and does not enrich alert content."
+        ],
+        "takeaway": "Enrichment makes a valid detection operationally useful.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/scheduled-rules-overview"
+      },
+      {
+        "id": "sentinel-analytics-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A log source often arrives 20 minutes after event generation. A scheduled rule only looks back five minutes by event time and misses those events. What is the best design response?",
+        "options": [
+          "Expand the event-time window based on measured delay and use suitable ingestion-time logic to control repeated processing.",
+          "Increase only the alert severity.",
+          "Change the rule title to “late events.”",
+          "Assume the built-in scheduled-rule delay handles every possible source delay."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. The timing design must include events that arrive later than the original event-time window.",
+          "Severity changes prioritization, not which events are evaluated.",
+          "A title cannot alter timing or query selection.",
+          "Built-in delay is not a guarantee against arbitrary upstream latency."
+        ],
+        "takeaway": "Measure and design for the source’s actual ingestion delay.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/ingestion-delay"
+      },
+      {
+        "id": "sentinel-analytics-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A detection produces repeated benign matches from one documented maintenance account. The team proposes pausing the entire rule for a day after any alert. What is the principal concern?",
+        "options": [
+          "Suppression pauses execution and could miss a real attack by another account during that period.",
+          "Suppression only changes the alert title.",
+          "Suppression is identical to entity mapping.",
+          "Suppression automatically proves the maintenance account is safe forever."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. A narrow, validated exclusion or other tuning may better preserve unrelated detection coverage.",
+          "Suppression affects execution, not merely presentation.",
+          "Mapping identifies assets and does not pause detection.",
+          "A tuning control does not establish permanent trust in an account."
+        ],
+        "takeaway": "Understand the coverage cost of broad suppression.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/scheduled-rules-overview"
+      },
+      {
+        "id": "redwood-case-q1",
+        "type": "single",
+        "difficulty": "Analyze",
+        "stem": "Which change addresses the first proven break in Redwood’s firewall collection path?",
+        "options": [
+          "Change the DCR to include local4 informational and required severities.",
+          "Increase the analytics rule frequency while leaving the DCR unchanged.",
+          "Convert the workbook into a playbook.",
+          "Wait for XDR incident correlation to create the missing raw events."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "The forwarder has received the data, but the collection facility and threshold do not match the emitted messages.",
+          "Scheduling cannot recover messages excluded by the collection filter.",
+          "A visualization or workflow change does not fix the DCR mismatch.",
+          "Correlation cannot synthesize telemetry discarded before ingestion."
+        ],
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-syslog-ama",
+        "context": "CASE 1 — REDWOOD RETAIL\n\nRedwood has connected its Sentinel workspace to the Defender portal. Its firewall emits correctly formatted CEF through local4 at informational severity to a supported Linux forwarder. The forwarder receives the messages, but its DCR currently collects local5 at error and above.\n\nThe SOC wants a scheduled detector evaluated every five minutes. The source can arrive 20 minutes late; the approved design is a 45-minute event-time lookback. Matching alerts must include the source IP as an entity. The SOC also wants matching new high-severity incidents assigned and tagged without calling an external service.\n\nA tier-one analyst may assign and close incidents but may not edit analytics rules. A separate engineer owns detection configuration. The SOC must validate data collection and representative detection results before declaring coverage. Assume supported connectors and required licensing are available.",
+        "takeaway": "The forwarder has received the data, but the collection facility and threshold do not match the emitted messages."
+      },
+      {
+        "id": "redwood-case-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "Which TWO settings directly express the approved detector behavior and investigation context?",
+        "options": [
+          "Run every five minutes with a 45-minute event-time lookback.",
+          "Map the returned source-IP field to the appropriate IP entity identifier.",
+          "Look back only five minutes because that is also the run frequency.",
+          "Rely on the workbook time picker to set the rule’s production lookback."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Frequency controls how often the query runs; the approved larger lookback accommodates the stated late data.",
+          "Entity mapping lets investigation features recognize the IP represented in query output.",
+          "This would miss the stated 20-minute-late events and contradict the approved design.",
+          "A workbook filter does not configure an analytics rule’s production query interval."
+        ],
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/scheduled-rules-overview",
+        "context": "CASE 1 — REDWOOD RETAIL\n\nRedwood has connected its Sentinel workspace to the Defender portal. Its firewall emits correctly formatted CEF through local4 at informational severity to a supported Linux forwarder. The forwarder receives the messages, but its DCR currently collects local5 at error and above.\n\nThe SOC wants a scheduled detector evaluated every five minutes. The source can arrive 20 minutes late; the approved design is a 45-minute event-time lookback. Matching alerts must include the source IP as an entity. The SOC also wants matching new high-severity incidents assigned and tagged without calling an external service.\n\nA tier-one analyst may assign and close incidents but may not edit analytics rules. A separate engineer owns detection configuration. The SOC must validate data collection and representative detection results before declaring coverage. Assume supported connectors and required licensing are available.",
+        "takeaway": "Frequency controls how often the query runs; the approved larger lookback accommodates the stated late data."
+      },
+      {
+        "id": "redwood-case-q3",
+        "type": "single",
+        "difficulty": "Analyze",
+        "stem": "The requested assignment and tag changes need no external API. Which implementation has the appropriate scope?",
+        "options": [
+          "An automation rule with conditions and native incident actions.",
+          "A workbook containing two charts.",
+          "A new threat intelligence feed.",
+          "A live-response session on every firewall."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Automation rules can match incident conditions and apply native assignment and tagging actions.",
+          "Charts display data rather than implement these incident actions.",
+          "Intelligence ingestion does not perform incident ownership and tagging workflow.",
+          "Endpoint response sessions are unrelated to Sentinel incident assignment."
+        ],
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/automate-incident-handling-with-automation-rules",
+        "context": "CASE 1 — REDWOOD RETAIL\n\nRedwood has connected its Sentinel workspace to the Defender portal. Its firewall emits correctly formatted CEF through local4 at informational severity to a supported Linux forwarder. The forwarder receives the messages, but its DCR currently collects local5 at error and above.\n\nThe SOC wants a scheduled detector evaluated every five minutes. The source can arrive 20 minutes late; the approved design is a 45-minute event-time lookback. Matching alerts must include the source IP as an entity. The SOC also wants matching new high-severity incidents assigned and tagged without calling an external service.\n\nA tier-one analyst may assign and close incidents but may not edit analytics rules. A separate engineer owns detection configuration. The SOC must validate data collection and representative detection results before declaring coverage. Assume supported connectors and required licensing are available.",
+        "takeaway": "Automation rules can match incident conditions and apply native assignment and tagging actions."
+      },
+      {
+        "id": "redwood-case-q4",
+        "type": "single",
+        "difficulty": "Analyze",
+        "stem": "Which built-in Sentinel role best fits the tier-one analyst’s stated duties, assuming no broader inherited role?",
+        "options": [
+          "Microsoft Sentinel Reader",
+          "Microsoft Sentinel Responder",
+          "Microsoft Sentinel Contributor",
+          "Subscription Owner"
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "Reader can view but does not supply the required incident-management authority.",
+          "Responder supports incident management without the detection-editing authority of Contributor.",
+          "Contributor is broader than the incident duties specified.",
+          "Owner is far broader than the required Sentinel incident workflow."
+        ],
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/roles",
+        "context": "CASE 1 — REDWOOD RETAIL\n\nRedwood has connected its Sentinel workspace to the Defender portal. Its firewall emits correctly formatted CEF through local4 at informational severity to a supported Linux forwarder. The forwarder receives the messages, but its DCR currently collects local5 at error and above.\n\nThe SOC wants a scheduled detector evaluated every five minutes. The source can arrive 20 minutes late; the approved design is a 45-minute event-time lookback. Matching alerts must include the source IP as an entity. The SOC also wants matching new high-severity incidents assigned and tagged without calling an external service.\n\nA tier-one analyst may assign and close incidents but may not edit analytics rules. A separate engineer owns detection configuration. The SOC must validate data collection and representative detection results before declaring coverage. Assume supported connectors and required licensing are available.",
+        "takeaway": "Responder supports incident management without the detection-editing authority of Contributor."
+      }
+    ]
+  },
+  {
+    "id": "mitre-anomalies",
+    "domain": "manage",
+    "title": "MITRE coverage, anomalies, and multistage correlation",
+    "subtitle": "Measure useful coverage and tune behavioral findings without treating unusual as malicious.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "MITRE ATT&CK",
+      "Anomalies",
+      "Machine learning",
+      "Correlation"
+    ],
+    "intro": "MITRE ATT&CK gives a shared vocabulary for attacker goals and techniques, helping the SOC compare detections against relevant attack paths. A colored matrix cell is a planning signal, not proof that an attack will be stopped. Behavioral anomalies add evidence that activity differs from a baseline, while correlation can connect weak signals into a stronger incident. SC-200 tests these distinctions and the engineering steps needed to improve coverage. Current Sentinel onboarding to the Defender portal also changes the correlation engine: Fusion is disabled for those workspaces and its function is replaced by Defender XDR correlation. Recognize that transition when reading older labs.",
+    "sections": [
+      {
+        "title": "Read the coverage matrix critically",
+        "body": "A tactic describes an attacker’s objective, such as credential access or lateral movement. A technique describes how the attacker pursues it. Sentinel’s MITRE view can show existing active detection coverage and available content associated with these categories. Use the distinction between enabled rules and available templates to identify a real gap. A template without its required source is not operational protection. Validate the rule’s actual query, scope, data quality, and expected evidence. Prioritize techniques relevant to your assets and threat model rather than enabling every template simply to fill the entire matrix with color."
+      },
+      {
+        "title": "Understand what an anomaly claims",
+        "body": "An anomaly is a departure from an established pattern. It can be useful context for hunting and correlation, but unusual does not automatically mean malicious. Sentinel includes UEBA-oriented and machine-learning anomaly approaches that analyze different aspects of behavior. Results in Anomalies include rule information and reasons that should guide interpretation. Check the relevant rule’s data requirements and baseline assumptions before using an anomaly as evidence. A backup job, new application rollout, or legitimate administrative change may produce unusual activity, so compare the finding with business context and other identity, network, or endpoint evidence."
+      },
+      {
+        "title": "Tune custom anomalies through a controlled comparison",
+        "body": "Built-in anomaly configurations are not edited like an ordinary custom KQL rule. Duplicate the supported anomaly rule, change the allowed parameters or threshold in the customized copy, and assess its results in Flighting mode. Compare findings in Anomalies using the template and rule identifiers and inspect the reasons. Move a satisfactory customized version to Production; the original version changes out of Production according to the supported workflow. This lets you compare behavior before replacing operational output. Do not assume that lowering a threshold always improves security; it may simply increase findings analysts cannot use."
+      },
+      {
+        "title": "Distinguish anomaly generation from correlation",
+        "body": "An anomaly, a deterministic alert, and a correlated incident are different outputs. Legacy Sentinel Fusion combines suitable signals to recognize multistage attacks and relies on meaningful entities and attack-stage context. For a workspace connected to the Defender portal, use the Defender XDR correlation experience rather than trying to restore Fusion as a separate engine. Wider source deployment can improve visibility, but every contributing source still needs to be configured and healthy. When several low-severity alerts describe the same host and account across stages, investigate the combined story rather than dismissing each alert in isolation."
+      }
+    ],
+    "remember": [
+      "Tactic is the attacker’s objective; technique is the method.",
+      "Available templates do not equal enabled, data-backed detection coverage.",
+      "Anomalies describe unusual behavior and require contextual validation.",
+      "Customize supported anomaly copies in Flighting before Production.",
+      "Fusion is replaced by XDR correlation for Sentinel workspaces onboarded to Defender portal."
+    ],
+    "pitfalls": [
+      "A filled ATT&CK cell is not proof of complete protection.",
+      "An anomaly does not necessarily create an incident by itself.",
+      "Avoid applying old Fusion instructions unchanged to the unified portal."
+    ],
+    "lab": {
+      "title": "Validate one coverage claim and one anomaly",
+      "steps": [
+        "Select an ATT&CK technique relevant to a training scenario and compare active rules with available templates.",
+        "Identify the exact source tables and mappings required by a candidate rule.",
+        "Inspect an anomaly’s reasons and baseline-related context.",
+        "Review the supported duplicate, Flighting, and Production workflow without changing production content."
+      ],
+      "done": "You can defend a coverage claim with active detection plus data, and distinguish an anomaly from a confirmed attack."
+    },
+    "sources": [
+      {
+        "title": "MITRE ATT&CK coverage in Sentinel",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/mitre-coverage"
+      },
+      {
+        "title": "Anomaly types and models",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/anomalies-reference"
+      },
+      {
+        "title": "Work with anomaly rules",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-anomaly-rules"
+      },
+      {
+        "title": "Multistage correlation and Fusion",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/fusion"
+      }
+    ],
+    "questions": [
+      {
+        "id": "mitre-anomalies-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A team points to an available ATT&CK-tagged template as proof that a technique is covered. The template is not active and its data connector is absent. What should the engineer conclude?",
+        "options": [
+          "The technique is fully covered because Microsoft published a template.",
+          "Operational coverage is not established until required data and an active validated detection exist.",
+          "Adding a tactic label automatically generates the source logs.",
+          "The matrix itself blocks the attack technique."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "A content catalog entry is not an operating detection.",
+          "Correct. Validate telemetry, activation, scope, and matching behavior before claiming coverage.",
+          "Metadata does not configure collection.",
+          "The matrix visualizes detection context and does not itself prevent attacks."
+        ],
+        "takeaway": "Coverage claims require evidence-backed active controls.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/mitre-coverage"
+      },
+      {
+        "id": "mitre-anomalies-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A built-in anomaly produces excessive benign findings after an application rollout. Choose TWO appropriate engineering actions.",
+        "options": [
+          "Review anomaly reasons and the business change before changing the threshold.",
+          "Create the supported customized copy and compare it in Flighting mode.",
+          "Assume every anomaly is malicious and isolate all affected hosts.",
+          "Overwrite the built-in template directly with an arbitrary query."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Context determines whether the finding reflects a threat or a changed baseline.",
+          "Correct. Controlled comparison is the supported customization workflow.",
+          "Unusual behavior alone is not sufficient proof for a broad response.",
+          "Built-in anomaly rules use a defined customization process rather than direct arbitrary replacement."
+        ],
+        "takeaway": "Tune behavioral models with context and comparison.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-anomaly-rules"
+      },
+      {
+        "id": "mitre-anomalies-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "After connecting Sentinel to the Defender portal, an engineer cannot use Fusion as the previous standalone correlation engine. Which explanation is correct?",
+        "options": [
+          "All correlation is permanently unavailable.",
+          "Fusion is disabled for onboarded workspaces and its functionality is replaced by Defender XDR correlation.",
+          "A workbook must be renamed Fusion to restore it.",
+          "The endpoint agent must be removed to enable incident correlation."
+        ],
+        "answer": [
+          1
+        ],
+        "explanations": [
+          "The unified portal still provides incident correlation through XDR.",
+          "Correct. This is a documented platform transition, not necessarily a deployment failure.",
+          "A visualization name cannot select a correlation engine.",
+          "Removing telemetry would harm visibility and does not restore the legacy engine."
+        ],
+        "takeaway": "Recognize platform changes when interpreting older Sentinel instructions.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/fusion"
+      },
+      {
+        "id": "mitre-anomalies-q4",
+        "type": "order",
+        "difficulty": "Analyze",
+        "stem": "Order a controlled customization of a supported built-in Sentinel anomaly rule.",
+        "options": [
+          "Compare results and reasons in Anomalies for the original and customized versions.",
+          "Duplicate the supported rule.",
+          "Promote the satisfactory customized version to Production.",
+          "Modify allowed parameters and enable the copy in Flighting."
+        ],
+        "answer": [
+          1,
+          3,
+          0,
+          2
+        ],
+        "explanations": [
+          "Comparison follows a running test version and supplies evidence for promotion.",
+          "Duplication creates the editable supported copy.",
+          "Production promotion follows evidence that the change is useful.",
+          "Configure and test the copy before replacing production behavior."
+        ],
+        "takeaway": "Duplicate, configure in Flighting, compare, then promote.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-anomaly-rules"
+      }
+    ]
+  },
+  {
+    "id": "xdr-custom-detections",
+    "domain": "manage",
+    "title": "Custom detections from Advanced Hunting",
+    "subtitle": "Turn a hunting query into a reliable alert and a precisely scoped response.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "Advanced Hunting",
+      "Custom detections",
+      "KQL",
+      "Response actions"
+    ],
+    "intro": "A hunting query supports an analyst’s investigation at a chosen moment. A custom detection runs repeatedly to generate alerts and, when configured and supported, response actions. This change creates new engineering obligations: event provenance, entity identifiers, supported frequency, scope, and safe response targeting. Current Microsoft guidance recommends custom detections as the unified rule-creation experience for Defender XDR and Sentinel data in the Defender portal. SC-200 scenarios can ask which fields a summarized query should preserve, why Continuous NRT is unavailable, or why a response cannot act on the intended asset. Design the result schema as carefully as the matching logic.",
+    "sections": [
+      {
+        "title": "Preserve the source event and asset identity",
+        "body": "For Defender data, project Timestamp or TimeGenerated so generated alerts retain meaningful event timing. For endpoint tables, keep DeviceId and ReportId for correct device scope and event enrichment. Other Defender sources have their own relevant event and asset identifiers; do not invent a universal DeviceId requirement for email-only data. Keep Timestamp and ReportId from the same real event. If aggregating per device, arg_max can preserve the pair from the latest matching event. Replacing Timestamp with now() or selecting unrelated maximum values can disconnect the alert from the source evidence and damage its investigation context.",
+        "code": "DeviceEvents\n| where ActionType == \"AntivirusDetection\"\n| summarize Hits=count(), arg_max(Timestamp, ReportId) by DeviceId\n| where Hits >= 5"
+      },
+      {
+        "title": "Choose frequency from supported query behavior",
+        "body": "Scheduled custom detections use frequency-dependent lookback behavior; current rules can also use Custom frequency for Sentinel-only data. Continuous NRT evaluates supported events quickly, but the query and selected table must qualify. Current continuous queries use one supported table and supported operators; joins, unions, and externaldata are not supported for that mode. Verify current eligibility rather than assuming every query that runs interactively can run continuously. The service prefilters the rule’s data window, so avoid an arbitrary narrow Timestamp filter that unintentionally removes relevant events. Where extra timing filters are necessary, align them with the intended detection logic."
+      },
+      {
+        "title": "Configure alert content, scope, and action",
+        "body": "Specify a meaningful alert name, severity, category, and impacted assets. An impacted-asset identifier is also important when selecting supported response actions. Device actions such as isolation act on the returned DeviceId; account, email, and file actions require the corresponding identifiers and source support. Permissions and device-group scope constrain who can create or manage a rule and which devices it can affect. Test a detection without an automatic disruptive action first when the intended result is uncertain. A correct alert on one device should never become an automatic response against a loosely matched display name."
+      },
+      {
+        "title": "Manage the rule as an operational control",
+        "body": "Run and inspect the hunting query before creating the rule, then review its history, generated alerts, and any configured actions. Investigate rule errors and unexpected volume instead of simply raising severity. Edit, disable, or remove the rule when its purpose changes; document why and verify the resulting coverage. Keep queries efficient by selecting the relevant table, filtering early, and retaining only useful columns after required identifiers are preserved. Treat a rule change as a change to an always-running control: assess scope, event window, benign cases, and action permissions together. A query can be syntactically valid yet operationally unsafe or ineffective."
+      }
+    ],
+    "remember": [
+      "Preserve real event timing and the relevant source-event identifiers.",
+      "For endpoint event enrichment, retain DeviceId and ReportId with event time.",
+      "Continuous NRT requires a supported single-table query and supported operators.",
+      "Response actions require supported target identifiers and permissions."
+    ],
+    "pitfalls": [
+      "Do not replace original event time with now().",
+      "Do not aggregate away the identifiers needed for device scope or action targeting.",
+      "Interactive hunting success does not prove Continuous NRT eligibility."
+    ],
+    "lab": {
+      "title": "Convert a harmless hunt into a detection design",
+      "steps": [
+        "Run a harmless official sample query in a training Defender environment.",
+        "Inspect which time, event, device, account, or email identifiers it returns.",
+        "Add a summarization while preserving a real source event with arg_max.",
+        "Check continuous-query eligibility and the scheduled lookback behavior.",
+        "Design alert content and an appropriate test scope before enabling any action."
+      ],
+      "done": "You can identify the exact source event and impacted asset from each result row and explain why its frequency is supported."
+    },
+    "sources": [
+      {
+        "title": "Create and manage custom detections",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules"
+      },
+      {
+        "title": "Custom detections overview",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/custom-detections-overview"
+      },
+      {
+        "title": "DeviceEvents schema",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-deviceevents-table"
+      },
+      {
+        "title": "Advanced hunting query practices",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-best-practices"
+      }
+    ],
+    "questions": [
+      {
+        "id": "xdr-custom-detections-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A DeviceEvents query summarizes five matching events per device. The detection must preserve the latest source event for device-scoped enrichment. Which aggregation is best?",
+        "options": [
+          "summarize Hits=count(), arg_max(Timestamp, ReportId) by DeviceId",
+          "summarize Hits=count() by DeviceName | extend Timestamp=now()",
+          "summarize max(Timestamp), max(ReportId) by ActionType",
+          "project FileName only"
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. It preserves DeviceId and takes Timestamp and ReportId together from a real latest matching event.",
+          "This loses the stable device identifier and source ReportId, and invents an alert time.",
+          "Independent maxima can come from different events and grouping by action loses device scope.",
+          "A file-name-only result cannot provide the requested device and event context."
+        ],
+        "takeaway": "Aggregate without destroying source-event provenance.",
+        "source": "https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules"
+      },
+      {
+        "id": "xdr-custom-detections-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A custom detection is intended for Continuous NRT. Choose TWO characteristics consistent with current supported query eligibility.",
+        "options": [
+          "It references one supported table.",
+          "It uses only supported operators and no joins, unions, or externaldata.",
+          "It unions all endpoint and email tables.",
+          "It relies on an externaldata lookup downloaded on every evaluation."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Continuous custom detections require a qualifying single-table query.",
+          "Correct. Supported syntax is narrower than arbitrary interactive hunting.",
+          "A union violates the stated continuous-query restriction.",
+          "externaldata is not supported for Continuous NRT."
+        ],
+        "takeaway": "Check continuous eligibility before selecting the frequency.",
+        "source": "https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules"
+      },
+      {
+        "id": "xdr-custom-detections-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A device custom detection generates the expected alert, but the team wants its supported isolation action to target the exact matched device. Which returned identifier is central to that action?",
+        "options": [
+          "DeviceId",
+          "Only a count of affected devices",
+          "The analyst’s display name",
+          "Only the alert severity label"
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Device actions operate against the identified returned device.",
+          "An aggregate count does not identify which device to isolate.",
+          "The analyst’s name describes the operator, not the impacted asset.",
+          "Severity helps prioritize the alert but does not identify an action target."
+        ],
+        "takeaway": "A response needs an actionable asset identifier.",
+        "source": "https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules"
+      },
+      {
+        "id": "xdr-custom-detections-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A rule starts producing far more benign alerts after a query change. What should its owner do?",
+        "options": [
+          "Review the changed query, results, execution history, scope, and actions; tune or disable the rule while correcting the issue.",
+          "Increase severity so fewer results exist.",
+          "Delete all source events that produced alerts.",
+          "Assume a successful save proves the detection is accurate."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Manage a detection’s ongoing behavior and any automatic response consequences.",
+          "Severity does not reduce the query’s matches.",
+          "Deleting evidence is not a sound tuning method.",
+          "A saved definition can still be noisy, incorrectly scoped, or inefficient."
+        ],
+        "takeaway": "Operational verification continues after rule creation.",
+        "source": "https://learn.microsoft.com/en-us/defender-xdr/custom-detections-overview"
+      }
+    ]
+  },
+  {
+    "id": "endpoint-configuration",
+    "domain": "manage",
+    "title": "Endpoint configuration, device groups, ASR, and custom telemetry",
+    "subtitle": "Configure protection and collection with precise scope and verified prerequisites.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "MDE",
+      "Device groups",
+      "ASR",
+      "Custom collection"
+    ],
+    "intro": "Endpoint configuration combines several different control planes. Device groups define management scope and remediation levels; endpoint security policies configure protection; advanced features enable additional capabilities; rules configure indicators and other operational behavior; custom collection adds targeted telemetry. SC-200 expects you to choose the right control rather than change a broad setting because it sounds related. A device tag is useful context but is not, by itself, an access-control assignment. A custom collection rule is also different from a custom detection: one gathers selected evidence and the other evaluates evidence to alert. Always identify whether the scenario asks to prevent, collect, detect, authorize, or respond.",
+    "sections": [
+      {
+        "title": "Use device groups and permissions correctly",
+        "body": "Device groups match properties such as device name, domain, tags, and operating system, and can assign access to appropriate Microsoft Entra user groups. When a device matches multiple groups, the highest-ranked matching group wins; it does not accumulate every group’s remediation level. Check rank when a critical server receives an unexpected automation setting. Defender XDR unified RBAC controls authorized operations and scope in current deployments; older tenants may expose legacy endpoint RBAC. Tags supply device context for matching and targeting, while roles define what people can do. Do not assume merely tagging a device hides it from all unauthorized readers. The advanced scoped-correlation setting can restrict future correlation to accessible device groups for local SOC operation, but the global SOC may then see multiple incidents instead of one cross-group attack story."
+      },
+      {
+        "title": "Select advanced features and endpoint rule settings",
+        "body": "Advanced features include capabilities such as live response, EDR in block mode, custom network indicators, tamper protection, device discovery, and product integrations. EDR in block mode can remediate post-breach artifacts when Defender Antivirus is passive; it is not the same as turning on every preventive AV capability. Live response and server live response have feature and permission prerequisites. Indicators under endpoint Rules can define supported allow, warn, or block behavior with scope and expiry. File and network indicator prerequisites differ, so check cloud protection and network-protection requirements. Automation uploads selects extensions for content submission. Automation folder exclusions affect the documented automation/investigation path, can block live-response examination of excluded files, and do not exempt them from antivirus scanning. Treat older AIR-oriented screens in light of the September 2026 lifecycle change."
+      },
+      {
+        "title": "Deploy attack surface reduction as a policy",
+        "body": "ASR rules target risky behaviors, such as Office spawning child processes, script abuse, or credential theft, rather than only known file hashes. Configure supported policies through Intune or another supported management channel, verify prerequisites for each rule, and test representative devices. Audit records would-be detections without enforcing a block. Block enforces the rule. Warn provides a supported temporary override workflow, with current platform and administrator-approval requirements; not every rule supports it. Review ASR reports and hunting results, use narrow justified exclusions, then expand deployment rings. A global antivirus exclusion is not automatically the correct fix for one ASR compatibility issue."
+      },
+      {
+        "title": "Collect additional evidence with targeted rules",
+        "body": "Current custom data collection is a preview feature requiring Defender for Endpoint Plan 2, a connected Sentinel workspace, supported endpoint versions, and dynamic tags configured through asset rule management. Static tags are not sufficient for its targeting. Choose the relevant custom event table, actions, and specific conditions, then validate only a small pilot before expanding. Supported custom categories include process, image-load, file, network, and script events in DeviceCustom tables. Collection adds to standard endpoint telemetry instead of replacing it. Sentinel ingestion can incur charges, and event-volume limits apply, so avoid collecting every event unnecessarily. Verify actual rows, DeviceId, rule metadata, and required attributes in the custom table."
+      }
+    ],
+    "remember": [
+      "The highest-ranked matching device group determines membership.",
+      "Tags provide context; RBAC roles and scope grant operations and data access.",
+      "ASR Audit observes; Block enforces; Warn has rule and platform limitations.",
+      "Custom collection adds evidence and currently requires dynamic tags and a connected Sentinel workspace.",
+      "An indicator rule, a collection rule, and a detection rule perform different jobs."
+    ],
+    "pitfalls": [
+      "Do not assume every exclusion type applies to every Defender component.",
+      "Custom collection preview prerequisites and limits may change; verify before configuring.",
+      "Turning on a feature does not give every user permission to invoke it."
+    ],
+    "lab": {
+      "title": "Plan a small scoped endpoint rollout",
+      "steps": [
+        "Inspect a test device’s tags, matching groups, and group rank.",
+        "Identify which role grants a responder the necessary action in the active RBAC model.",
+        "Review an ASR rule’s audit results and design a narrow pilot deployment.",
+        "Inspect dynamic-tag and connected-workspace prerequisites for custom data collection.",
+        "Design a targeted custom collection rule and a query proving that the pilot emitted expected events."
+      ],
+      "done": "You can distinguish protection, collection, detection, and access scope, and validate each against a known pilot device."
+    },
+    "sources": [
+      {
+        "title": "Device groups",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/machine-groups"
+      },
+      {
+        "title": "Endpoint role-based access",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/rbac"
+      },
+      {
+        "title": "Endpoint advanced features",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/advanced-features"
+      },
+      {
+        "title": "Manage indicators",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/indicator-manage"
+      },
+      {
+        "title": "Automation file uploads",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/manage-automation-file-uploads"
+      },
+      {
+        "title": "Automation folder exclusions",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/automation-folder-exclusions-configure"
+      },
+      {
+        "title": "ASR rules overview",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-overview"
+      },
+      {
+        "title": "Test ASR deployment",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-deployment-test"
+      },
+      {
+        "title": "Custom data collection overview",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/custom-data-collection"
+      },
+      {
+        "title": "Create custom collection rules",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/create-custom-data-collection-rules"
+      },
+      {
+        "title": "Dynamic asset rules",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/configure-asset-rules"
+      }
+    ],
+    "questions": [
+      {
+        "id": "endpoint-configuration-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A server matches the broad All-Windows group and the more specific Critical-Servers group. It unexpectedly receives the broad group’s remediation level. What should the engineer inspect first?",
+        "options": [
+          "The ranking of the matching device groups.",
+          "The color used for the server icon.",
+          "Whether a workbook includes the server name.",
+          "The size of the server’s incident comments field."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. A device belongs to the highest-ranked matching group, so specificity alone does not win.",
+          "An icon does not determine group membership.",
+          "Workbook query results are not the group assignment mechanism.",
+          "Incident comment size does not affect endpoint grouping."
+        ],
+        "takeaway": "Device-group priority is explicit ranking, not an assumption of specificity.",
+        "source": "https://learn.microsoft.com/en-us/defender-endpoint/machine-groups"
+      },
+      {
+        "id": "endpoint-configuration-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A team wants targeted additional script and file telemetry through current custom data collection. Choose TWO prerequisites that directly distinguish this feature.",
+        "options": [
+          "A connected Sentinel workspace for the custom data.",
+          "Dynamic device tags configured through asset rule management.",
+          "Only a manually assigned static tag.",
+          "Only a workbook template and no endpoint deployment."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Custom collection routes and queries data through the connected Sentinel workspace.",
+          "Correct. Current targeting requires dynamic tags rather than static tags.",
+          "Static tags do not meet the documented custom collection targeting requirement.",
+          "A workbook neither deploys the endpoint capability nor supplies required telemetry."
+        ],
+        "takeaway": "Custom collection depends on both storage integration and supported dynamic targeting.",
+        "source": "https://learn.microsoft.com/en-us/defender-endpoint/create-custom-data-collection-rules"
+      },
+      {
+        "id": "endpoint-configuration-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An ASR rule may disrupt a legacy line-of-business application. The SOC needs to observe its effect before enforcing it broadly. What is the best initial rollout?",
+        "options": [
+          "Pilot in Audit mode, review ASR reports or hunting data, then move justified rules and exclusions through deployment rings.",
+          "Enable Block tenant-wide and ignore compatibility reports.",
+          "Turn off all endpoint protection permanently.",
+          "Create a file-hash indicator and assume it simulates every ASR behavior."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Audit provides evidence about impact before enforcement and a staged rollout limits unintended disruption.",
+          "Broad untested enforcement can interrupt legitimate work.",
+          "This abandons the protection goal rather than managing compatibility.",
+          "Hash indicators and behavior-based ASR rules address different control requirements."
+        ],
+        "takeaway": "Use measured, staged ASR deployment.",
+        "source": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-deployment-test"
+      },
+      {
+        "id": "endpoint-configuration-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An organization uses another primary antivirus and keeps Defender Antivirus passive. It wants Defender endpoint post-breach remediation where supported. Which advanced feature directly fits?",
+        "options": [
+          "EDR in block mode.",
+          "Workbook auto-refresh.",
+          "A Sentinel Reader assignment.",
+          "Disabling every network indicator."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. EDR in block mode can remediate malicious artifacts detected after breach while Defender Antivirus is passive.",
+          "A visualization refresh does not enforce endpoint remediation.",
+          "A read-only Azure role does not change endpoint protection behavior.",
+          "Removing indicators does not enable the requested protection."
+        ],
+        "takeaway": "Distinguish endpoint post-breach enforcement from the primary antivirus operating mode.",
+        "source": "https://learn.microsoft.com/en-us/defender-endpoint/advanced-features"
+      }
+    ]
+  },
+  {
+    "id": "air-disruption-notifications",
+    "domain": "manage",
+    "title": "Automated response, attack disruption, notifications, and alert tuning",
+    "subtitle": "Configure response readiness and reduce noise while preserving investigation visibility.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "AIR lifecycle",
+      "Attack disruption",
+      "Notifications",
+      "Alert tuning"
+    ],
+    "intro": "Automation should shorten response time without obscuring what happened. Attack disruption contains high-confidence attacks in progress; action management tracks remediation; notifications route information; alert tuning controls how expected signals appear. These functions are related but not interchangeable. The published SC-200 objectives still name AIR, so learn its remediation-level model and recognize the current lifecycle change: Microsoft states that from September 1, 2026, AIR no longer runs as a separate investigation experience or supports manual triggering; its capabilities run through Defender’s default antivirus protection stack. Older “start AIR investigation” walkthroughs therefore require interpretation rather than literal repetition in an October 2026 tenant.",
+    "sections": [
+      {
+        "title": "Understand remediation levels and the lifecycle change",
+        "body": "Full automation allows supported malicious-artifact remediation without a manual approval step; semi-automation introduces approval requirements according to the configured policy, such as core folders or all folders. Device groups are where endpoint remediation levels are associated with intended device populations. Current documentation retains these settings while announcing the retirement of standalone AIR investigation and manual invocation. For on-demand investigation, Microsoft directs operators to a full antivirus scan as needed. Use Action center to review pending decisions and completed action history, verify the relevant permissions, and inspect results. A closed alert does not prove that an expected remediation action succeeded."
+      },
+      {
+        "title": "Prepare for automatic attack disruption",
+        "body": "Attack disruption uses high-confidence correlated attack signals to contain assets and interrupt lateral movement during an active attack. It is built in rather than a playbook you write for every scenario. Its coverage and actions depend on deployed Defender products and their prerequisites: endpoint onboarding, suitable device discovery, identity sensor auditing and action permissions, or required cloud-app and mailbox configuration. Review device-group automation settings and current exclusions. Semi-automation does not mean every disruption action waits for an operator; current guidance says disruption can trigger without manual approval. Investigate containment in the incident and Action center, then release or restore assets only after assessing the threat."
+      },
+      {
+        "title": "Route the right information to the right people",
+        "body": "Configure incident email rules for selected severities, sources, and device-group scope. Actions notifications report supported manual or automated response actions, while Threat analytics notifications announce new or updated research reports. Alert email notifications have their own endpoint-oriented configuration. Choose the event type that matches the requirement before adjusting recipients. Notification administration requires suitable settings permissions and respects supported scope. Send a test email, verify delivery filtering, and understand that adding a recipient does not replay all historical events. Current actions notifications do not support custom detections containing response actions, so validate the exact supported notification path."
+      },
+      {
+        "title": "Tune expected signals without broad blind spots",
+        "body": "Alert tuning can automatically hide, resolve, or, where supported, represent signals as behaviors when precise conditions match expected activity. The available actions vary by source. Hidden endpoint alerts remain available in AlertInfo and AlertEvidence, while behavior output uses its corresponding behavior tables. Built-in tuning has specific exceptions, including custom detections and custom threat intelligence, so do not assume one rule covers every alert family. Correlation groups related signals into an attack story; tuning decides how selected expected signals appear. Use narrow evidence-based conditions, review affected alerts, and preserve visibility for other assets rather than disabling an entire service’s detections."
+      }
+    ],
+    "remember": [
+      "From Sep 1, 2026, standalone/manual AIR investigation is retired in current Microsoft guidance.",
+      "Action center separates pending decisions from completed action history.",
+      "Attack disruption is built-in incident-level containment and depends on product prerequisites.",
+      "Incidents, actions, threat research reports, and alerts have different notification paths.",
+      "Alert tuning actions and exceptions depend on the alert source."
+    ],
+    "pitfalls": [
+      "Semi-automation does not universally delay automatic attack disruption.",
+      "Receiving email does not establish that remediation completed.",
+      "Hiding expected endpoint alerts is not the same as deleting their hunting evidence."
+    ],
+    "lab": {
+      "title": "Audit response and notification readiness",
+      "steps": [
+        "Read the current AIR lifecycle notice and identify any older lab steps it supersedes.",
+        "Inspect a test device group’s remediation level and relevant disruption prerequisites.",
+        "Open Action center Pending and History and explain their different purposes.",
+        "Draft an incident notification and a Threat analytics notification with appropriate scope.",
+        "Review a narrowly scoped alert-tuning rule and identify where its evidence remains searchable."
+      ],
+      "done": "You can explain which component detects, contains, records, notifies, and tunes a scenario, including the current AIR limitation."
+    },
+    "sources": [
+      {
+        "title": "Automation levels and AIR lifecycle",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/automation-levels"
+      },
+      {
+        "title": "Unified Action center",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-action-center"
+      },
+      {
+        "title": "Configure automatic attack disruption",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/configure-attack-disruption"
+      },
+      {
+        "title": "Automatic attack disruption overview",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/automatic-attack-disruption"
+      },
+      {
+        "title": "Attack disruption exclusions",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/automatic-attack-disruption-exclusions"
+      },
+      {
+        "title": "Incident email notifications",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-notifications-incidents"
+      },
+      {
+        "title": "Response-action email notifications",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-response-actions-notifications"
+      },
+      {
+        "title": "Threat analytics email notifications",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-threat-analytics-notifications"
+      },
+      {
+        "title": "Alert email notifications",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/configure-email-notifications"
+      },
+      {
+        "title": "Alert investigation and tuning",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-alerts"
+      }
+    ],
+    "questions": [
+      {
+        "id": "air-disruption-notifications-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An October 2026 training checklist tells an analyst to manually trigger a standalone AIR investigation. Which update aligns with current Microsoft guidance?",
+        "options": [
+          "Standalone AIR and manual triggering were retired from September 1, 2026; use current integrated protection workflows and a full antivirus scan when an on-demand scan is needed.",
+          "AIR is now a workbook theme.",
+          "All automated endpoint protection was removed with no replacement capabilities.",
+          "Manually rename an incident “AIR” to force an investigation."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Microsoft distinguishes retirement of that experience from the continued integrated detection and response capabilities.",
+          "A workbook display feature is unrelated to the lifecycle change.",
+          "The capabilities remain in the default antivirus protection stack.",
+          "An incident name is metadata and does not invoke a retired experience."
+        ],
+        "takeaway": "Treat the AIR lifecycle notice as a current-product correction to older labs.",
+        "source": "https://learn.microsoft.com/en-us/defender-endpoint/automation-levels"
+      },
+      {
+        "id": "air-disruption-notifications-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A manager needs notices when high-priority incidents are created and when relevant research reports are updated. Choose TWO notification configurations.",
+        "options": [
+          "Incident email notification rules with the required severity, source, and scope.",
+          "Threat analytics notification rules for the relevant reports or tags.",
+          "Only an Actions notification rule and no incident or report rules.",
+          "A workbook print setting."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Incident notifications match the operational incident event.",
+          "Correct. Threat analytics notifications match research publication and update events.",
+          "Action notifications describe response actions rather than satisfying both requested event types.",
+          "Printing does not subscribe recipients to security notifications."
+        ],
+        "takeaway": "Match each notification to the event the recipient actually needs.",
+        "source": "https://learn.microsoft.com/en-us/defender-xdr/m365d-notifications-incidents"
+      },
+      {
+        "id": "air-disruption-notifications-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A Defender endpoint group uses a supported semi-automation level. The team assumes automatic attack disruption can never contain an active attack without approval. Which assessment is correct?",
+        "options": [
+          "The assumption is too broad; current attack-disruption guidance allows triggering under semi-automation without manual approval, subject to prerequisites and exclusions.",
+          "The assumption is always correct for every response action.",
+          "Semi-automation disables all sensors.",
+          "Device groups control only dashboard colors."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Review the specific disruption action and documented configuration rather than applying the artifact-remediation approval model universally.",
+          "Different automated response mechanisms have different approval behavior.",
+          "Semi-automation is not sensor offboarding.",
+          "Device groups influence operational scope and automation settings."
+        ],
+        "takeaway": "Do not generalize one automation approval model to every containment feature.",
+        "source": "https://learn.microsoft.com/en-us/defender-xdr/configure-attack-disruption"
+      },
+      {
+        "id": "air-disruption-notifications-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "A narrowly scoped tuning rule uses Hide alert for known benign Defender for Endpoint activity. An investigator later needs to hunt the suppressed evidence. Which statement is accurate?",
+        "options": [
+          "Hidden alerts remain in AlertInfo and AlertEvidence according to current tuning documentation.",
+          "Hidden means every corresponding endpoint log is permanently deleted.",
+          "Hide alert automatically disables all future endpoint telemetry.",
+          "A hidden alert must be restored from a workbook PDF before it can be analyzed."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Queue suppression and retained hunting evidence are different concepts.",
+          "Hiding an alert is not wholesale deletion of endpoint evidence.",
+          "The tuning action does not offboard the device or stop every source event.",
+          "A PDF is not required to access retained hunting tables."
+        ],
+        "takeaway": "Understand both the queue effect and the retained evidence of a tuning action.",
+        "source": "https://learn.microsoft.com/en-us/defender-xdr/investigate-alerts"
+      }
+    ]
+  },
+  {
+    "id": "sentinel-automation",
+    "domain": "manage",
+    "title": "Sentinel automation rules and Logic Apps playbooks",
+    "subtitle": "Choose the trigger, orchestrate response, and troubleshoot each identity and workflow stage.",
+    "minutes": 18,
+    "priority": "Core",
+    "tags": [
+      "Automation rules",
+      "Playbooks",
+      "Logic Apps",
+      "SOAR"
+    ],
+    "intro": "A Sentinel automation rule decides when and under what conditions to act; a playbook performs a workflow that can coordinate multiple services. Native automation actions can handle straightforward incident changes, while Logic Apps provide richer enrichment, ticket integration, and response. SC-200 scenarios often include an avoidable mismatch: the wrong trigger, a later rule evaluating a state changed by an earlier rule, a template mistaken for an active workflow, or missing permissions for a service identity. Learn the chain from event to condition to action to authenticated connector. Current Defender case terminology and newer alert triggers also appear alongside legacy Sentinel incident terms.",
+    "sections": [
+      {
+        "title": "Choose a rule trigger and native action",
+        "body": "Automation can respond to incident creation, incident updates, or supported alert creation, with available conditions and actions depending on the trigger and portal experience. Use a native action when the requirement is simply assigning an owner, changing severity or status, tagging, or adding a task. A more complex external workflow may call a playbook. Configure narrow conditions and expiration for temporary maintenance or testing exceptions. Rule order matters: later rules evaluate the state left by earlier rules, so a severity change can prevent a later severity condition from matching. Avoid identical priorities when deterministic ordering is required."
+      },
+      {
+        "title": "Build a compatible playbook",
+        "body": "A playbook is an Azure Logic Apps workflow with a supported Sentinel or Defender trigger and authenticated connector actions. Its trigger must match the event context used by the invoking rule; an incident-trigger automation rule cannot invoke an arbitrary entity-trigger workflow as though it were incident-triggered. Current Defender creation experiences include case and enhanced alert triggers alongside legacy incident, alert, and entity options. Defender may say case while the corresponding Logic Apps connector still says Microsoft Sentinel incident. Install a template when useful, then create and configure an active workflow. For Standard Logic Apps, use a supported stateful workflow and consider network requirements."
+      },
+      {
+        "title": "Authorize execution and connector actions separately",
+        "body": "The human author needs the appropriate Logic Apps authoring role for the hosting model. Sentinel needs its Automation Contributor permission on the playbook resource group to invoke incident automation. Within the workflow, connector connections act as their configured identity and require appropriate target-system permissions. A managed identity can avoid storing a user password or client secret where supported, but it still needs authorized read or write access to the workspace and any downstream resource. A workflow that starts successfully can still fail on its first API call. Inspect the failing action and identity rather than granting broad permissions to every participant."
+      },
+      {
+        "title": "Test ordering, idempotency, and run history",
+        "body": "Test manually with harmless data before enabling broad automatic execution. Inspect Logic Apps run history, inputs, outputs, connector responses, and the resulting incident or external record. Make external synchronization idempotent where practical: an incident update should update the existing ticket rather than create duplicates repeatedly. Distinguish rule execution from completion of an external playbook action, and avoid relying on timing that the engine does not guarantee. Review portal-specific update behavior when moving older workflows into the unified experience. Monitor failed or disabled connections, stale credentials, permissions, and changing source fields as part of routine SOC operations."
+      }
+    ],
+    "remember": [
+      "Automation rule = trigger, conditions, ordered actions; playbook = Logic Apps workflow.",
+      "A workflow template must become a configured active playbook before use.",
+      "Rule and playbook triggers must be compatible.",
+      "Invocation permission and downstream connector authorization are separate.",
+      "Later automation rules can see state changes made by earlier ones."
+    ],
+    "pitfalls": [
+      "Starting a playbook does not prove all its actions completed.",
+      "Automation updates can retrigger workflows; design against loops and duplicate tickets.",
+      "Current case terminology can map to incident-named Logic Apps connector operations."
+    ],
+    "lab": {
+      "title": "Build an enrichment-only automation design",
+      "steps": [
+        "Choose a harmless incident enrichment scenario and document its trigger and conditions.",
+        "Create or inspect the compatible workflow with a read-only enrichment action.",
+        "Map human, Sentinel service, and connector identity permissions separately.",
+        "Run a controlled manual test and inspect every action in run history.",
+        "Add a narrow automation rule and validate the resulting incident comment or tag."
+      ],
+      "done": "The expected event starts exactly the intended workflow, and its run history proves the enrichment completed under the correct identity."
+    },
+    "sources": [
+      {
+        "title": "Automation rule triggers and order",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automate-incident-handling-with-automation-rules"
+      },
+      {
+        "title": "Playbook overview and use cases",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/automate-responses-with-playbooks"
+      },
+      {
+        "title": "Create and manage playbooks",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/create-playbooks"
+      },
+      {
+        "title": "Authenticate playbooks to Sentinel",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/authenticate-playbooks-to-sentinel"
+      },
+      {
+        "title": "Run playbooks",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/automation/run-playbooks"
+      }
+    ],
+    "questions": [
+      {
+        "id": "sentinel-automation-q1",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "The SOC needs all new high-severity incidents from one detection to be assigned to a designated team member and tagged. No external API calls are needed. Which design is most direct?",
+        "options": [
+          "An incident-created automation rule with matching conditions and native assignment/tag actions.",
+          "A workbook parameter that changes incident ownership.",
+          "A CEF connector that renames owners at ingestion.",
+          "An unrelated entity-trigger playbook with no invoking rule."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Native rule actions meet the stated simple incident workflow requirement.",
+          "Workbook parameters select display/query behavior rather than directly implementing this automation.",
+          "Log ingestion is not incident assignment.",
+          "An uninvoked incompatible workflow does not implement the required event-based handling."
+        ],
+        "takeaway": "Prefer the simplest supported automation action that satisfies the requirement.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/automate-incident-handling-with-automation-rules"
+      },
+      {
+        "id": "sentinel-automation-q2",
+        "type": "multi",
+        "difficulty": "Analyze",
+        "stem": "A playbook starts but fails when adding a comment to a Sentinel incident through its managed identity. Choose TWO useful checks.",
+        "options": [
+          "Inspect the failed connector action’s input, output, and authorization error in run history.",
+          "Verify the managed identity has an appropriate Sentinel write role, such as Responder, on the target workspace.",
+          "Give the human analyst Reader again and assume it changes the managed identity.",
+          "Assume successful trigger invocation proves every downstream permission is correct."
+        ],
+        "answer": [
+          0,
+          1
+        ],
+        "explanations": [
+          "Correct. Action-level diagnostics show where the workflow actually failed.",
+          "Correct. The identity performing the write needs the relevant workspace permission.",
+          "The human and managed identity are separate security principals.",
+          "Invocation and downstream API authorization are distinct checks."
+        ],
+        "takeaway": "Troubleshoot the identity executing the failed action.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/automation/authenticate-playbooks-to-sentinel"
+      },
+      {
+        "id": "sentinel-automation-q3",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "Rule A runs first and changes incident severity from High to Low. Rule B runs later and only matches High incidents. What happens when B evaluates the same creation event?",
+        "options": [
+          "B evaluates the updated Low state and does not match that severity condition.",
+          "B always sees the original High value regardless of earlier rules.",
+          "Both rules must run in parallel.",
+          "Rule order only controls the alphabetical display in the portal."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Later rules evaluate the current state after preceding rule actions.",
+          "That would ignore the documented effect of ordered execution.",
+          "Automation rules are sequenced rather than universally parallel.",
+          "Order affects execution and therefore can change outcomes."
+        ],
+        "takeaway": "Test automation with the state produced by earlier rules.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/automate-incident-handling-with-automation-rules"
+      },
+      {
+        "id": "sentinel-automation-q4",
+        "type": "single",
+        "difficulty": "Apply",
+        "stem": "An incident-created automation rule cannot select a workflow whose only Sentinel trigger is an entity trigger. What is the best correction?",
+        "options": [
+          "Create or adapt a playbook with a compatible incident/case trigger and configure its required connections and permissions.",
+          "Rename the entity-trigger workflow “Incident.”",
+          "Increase log retention until the trigger changes.",
+          "Save the entity workflow as a workbook."
+        ],
+        "answer": [
+          0
+        ],
+        "explanations": [
+          "Correct. Trigger compatibility is structural and must match the invoking context.",
+          "A display name does not change a trigger contract.",
+          "Retention does not alter Logic Apps triggers.",
+          "A workbook is not an executable response workflow."
+        ],
+        "takeaway": "Match the event contract before debugging workflow logic.",
+        "source": "https://learn.microsoft.com/en-us/azure/sentinel/automation/create-playbooks"
+      }
+    ]
+  }
+]

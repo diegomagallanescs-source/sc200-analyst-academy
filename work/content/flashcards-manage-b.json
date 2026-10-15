@@ -1,0 +1,342 @@
+[
+  {
+    "id": "fc-manage-15",
+    "domain": "manage",
+    "group": "Configure the Microsoft Sentinel SIEM and platform",
+    "front": "Optimize the Microsoft Sentinel platform, including SOC optimization recommendations",
+    "explanation": "SOC optimization translates the workspace's existing data and detections into recommendations about coverage and value. Coverage recommendations can identify a missing source, a missing detection, or both; data-value recommendations highlight opportunities to use expensive telemetry better or change its collection or storage. For exam decisions, first identify the actual gap: an enabled analytics rule cannot detect an event that never arrives, while collecting a useful log without a relevant detection leaves an operational opportunity. A lightly queried table is not automatically disposable: legal retention, a rare investigation, or another security feature can justify it. Recommendations based on similar organizations are suggestions, rather than evidence that your own organization has identical requirements. Some capabilities, including AI MITRE tagging and risk-based recommendations, are preview features, so distinguish a recommendation from an automatically enforced control.",
+    "soc": "In the Defender portal, open SOC optimization, select an optimization card, and read its observations, affected workspace, proposed action, and expected value. An authorized Sentinel engineer can follow the link to Content hub to install and configure the required content, connect a missing source, or review an eligible table's plan. Record the team's decision using the recommendation's progress, completion, or dismissal state, then verify the resulting ingestion and detection behavior. For example, a retailer already collecting domain-controller authentication events might add and tune a password-spray detection rather than discard those events for low query usage. Conversely, a verbose application-health feed with no security or retention requirement may belong in a different monitoring workspace. Review changes regularly with detection owners and compare costs, alert quality, and coverage; a cheaper configuration is useful only when required evidence remains available.",
+    "lessons": [
+      "workbooks-optimization",
+      "platform-architecture"
+    ],
+    "sources": [
+      {
+        "title": "SOC optimization recommendation types",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/soc-optimization/soc-optimization-reference"
+      },
+      {
+        "title": "Access and manage SOC optimizations",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/soc-optimization/soc-optimization-access"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-16",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Select data connectors based on data source requirements, including Windows logs and security events",
+    "explanation": "A data connector is the supported integration path between a particular source and Sentinel's storage and security content. Select it by the required events, source location, authentication, transport, expected table, and operational constraints. Microsoft cloud services may have service-to-service connectors; Windows servers commonly use agent-based collection; appliances may send Syslog or CEF through a Linux collector; an unsupported application may need a custom integration. The exam's decisive detail is often the destination schema: Windows Security Events via AMA supplies SecurityEvent, whereas Windows Forwarded Events supplies WindowsEvent. Installing a solution makes its content available, but still requires configuring its connector and source. A connector's connected status also does not prove that every needed event type is arriving. Source licensing, cloud availability, roles, and network prerequisites can change the appropriate choice.",
+    "soc": "Start in Content hub, install the relevant solution, open Data connectors, and inspect the connector's prerequisites and instructions before granting its source access. Confirm its documented table and compare that schema with the detections the SOC intends to run. Generate or locate a permitted recent source event, query the target table, and inspect the host, timestamp, and event fields rather than accepting a green status alone. For example, when an analyst needs native Windows failed-logon detections, choose and validate the SecurityEvent collection path and confirm that auditing produces failures. When a branch cannot install an agent on each Windows source, evaluate a collector with Windows Event Forwarding and plan the rule adaptations needed for WindowsEvent. Track ingestion freshness and volume per source in daily operations; a sudden fall in one branch's records merits a collection investigation before concluding that attacks stopped.",
+    "lessons": [
+      "windows-ama-wef",
+      "syslog-cef",
+      "azure-custom-ingestion"
+    ],
+    "sources": [
+      {
+        "title": "Microsoft Sentinel data connector selection",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-data-sources"
+      },
+      {
+        "title": "Find a connector and its prerequisites",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/data-connectors-reference"
+      },
+      {
+        "title": "Windows agent-based connector schemas",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-services-windows-based"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-17",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Configure collection of Windows Security events by using Windows Security Events via AMA, including data collection rules",
+    "explanation": "Windows Security Events via AMA collects selected Windows Security log records into SecurityEvent for Sentinel analysis. Azure Monitor Agent performs collection, a data collection rule defines the event selection and workspace destination, and a data collection rule association applies that configuration to machines. Keep these responsibilities separate: an installed agent with no applicable DCR is insufficient, and a permissive DCR cannot invent events that Windows audit policy never generates. All, Common, Minimal, and custom selections trade evidence coverage against volume; Minimal does not mean a complete audit trail. Custom XPath must refer to the right channel and event criteria. If the requirement instead involves general Application or System event logs, examine generic Azure Monitor Windows event collection and its Event table, rather than assuming all Windows connectors share a schema.",
+    "soc": "Install the Windows Security Events solution, open its AMA connector, and add a DCR with its resource group, destination, selected machines, and event selection. Non-Azure machines generally need Azure Arc for this extension-based path. Coordinate with endpoint administrators to enable the required audit categories and test custom XPath with Get-WinEvent before applying it broadly. For a practical password-spray use case, verify that Security event 4625 is generated and retained by the chosen filter; then query recent SecurityEvent records grouped by computer and event ID. For process-creation investigations, confirm the intended 4688 auditing and command-line configuration instead of expecting the connector to enable every source detail. When a server goes silent, check the source log, agent, DCR association, filter, connectivity, and workspace in that order. Avoid overlapping collection definitions that needlessly increase volume, and retest dependent analytics whenever the event selection changes.",
+    "lessons": [
+      "windows-ama-wef"
+    ],
+    "sources": [
+      {
+        "title": "Configure Windows agent-based data connectors",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-services-windows-based"
+      },
+      {
+        "title": "Windows Security event collection sets",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/windows-security-event-id-reference"
+      },
+      {
+        "title": "Collect generic Windows events using AMA",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-windows-events"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-18",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Plan and configure collection of Windows Security events by using Windows Event Forwarding (WEF)",
+    "explanation": "Windows Event Forwarding uses native Windows subscriptions to send selected source events to a Windows Event Collector. Sentinel then needs a second transport hop: AMA on the collector, configured through the Windows Forwarded Events connector. This architecture is useful when a central agent is acceptable but installing an agent on every source is not. Source-initiated subscriptions commonly use Group Policy to tell domain computers which collector to contact; collector-initiated arrangements have different management requirements. Forwarding success and cloud-ingestion success are separate facts. Crucially, this Sentinel connector writes to WindowsEvent even when a forwarded record originated in the Security channel. SecurityEvent-specific analytics therefore need a compatible collection path or a tested query/parser adaptation. Choose based on the topology and detection requirement, rather than the word Security in the source channel name.",
+    "soc": "Plan collector capacity, event volume, subscription scope, authentication, source-channel access, and permitted network paths with the Windows team. Enable the Windows Event Collection service, configure the subscription and appropriate source audit policy, and verify a known event in the collector's ForwardedEvents channel. Install AMA on that collector, satisfy Azure Arc requirements when applicable, associate the intended DCR, and validate the same source event in WindowsEvent. A practical branch deployment might forward selected logon events from 200 domain-joined servers to regional collectors; the SOC monitors each branch's freshness and checks subscription health if one disappears. If events are visible at the collector but absent in Sentinel, investigate the collector-to-cloud hop instead of repeatedly changing source Group Policy. If they are present in WindowsEvent but an older rule querying SecurityEvent stays quiet, repair the schema mismatch and test its entity mapping before enabling production alerting.",
+    "lessons": [
+      "windows-ama-wef"
+    ],
+    "sources": [
+      {
+        "title": "Plan WEF for intrusion detection",
+        "url": "https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/use-windows-event-forwarding-to-assist-in-intrusion-detection"
+      },
+      {
+        "title": "Windows Forwarded Events prerequisites and table",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-services-windows-based"
+      },
+      {
+        "title": "Windows Security connector destination distinctions",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/windows-security-event-id-reference"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-19",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Plan and configure Syslog via AMA and Common Event Format (CEF) via AMA connectors",
+    "explanation": "Syslog via AMA and CEF via AMA integrate Linux and appliance logs using Azure Monitor Agent, often on a Linux forwarder. Ordinary Syslog is stored in Syslog; CEF is a structured security-event format carried over Syslog and is parsed into CommonSecurityLog. Choose CEF when the source emits valid CEF and the use case needs its mapped security fields, rather than assuming a connector can turn arbitrary text into valid CEF. A DCR selects facilities, severities, and the monitored machine. Collection severity is the Syslog transport priority, which may differ from a firewall's internal threat severity. A healthy appliance-to-forwarder network connection proves only one segment; the local daemon, AMA handoff, DCR association, outbound Azure connectivity, and destination table must also work. Source format and deployment location can therefore change the right configuration.",
+    "soc": "Install the appropriate Sentinel solution, select its Syslog or CEF AMA connector, create the DCR, and select a supported Linux source or collector; an external collector typically needs Azure Arc. Configure rsyslog or syslog-ng to receive the appliance's chosen transport on its intended interface, run the documented forwarder configuration, and point the appliance at that collector. Set facilities and severities deliberately and avoid overlapping selections that collect identical traffic twice. For example, a firewall exporting CEF to local4 should produce parsed source IP, destination IP, and action fields in CommonSecurityLog; a Linux authentication service's ordinary messages belong in Syslog. Send a harmless approved test event and compare local receipt with its cloud row. If local4 informational messages never arrive while the DCR accepts only local5 errors, correct the filter. If text arrives without expected CEF fields, inspect actual CEF syntax and routing before reinstalling the entire collector.",
+    "lessons": [
+      "syslog-cef"
+    ],
+    "sources": [
+      {
+        "title": "Syslog and CEF architecture",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/cef-syslog-ama-overview"
+      },
+      {
+        "title": "Configure Syslog and CEF via AMA",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-syslog-ama"
+      },
+      {
+        "title": "Collect Syslog using Azure Monitor Agent",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/data-collection-syslog"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-20",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Configure collection of Azure activity logs by using Azure Policy and resource diagnostic settings",
+    "explanation": "Azure Activity logs describe management-plane operations, such as creating a VM or changing a resource configuration; resource logs describe service-specific activity, such as reading a Key Vault secret. The Activity log exists by default, but exporting it to Sentinel's workspace requires the appropriate diagnostic setting and produces AzureActivity records. A subscription export does not automatically enable each resource's data-plane audit logs. Diagnostic settings choose categories and destinations; Azure Policy deploys or audits those settings consistently at scale. For exam scenarios, distinguish a one-resource configuration from an estate-wide requirement, and distinguish a new-resource policy assignment from remediation of existing resources. A deployIfNotExists policy needs its managed identity and deployment permissions; policy compliance describes the intended configuration, not proof that a particular fresh event has already reached the SOC.",
+    "soc": "For a subscription, use Activity log and Export Activity Logs to select relevant categories and the Sentinel Log Analytics workspace. For individual services, configure that resource's diagnostic settings and required audit categories, checking whether resource-specific tables are available. Assign the appropriate Azure Policy or initiative at the desired scope, configure its workspace parameters and identity permissions, and create remediation tasks for existing noncompliant resources where needed. A cloud SOC investigating an unexpected network security group change can query AzureActivity for the caller, operation, resource, status, and correlation ID. A separate suspected secret-theft investigation needs Key Vault audit telemetry; an AzureActivity export alone cannot answer which secret was read. In daily operations, compare policy compliance with ingestion freshness, test an approved change, and check the actual destination. A correct policy deployed to the wrong workspace still leaves the analysts without the intended evidence.",
+    "lessons": [
+      "azure-custom-ingestion"
+    ],
+    "sources": [
+      {
+        "title": "Azure Activity log and export",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/activity-log"
+      },
+      {
+        "title": "Deploy diagnostic settings using Azure Policy",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/diagnostic-settings-policy"
+      },
+      {
+        "title": "Resource diagnostic settings and categories",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/diagnostic-settings"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-21",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Ingest threat indicators into Microsoft Sentinel",
+    "explanation": "Threat indicators associate observables such as domains, IP addresses, URLs, or hashes with suspected malicious activity. STIX describes intelligence objects; TAXII transports compatible intelligence between systems. Use the TAXII import connector when a provider offers a supported TAXII 2.0/2.1 server and collection; use the threat-intelligence upload API for a TIP or custom application that pushes STIX objects. A manual file import suits a prepared set, but does not establish continuous feed synchronization. Current indicator queries use ThreatIntelIndicators, while broader STIX objects use ThreatIntelObjects; the legacy ThreatIntelligenceIndicator table is an outdated target for new ingestion. Indicator presence is not proof of local compromise: confidence, validity, revocation, source, and actual matching telemetry determine its significance. The upload API and richer STIX management documentation include preview capabilities, so verify the feature and cloud required by a scenario.",
+    "soc": "Install the Threat Intelligence solution and configure the TAXII connector with the provider's API root, collection ID, required credentials, and polling settings. For API ingestion, authorize the application's workspace access and validate its STIX payload using the documented upload workflow. Confirm indicators in the management interface and current tables, then enable a compatible matching rule or a carefully tested hunt against local telemetry. For example, an incident analyst can add a newly discovered phishing domain and search DNS or proxy events for prior contact; a provider feed can maintain a changing set of command-and-control IPs. Retain source and validity context in the investigation, deduplicate to the current object version, and avoid acting on withdrawn intelligence. Connector ingestion rules can reduce low-value feed objects, but those rules do not filter manually created intelligence or uploads through the API. Verify both feed freshness and the health of the activity source; intelligence alone cannot reveal an unlogged connection.",
+    "lessons": [
+      "threat-intelligence"
+    ],
+    "sources": [
+      {
+        "title": "Configure TAXII import and export",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-threat-intelligence-taxii"
+      },
+      {
+        "title": "Connect a TIP using the upload API (Preview)",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/connect-threat-intelligence-upload-api"
+      },
+      {
+        "title": "Current TI tables, lifecycle, and ingestion-rule scope",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/understand-threat-intelligence"
+      },
+      {
+        "title": "ThreatIntelIndicators schema",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/threatintelindicators"
+      },
+      {
+        "title": "ThreatIntelObjects schema",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/threatintelobjects"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-22",
+    "domain": "manage",
+    "group": "Ingest data into the Microsoft Sentinel SIEM and platform",
+    "front": "Create custom log tables in the workspace to store ingested data",
+    "explanation": "A custom Log Analytics table stores records whose schema is not already served by the chosen integration. Its name ends in _CL, and its column definitions include TimeGenerated with the required datetime representation. Creating the table establishes storage, not a working sender. For the Logs Ingestion API, the DCR declares the incoming stream, optional transformation, workspace destination, and output stream pointing at the destination table. These schemas must agree after transformation; the API does not fix an incorrectly typed column merely because authentication succeeds. Choose the table plan according to the required detection and query capabilities, not only ingestion cost. The endpoint can be a direct DCR ingestion endpoint or a data collection endpoint, with architecture and private networking requirements affecting the choice. This is different from the legacy shared-key ingestion design.",
+    "soc": "In the workspace's Tables experience, create the custom table from representative JSON, inspect inferred types, and use the transformation editor where needed. Define or review the DCR's stream declaration and data flow, then grant the sending application Monitoring Metrics Publisher on that DCR for the Logs Ingestion API path. Configure its endpoint, immutable DCR ID, stream name, and Entra authentication, send a small test batch, and query the resulting table before relying on it. For example, a warehouse access application could send BadgeAccess_CL records with an event time, employee identifier, door, and result; a transform can turn its source time into TimeGenerated and remove an unnecessary payload field. The SOC can then detect repeated denied entries or correlate a physical-access event with account activity. When an application adds a new field, update both the table and DCR as needed and test compatibility; changing one contract component alone can silently lose useful detail or reject ingestion.",
+    "lessons": [
+      "azure-custom-ingestion"
+    ],
+    "sources": [
+      {
+        "title": "Create custom tables and columns",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/create-custom-table"
+      },
+      {
+        "title": "Logs Ingestion API and DCR authorization",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview"
+      },
+      {
+        "title": "DCR streams, destinations, and transformations",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-rule-structure"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-23",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Create custom detection rules by using Advanced Hunting in Microsoft Defender XDR",
+    "explanation": "A custom detection turns an Advanced Hunting query into recurring alerting and, optionally, supported response actions. The query must identify both suspicious behavior and usable evidence. For Defender data, preserve real event time; Microsoft recommends DeviceId and ReportId for endpoint enrichment and scope, and matching Timestamp/ReportId from the same event for other Defender sources. If aggregating, retain a coherent source record, for example with arg_max, rather than independently maximizing unrelated identifiers. These are evidence and enrichment requirements to understand, rather than a claim that every data source universally requires DeviceId. Continuous NRT is available only for supported single-table queries and supported operators; joins, unions, externaldata, and comments make that mode ineligible. A valid interactive multi-table hunt may therefore require a scheduled detection. Entity type, source support, permissions, and returned identifiers also determine available response actions.",
+    "soc": "In Defender Advanced Hunting, run the query over representative data, inspect matching rows, and choose Create detection rule. Configure frequency, meaningful alert details, impacted assets, scope, and only the response actions justified by tested results. For example, a detection for unusual use of a named administrative tool can return the device ID, process command line, actual event time, and event report ID so the responder can open the correct evidence. Contrast that with an email hunt: it needs mailbox or message identifiers appropriate to its chosen actions, rather than an invented endpoint ID. Keep the first rollout narrow, compare harmless administrator usage with suspicious usage, and verify whether an automatic isolation or email-removal action would target exactly the intended object. Efficient queries filter the relevant table early and retain required evidence through aggregation. After enabling the rule, review real generated alerts and any actions; saving a query successfully proves neither detection accuracy nor safe response targeting.",
+    "lessons": [
+      "xdr-custom-detections",
+      "kql-aggregation"
+    ],
+    "sources": [
+      {
+        "title": "Create custom detections: evidence, frequency, and actions",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules"
+      },
+      {
+        "title": "Custom detection purpose and capabilities",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/custom-detections-overview"
+      },
+      {
+        "title": "Advanced Hunting query practices",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-best-practices"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-24",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Manage custom detection rules in Microsoft Defender XDR",
+    "explanation": "Managing a custom detection means maintaining a running security control: its logic, scope, cadence, alert quality, and response outcomes all matter after creation. The Defender custom-detections list exposes status, timing, rule details, generated alerts, and actions, with operations to edit, run, enable, disable, or delete rules. Running a custom detection on demand resets its next execution interval, so it is not equivalent to an isolated manual hunt. Unified-portal lists can also contain Sentinel analytics rules, but available management details differ by rule type. Current per-rule custom-detection correlation settings are public preview: inclusion is the default, while exclusion may support a predictable incident workflow, subject to incident alert-grouping rules. Disabling a noisy rule stops future evaluations; classifying an existing alert or changing incident ownership does not repair the detection query.",
+    "soc": "Open Hunting > Custom detection rules, locate the rule by name or ID, and examine its last execution, scope, Triggered alerts, and Triggered actions. Reopen a questionable alert's query to reconstruct why it matched, then test a precise change against expected malicious and legitimate cases. For example, if a software deployment causes a process-based rule to alert on every workstation, inspect signer, parent process, path, and deployment scope before adding a narrow exception. If the rule has disruptive response actions, disable it while correcting an unsafe match and separately verify whether earlier actions need reversal. Conversely, a silent rule warrants checking source availability and scope before lowering its threshold. Document ownership, purpose, review date, and rollback details. Where teams manage content in repositories, the supported detection-as-code path is preview and should preserve reviewable changes rather than encourage untracked portal drift. Continue measuring coverage and action accuracy after every modification.",
+    "lessons": [
+      "xdr-custom-detections"
+    ],
+    "sources": [
+      {
+        "title": "Manage existing custom detection rules",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/custom-detection-manage"
+      },
+      {
+        "title": "Manage detection correlation settings",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/exclude-analytics-rules-correlation"
+      },
+      {
+        "title": "Repository-based custom content management",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/ci-cd-custom-content"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-25",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Configure and manage analytics rules in Microsoft Sentinel SIEM, including scheduled, near-real time (NRT), threat intelligence, and machine learning",
+    "explanation": "Sentinel analytics converts security data into alerts through several execution and detection models. Scheduled rules run KQL at an interval over a lookback window; the interval cannot exceed lookback because that would create gaps. NRT rules run every minute using ingestion-time handling and a short built-in delay, rather than being ordinary scheduled rules with a one-minute value. Threat-intelligence rules compare suitable observables against local events; machine-learning and multistage correlation infer patterns beyond a simple threshold. Legacy Fusion is disabled for workspaces onboarded to Defender and replaced by Defender XDR correlation, so portal context changes the correct configuration. Distinguish event grouping into alerts, alert grouping into incidents, and suppression that stops further rule runs temporarily. None of these substitutes for an accurate query, healthy source, and useful entity mappings.",
+    "soc": "Start with an installed rule template or a tested query, verify required tables, and configure severity, ATT&CK mappings, entity identifiers, custom details, threshold, schedule, and incident behavior. Use results simulation where available, then monitor execution health and investigation quality. For a password-spray scenario, aggregate failures across accounts over an appropriate window and ensure the threshold applies to the query's aggregate rows as intended; treating each aggregate row as an individual failed logon yields the wrong trigger. For a high-value audit event needing quick visibility, evaluate NRT eligibility and actual ingestion latency. For an intelligence IP match, verify both active indicators and network telemetry before expecting an alert. When delayed source events are missed, measure the delay and redesign the query window rather than indiscriminately suppressing repeats. In the unified portal, review current correlation settings before assuming the resulting incident will follow an older Sentinel grouping example. Keep incident creation enabled when the detection should produce actionable incidents.",
+    "lessons": [
+      "sentinel-analytics",
+      "mitre-anomalies",
+      "threat-intelligence"
+    ],
+    "sources": [
+      {
+        "title": "Scheduled analytics configuration",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/scheduled-rules-overview"
+      },
+      {
+        "title": "Near-real-time analytics behavior",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/near-real-time-rules"
+      },
+      {
+        "title": "Threat detection rule models",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/threat-detection"
+      },
+      {
+        "title": "Fusion and Defender XDR correlation transition",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/fusion"
+      },
+      {
+        "title": "Handle delayed event ingestion",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/ingestion-delay"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-26",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Analyze attack vector coverage by using the MITRE ATT&CK matrix",
+    "explanation": "MITRE ATT&CK organizes observed adversary behavior: tactics describe an objective, techniques describe a method, and subtechniques provide a more specific implementation. Sentinel's MITRE matrix links this vocabulary to active detections and available content, helping engineers identify gaps against relevant attack paths. Current coverage and simulated coverage are different: a published template or hunting query that could be configured does not establish an active detection. Even an enabled rule with an ATT&CK label needs working telemetry, appropriate scope, and tested logic before you claim coverage. A matrix cell counts mapped content; it does not measure the probability of preventing every variant of a technique. For an exam scenario, prioritize a technique relevant to the described threat and inspect its missing detection or source dependencies, rather than enabling unrelated rules simply to increase the displayed count.",
+    "soc": "Open Microsoft Sentinel > Threat management > MITRE ATT&CK in the Defender portal, select a relevant technique, and compare active items with available or recommended detections and services. Check the linked rule's actual query, table requirements, and mapping, then install or configure the missing content and validate it with an approved simulation. For example, PowerShell abuse maps to T1059.001 under Execution: a SOC might test suspicious encoded invocation logic against endpoint process telemetry, while confirming that routine management scripts do not overwhelm the queue. A second use case is tracking a ransomware attack path across execution, credential access, and lateral movement; one well-covered stage does not prove visibility into the next. Record evidence of test results and source coverage beside each claim. During daily rule reviews, use ATT&CK filters to find overlapping detections and identify places where the log source exists but no useful control consumes it.",
+    "lessons": [
+      "mitre-anomalies",
+      "workbooks-optimization"
+    ],
+    "sources": [
+      {
+        "title": "View active and simulated Sentinel ATT&CK coverage",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/mitre-coverage"
+      },
+      {
+        "title": "MITRE ATT&CK PowerShell technique T1059.001",
+        "url": "https://attack.mitre.org/techniques/T1059/001/"
+      }
+    ]
+  },
+  {
+    "id": "fc-manage-27",
+    "domain": "manage",
+    "group": "Configure detections",
+    "front": "Configure anomalies in Microsoft Sentinel",
+    "explanation": "An anomaly flags behavior that departs from a modeled baseline; it is an investigation lead, not a verdict of compromise. Sentinel's UEBA anomalies focus on unusual entity behavior, while customizable machine-learning anomaly rules evaluate particular data patterns. Source requirements, model training history, thresholds, and business changes affect the result, so a new backup process can be unusual without being malicious. The supported customization workflow for built-in ML rules is to duplicate the rule, adjust exposed parameters, and compare it in Flighting before promotion to Production. The original built-in configuration is not edited or deleted like arbitrary custom KQL. Anomalies records contain model and rule context, including reasons and status; they should not be confused with a confirmed alert or incident. An exam question about tuning a model therefore differs from one about correlation or writing a deterministic scheduled rule.",
+    "soc": "In Sentinel Analytics, inspect the anomaly rule's required sources, version, status, and permitted parameters. Duplicate a supported template, enable its customized copy in Flighting, and compare its Anomalies rows with the original using AnomalyTemplateId, RuleId, RuleStatus, and AnomalyReasons. After evidence shows the new setting is useful, promote the copy to Production; the original automatically moves to Flighting because both versions cannot be in production together. For example, a new nightly data export may make a download anomaly noisy. Compare that service account, schedule, destinations, and transfer pattern with unexpected interactive downloads before tuning a threshold. Conversely, an unusual download coupled with a risky sign-in and a new external destination warrants deeper investigation. Review baseline suitability whenever operations change, and inspect independent identity or endpoint evidence before containment. Do not build new plans around discontinued DGA anomaly models; Microsoft lists those particular detections as retired in March 2026.",
+    "lessons": [
+      "mitre-anomalies"
+    ],
+    "sources": [
+      {
+        "title": "Tune and compare anomaly rules",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/work-with-anomaly-rules"
+      },
+      {
+        "title": "Anomaly models, prerequisites, and discontinued detections",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/anomalies-reference"
+      },
+      {
+        "title": "Anomalies table fields",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/anomalies"
+      }
+    ]
+  }
+]

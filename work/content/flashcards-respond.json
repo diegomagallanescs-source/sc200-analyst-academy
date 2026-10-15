@@ -1,0 +1,443 @@
+[
+  {
+    "id": "fc-respond-01",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate threats by using Microsoft Defender for Office 365, including automatic attack disruption",
+    "explanation": "Microsoft Defender for Office 365 investigates malicious email and collaboration content by connecting message details, delivery history, attachments, URLs, recipients, and user interaction. The exam decision depends on the task: use the email entity page to explain one message, Threat Explorer to scope a campaign and take supported bulk action, and click telemetry to determine interaction. A URL appearing in a message does not prove it was clicked. Threat Explorer and Office 365 automated investigation and response require Plan 2; Plan 1 Real-time detections has a smaller action set. Distinguish post-delivery cleanup through zero-hour auto purge from AIR investigation and from automatic attack disruption, which uses high-confidence correlated attack evidence to contain an active attack. Deleting messages alone cannot remediate stolen sessions or an executed endpoint payload.",
+    "soc": "The SOC needs to remove accessible malicious content while discovering users who already interacted. Provision the relevant licenses and response permissions, including Search and Purge or the applicable unified RBAC advanced email action permission for deletion. In Explorer, select a focused time range and filter using the message identifier, sender, URL, or campaign; inspect the email entity and latest delivery location before choosing Take action. For example, scope a fake payroll email to all recipients, validate the phishing verdict, soft-delete confirmed copies, and check remediation results. Investigate clicked recipients for session theft and endpoint activity separately. For a legitimate invoice incorrectly quarantined, verify the sender and authentication context, release the intended recipients' copies, and submit the false positive. Review AIR pending actions and attack-disruption activity instead of assuming an automated verdict means every response succeeded.",
+    "lessons": [
+      "office365-investigation",
+      "email-remediation"
+    ],
+    "sources": [
+      {
+        "title": "Threat Explorer investigation and response",
+        "url": "https://learn.microsoft.com/en-us/defender-office-365/threat-explorer-threat-hunting"
+      },
+      {
+        "title": "Office 365 automated investigation and response",
+        "url": "https://learn.microsoft.com/en-us/defender-office-365/air-about"
+      },
+      {
+        "title": "Zero-hour auto purge",
+        "url": "https://learn.microsoft.com/en-us/defender-office-365/zero-hour-auto-purge"
+      },
+      {
+        "title": "Automatic attack disruption",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/automatic-attack-disruption"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-02",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate threats or compromised entities identified by Microsoft Purview",
+    "explanation": "Microsoft Purview signals help analysts investigate exposure of sensitive information and risky behavior affecting users, files, and devices. For an exam scenario, first distinguish a DLP policy match from proof of malicious compromise: an employee can trigger a correct policy while performing approved work, whereas a compromised account might violate the same rule during exfiltration. Read the policy, matched condition, activity, data location, and available sensitive-content evidence before deciding. As of early October 2026, a built-in Defender XDR tuning rule represents DLP signals as behaviors in BehaviorInfo and BehaviorEntities, rather than generating alerts and incidents; disabling that rule restores alert representation. This change does not erase the underlying signals or disable Purview DLP enforcement. Insider Risk Management adds policy-scoped user context when its sharing prerequisites are met. Seeing alert metadata and opening matched sensitive content also require different permissions.",
+    "soc": "The SOC combines data-protection context with security evidence so that containment addresses both the attacker and exposed data. Configure alerts within the relevant Purview DLP policies, assign scoped investigation access, and grant the content-viewing role only to analysts who need it. In Purview's DLP Alerts dashboard, open the alert's events and matched conditions; in Defender, inspect supported DLP incident context or hunt behaviors according to the tuning configuration. For example, a finance spreadsheet shared publicly can require removing the share and applying the correct sensitivity label, while suspicious sign-ins by its owner justify a separate account-containment investigation. A blocked USB copy by an authorized administrator might instead require validating the exception and documenting the result. Inspect related file activity and other violations to establish scope, record what was actually exposed versus merely attempted, and verify the selected file, user, or device action completed.",
+    "lessons": [
+      "purview-graph",
+      "entra-identity"
+    ],
+    "sources": [
+      {
+        "title": "DLP investigation and October 2026 signal representation",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/dlp-investigate-alerts-defender"
+      },
+      {
+        "title": "Purview DLP Alerts dashboard, evidence and permissions",
+        "url": "https://learn.microsoft.com/en-us/purview/dlp-alerts-dashboard-get-started"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-03",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate alerts and incidents identified by Microsoft Defender for Cloud workload protections",
+    "explanation": "Defender for Cloud workload protections generate threat alerts for the protected resource type, such as virtual machines, Kubernetes workloads, or storage. These differ from posture recommendations, which identify configurations and weaknesses rather than necessarily describing an active attack. Match the response to the resource and enabled protection plan: a compromised VM process, a suspicious Kubernetes API operation, and a malicious uploaded blob need different evidence and controls. Review the alert's affected resource, activity time, entities, detection description, and remediation guidance, then pivot to the resource logs. Defender for Containers distinguishes control-plane activity from sensor-observed runtime behavior, so detection availability depends on distribution and deployed components. Resolving an alert changes its workflow state; it does not by itself stop a process, rotate an exposed secret, or remove infected storage content.",
+    "soc": "The SOC needs workload context to contain threats without disrupting unrelated services. Enable the relevant Defender plans and collection components, establish permissions to investigate and remediate the resource, and connect supported alerts to the unified investigation workflow or Sentinel as required. In Defender for Cloud, open Security alerts, inspect full details, and use Take action to review the resource context, mitigation steps, and supported Logic App response. For example, a container mining alert warrants examining the workload process and deployment source, containing the affected workload, rotating stolen credentials, and repairing the image or deployment path; simply deleting a pod can allow the controller to recreate it. A malware-scanning finding on a blob instead calls for checking the scan result, preventing downstream consumption, and following the configured deletion or quarantine workflow. Validate which automatic remediation is enabled and confirm its result before restoring access or closing the incident.",
+    "lessons": [
+      "cloud-workloads"
+    ],
+    "sources": [
+      {
+        "title": "Investigate and respond to Defender for Cloud alerts",
+        "url": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/manage-respond-alerts"
+      },
+      {
+        "title": "Container control-plane and runtime alerts",
+        "url": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/alerts-containers"
+      },
+      {
+        "title": "Defender for Storage malware scanning and response",
+        "url": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/introduction-malware-scanning"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-04",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate security risks identified by Microsoft Defender for Cloud Apps",
+    "explanation": "Defender for Cloud Apps investigates SaaS activity, anomaly detections, exposed files, and risky application access. Select the tool according to the suspected access path: use activity and anomaly context for unusual user behavior, and app governance for OAuth app permissions, consent, usage, and affected users. An impossible-travel or mass-download alert is a lead to verify against VPN use, business activity, device context, and related sign-ins, not an automatic guilty verdict. For OAuth abuse, distinguish delegated access from application access: an application permission can operate without a signed-in user, so a user's password reset alone may leave the app's grant intact. Governance actions vary by connected app and permission. File policies remain relevant to current scenarios but retire January 6, 2027; Microsoft directs file-protection migration toward Purview DLP or auto-labeling.",
+    "soc": "SOC analysts need visibility into cloud access that endpoint controls alone cannot explain. Configure the supported app connectors, assign the relevant Cloud Apps or app-governance roles, and create scoped anomaly or app policies appropriate to the monitored environment. Open the alert, inspect surrounding activity and the app's publisher, consent, permissions, and data usage, then validate the finding with the business owner through a trusted channel. For example, an unfamiliar app granted broad mail access and showing a sudden data spike warrants investigation of its consent trail, disabling or banning the app through the supported experience, and removal of unauthorized access. A legitimate travel alert from a sanctioned VPN instead supports tuning the known network context after verification. For a publicly shared sensitive document, inspect the connector's supported sharing or quarantine action, verify the governance log, and coordinate the file-policy migration rather than assuming every SaaS platform supports identical controls.",
+    "lessons": [
+      "cloud-apps"
+    ],
+    "sources": [
+      {
+        "title": "Investigate Cloud Apps anomaly alerts",
+        "url": "https://learn.microsoft.com/en-us/defender-cloud-apps/investigate-anomaly-alerts"
+      },
+      {
+        "title": "Investigate risky OAuth apps",
+        "url": "https://learn.microsoft.com/en-us/defender-cloud-apps/investigate-risky-oauth"
+      },
+      {
+        "title": "App governance permission and usage details",
+        "url": "https://learn.microsoft.com/en-us/defender-cloud-apps/app-governance-visibility-insights-view-apps"
+      },
+      {
+        "title": "Governance actions and file-policy retirement",
+        "url": "https://learn.microsoft.com/en-us/defender-cloud-apps/governance-actions"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-05",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate compromised identities that are identified by Microsoft Entra ID",
+    "explanation": "Microsoft Entra ID Protection reports risky users, risky sign-ins, and individual detections. User risk estimates account compromise; sign-in risk concerns the legitimacy of a particular authentication attempt. For the exam, select a response based on confirmed evidence and the risk type: investigate the app, IP, device, authentication details, and surrounding activity; confirm safe only after validation; confirm compromise and secure access when evidence supports it. Risk-based Conditional Access can require MFA for sign-in risk and a secure password change for user risk. Secure password change requires MFA and differs from an SSPR recovery reset, although SSPR can also remediate user risk. Dismissing a risk record does not replace credential or session remediation. For stolen sessions, revocation and application behavior matter because an existing application-issued session is not always terminated immediately by an Entra change.",
+    "soc": "The SOC uses identity evidence to stop cloud access and discover other accounts targeted by the same attack. Provide ID Protection licensing and scoped read or response roles, then configure appropriate risk-based Conditional Access policies with the identity team. In a live investigation, review the risky user and sign-in reports, pivot to sign-in logs, compare normal activity, and record the actual policy evaluation. For example, a verified corporate VPN change may justify a safe finding and named-location correction; a finance user with suspicious token activity followed by mailbox access requires blocking the attacker, revoking sessions, resetting compromised credentials, and checking authentication methods, consent, and persistence. Confirm that connected SaaS applications terminate their own sessions where necessary. For hybrid users, verify synchronization and the relevant on-premises password-change risk-remediation settings before assuming a local reset cleared cloud risk. Recheck both the risk state and observed access before restoring normal service.",
+    "lessons": [
+      "entra-identity"
+    ],
+    "sources": [
+      {
+        "title": "Investigate Entra ID Protection risk",
+        "url": "https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-investigate-risk"
+      },
+      {
+        "title": "Risk remediation, password-change flows and roles",
+        "url": "https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-remediate-unblock"
+      },
+      {
+        "title": "Revoke user access and understand session limits",
+        "url": "https://learn.microsoft.com/en-us/entra/identity/users/users-revoke-access"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-06",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate security alerts from Microsoft Defender for Identity",
+    "explanation": "Defender for Identity exposes identity attacks by connecting directory activity, authentications, queried resources, and impacted accounts to the unified incident. Investigating an alert means validating its evidence and scope, not treating every unusual authentication as compromise. Check source and destination devices, identity privileges, related activity, and whether the behavior matches an authorized administrative task. The response depends on the identity's actual account and provider: disabling an on-premises Active Directory account, revoking an Entra session, and forcing a password change have different capabilities and permissions. Current Defender identity actions can cover linked accounts through their connectors, so verify the selected scope. For AD remediation, only sensors on domain controllers execute actions. Sensor v3 always uses the domain controller's LocalSystem account; optional dedicated gMSA action-account configuration applies to v2 sensors rather than v3.",
+    "soc": "The SOC needs identity telemetry because stolen credentials can move between machines without dropping obvious malware. Deploy and monitor healthy supported sensors and integrations, grant the analyst the required response permission, and verify Settings > Identities > Microsoft Defender for Identity > Manage action accounts. Keep directory-reading permissions distinct from write-capable remediation configuration. For example, a suspicious authentication sequence followed by access to a privileged server warrants opening the identity and source-device context, checking whether the credentials were stolen, containing the implicated account and device as justified, and hunting other destinations. A scheduled identity-management job may produce an unusual directory operation that becomes expected only after verifying the job identity, source, timing, and change authorization. Record response results in the Action center and review the account in its authoritative identity system. In mixed sensor deployments, confirm the LocalSystem setting required for v3 instead of trying to fix a v3 remediation failure by adding a gMSA.",
+    "lessons": [
+      "defender-identity"
+    ],
+    "sources": [
+      {
+        "title": "Investigate Defender for Identity alerts",
+        "url": "https://learn.microsoft.com/en-us/defender-for-identity/investigate-security-alerts"
+      },
+      {
+        "title": "Supported identity remediation actions and authorization",
+        "url": "https://learn.microsoft.com/en-us/defender-for-identity/remediation-actions"
+      },
+      {
+        "title": "Sensor-version-specific action account configuration",
+        "url": "https://learn.microsoft.com/en-us/defender-for-identity/deploy/manage-action-accounts"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-07",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate and remediate alerts and incidents identified by Microsoft Sentinel",
+    "explanation": "A Sentinel incident organizes related alerts and their investigative context; the analytics rule, triggering records, mapped entities, and relevant time window explain why it exists. The exam's best next step depends on the missing fact: inspect raw events to validate detection logic, follow an account or host to establish scope, or execute the authorized response when an active threat is established. Entity mapping makes account, IP, and host relationships usable for investigation; a display name alone can be ambiguous. Bookmarks preserve useful query results and analyst context, but they do not remediate an asset. Portal matters: legacy Azure Sentinel incident investigation has its own graph and bookmark workflows, while Sentinel onboarded to Defender participates in the unified experience. Always separate a detection result, a saved evidence record, an investigation status, and a completed remediation action.",
+    "soc": "Sentinel gives the SOC a way to investigate Microsoft and third-party telemetry together. Configure the necessary data connectors and analytic-rule entity mappings before relying on incident relationships; ensure the analyst can read the relevant workspace data and has response rights for the action or playbook. Open the incident, inspect each material alert and its query results, and expand the search window to test the proposed attack sequence. For example, join a suspicious firewall connection to a host's sign-in activity and preserve the supporting query with mapped account and IP evidence. A service-account burst might match a legitimate maintenance window, while the same burst followed by unexpected privileged access requires broader containment. Run an approved playbook when it matches the evidence and verify its output and the target system's state. Document ownership, classification rationale, and remaining tasks so that another shift can reproduce the conclusion rather than merely inherit a closed queue item.",
+    "lessons": [
+      "sentinel-cases",
+      "incident-triage"
+    ],
+    "sources": [
+      {
+        "title": "Sentinel incident investigation in Azure",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/investigate-incidents"
+      },
+      {
+        "title": "Sentinel bookmarks and entity mapping",
+        "url": "https://learn.microsoft.com/en-us/azure/sentinel/bookmarks"
+      },
+      {
+        "title": "Respond using Sentinel in the Defender portal",
+        "url": "https://learn.microsoft.com/en-us/security/zero-trust/respond-incident-defender"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-08",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate incidents by using agentic AI, including embedded Microsoft Security Copilot",
+    "explanation": "Embedded Microsoft Security Copilot helps explain incident evidence through summaries, guided response, and script analysis; agentic capabilities can carry out supported investigation or triage workflows with configured triggers and permissions. Choose the capability that addresses the stated requirement: a summary for orientation, script analysis for a selected command, or a deployed agent for recurring supported work. An AI explanation is not new telemetry and a recommendation is not proof an action ran. As researched October 15, 2026, the Security Alert Triage Agent expands the Phishing Triage Agent's scope: email and collaboration capabilities are generally available, while expanded cloud and identity triage requires preview access and workload prerequisites. Do not assume every tenant has identical agents. A true-positive triage verdict can deliberately leave an incident in progress for analyst investigation and response.",
+    "soc": "The SOC uses AI to shorten repetitive interpretation while preserving accountable decisions. Provision Security Copilot capacity and access, verify underlying workload permissions, then inspect an agent's requirements in Security Copilot > Security Store and finish its configured setup under Agents. Review its identity, enabled alert types, and permitted actions before relying on autonomous runs. For example, ask embedded Copilot to explain an obfuscated PowerShell event selected from a timeline, then compare the explanation with the actual parent process, command, and network evidence. For reported phishing, inspect the triage agent's rationale and activity, verify its classification, and continue compromise scoping when it identifies a threat. Feedback should reflect checked evidence because incorrect feedback can influence later decisions. Validate generated KQL before using results and verify response outcomes in the relevant workload. Capture useful summaries in the investigation record with the supporting event identifiers, especially when handing work to an analyst who did not watch the agent session.",
+    "lessons": [
+      "security-copilot"
+    ],
+    "sources": [
+      {
+        "title": "Deploy agents and current preview scope",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/security-copilot-agents-defender"
+      },
+      {
+        "title": "Guided incident responses",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/security-copilot-m365d-guided-response"
+      },
+      {
+        "title": "Embedded script analysis",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/security-copilot-m365d-script-analysis"
+      },
+      {
+        "title": "Phishing Triage Agent verdict and follow-up behavior",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/phishing-triage-agent"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-09",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Investigate complex attacks, such as multi-stage, multi-domain, and lateral movement",
+    "explanation": "A complex attack crosses stages or domains, such as phishing, endpoint execution, credential theft, directory abuse, lateral movement, and cloud data access. Defender's correlated attack story helps reconstruct that sequence, but analysts must verify the relationships using actual events. Multi-stage means successive attack activities; multi-domain means activity crossing workload boundaries; lateral movement means gaining access to additional systems or identities. The correct exam response follows the active access path and business impact. Removing a phishing message does not stop a payload already running, and isolating one laptop does not revoke a stolen cloud session. Likewise, a graph relationship can describe possible exposure rather than evidence that the attacker traversed it. Use chronology, stable identifiers, authentication context, and source-destination evidence to distinguish demonstrated compromise from hypotheses that still need testing.",
+    "soc": "The SOC coordinates endpoint, identity, email, and cloud investigators because each sees only part of the intrusion. Ensure the relevant workloads and connectors are deployed, give responders appropriate scoped access, and use the incident or incident-case attack story and affected assets as the shared starting point. For example, trace a delivered payroll phish to a recipient's script execution, inspect that device's outbound activity, then test whether its user's identity authenticated to a file server. Investigate the destination device and any additional accounts instead of stopping at the first host. In a separate cloud-session theft scenario, correlate anomalous sign-ins with mailbox rules and file access even if endpoint telemetry is quiet. Contain verified active footholds, preserve enough evidence to explain the sequence, remove persistence and compromised access, and validate recovery across every affected domain. Record which links are proven, which telemetry is missing, and who owns each remaining question so that correlated alerts become a coherent response plan.",
+    "lessons": [
+      "incident-triage",
+      "defender-identity",
+      "sentinel-cases"
+    ],
+    "sources": [
+      {
+        "title": "Cross-workload investigation and response walkthrough",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/pilot-deploy-investigate-respond"
+      },
+      {
+        "title": "Incident-case attack story, assets and evidence",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-incident-cases"
+      },
+      {
+        "title": "Identity context and linked-account investigation",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-users"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-10",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender XDR",
+    "front": "Manage security incidents by using case management",
+    "explanation": "Case management turns an investigation into coordinated work by tracking ownership, severity, status, tasks, evidence, comments, custom fields, due dates, and resolution details. Distinguish the case owner who coordinates the response from the assignee responsible for an individual task. For the exam, choose templates when the requirement is consistent fields, statuses, and SLA policies; choose tasks when specific response work needs ownership and verification. Incident cases in the Defender portal are a recommended preview experience as of October 15, 2026, with legacy incidents still available. In the preview model, resolving or closing a case synchronizes its related incident's status, while related alerts retain their own statuses. Do not transfer a legacy closure assumption into a current-case scenario. Classification records the finding; workflow status records progress, and neither substitutes for verified recovery.",
+    "soc": "The SOC needs cases to prevent technically correct findings from being lost during shift changes or cross-team response. Grant Security Data Read for viewing and the appropriate Security Data Manage permission for managing incident cases, then configure supported case templates for required business context and response expectations. In Cases > Incident, assign the owner, capture the impacted service, create tasks with assignees and due dates, and attach relevant evidence with explanatory comments. For example, one task can require an endpoint responder to verify isolation, while another asks the identity team to invalidate compromised access and report the observed result. A third task can confirm that application owners restored service safely. Mark tasks complete only after checking their success criteria. Before closing the case, document disposition, containment and recovery evidence, residual risk, and follow-up ownership; check any alert workflow obligations separately. Consistent case history lets the next shift understand decisions without repeating the entire investigation.",
+    "lessons": [
+      "sentinel-cases"
+    ],
+    "sources": [
+      {
+        "title": "Manage incident cases, permissions and closure semantics",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/manage-incident-cases"
+      },
+      {
+        "title": "Manage incident-case tasks",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/manage-incident-case-tasks"
+      },
+      {
+        "title": "Configure case templates and SLA policies",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/manage-case-templates"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-11",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Investigate device timelines",
+    "explanation": "The device timeline is a chronological view of observed endpoint events and related alerts, useful for testing what happened before and after suspicious activity. Read process ancestry, command line, account, file creation, persistence changes, and network activity together. For an exam question asking what executed, start with process evidence; for where it connected, inspect network events and the initiating process; for organizational scope, pivot beyond the single device. DeviceProcessEvents describes process creation and associated context, while DeviceNetworkEvents describes network connections and related events. A process name alone is weak identity, and a later connection from the same device is not automatically attributable to that process. Use event timestamps and available initiating-process identifiers to correlate carefully. A device profile's Last seen value can lag newer timeline evidence, so do not declare a host offline from that label alone.",
+    "soc": "The SOC uses timelines to turn an alert title into a defensible local attack sequence. On an onboarded device, open Assets > Devices or follow the device from the incident, select Timeline, set a focused time range, and apply relevant event filters. Flag meaningful events, inspect the process tree, and use Hunt for related events to test neighboring activity. For example, an Office process spawning a script interpreter, writing a payload, and initiating an unfamiliar connection supports a stronger hypothesis than any one filename. Conversely, a signed deployment agent running a known script during an approved rollout can explain a superficially similar chain. Expand the time window to find the original download and later persistence; then hunt the relevant hash, account, or destination across other devices. Preserve timestamps, stable device identifiers, and the exact command line in the case. Avoid filtering so narrowly that you hide the first access event or treat missing telemetry as proof no activity occurred.",
+    "lessons": [
+      "endpoint-investigation"
+    ],
+    "sources": [
+      {
+        "title": "Device investigation and timeline workflow",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-machines"
+      },
+      {
+        "title": "DeviceProcessEvents schema",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-deviceprocessevents-table"
+      },
+      {
+        "title": "DeviceNetworkEvents schema",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-devicenetworkevents-table"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-12",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Perform actions on the device, including live response and collecting investigation packages",
+    "explanation": "Device response actions answer different needs: isolation limits network access, an antivirus scan looks for and remediates detected malware, an investigation package collects a structured snapshot, and live response provides an interactive remote investigation shell. Select the least disruptive action that satisfies the scenario while containing an active threat promptly. Live response is not a general-purpose unrestricted terminal; commands, operating-system support, licensing, feature settings, and basic versus advanced permissions determine what is available. Investigation packages provide useful artifacts such as processes, scheduled tasks, connections, and autoruns, but are not full forensic disk images. Some high-value assets can restrict specific actions. Current endpoint AIR guidance says the separate investigation experience and manual trigger stopped September 1, 2026; for an on-demand endpoint check, use the supported full antivirus scan rather than relying on an older manual AIR button.",
+    "soc": "The SOC needs remote response when an analyst cannot reach the physical device. Provision supported Defender for Endpoint licensing and onboarding, enable live response in Settings > Endpoints > Advanced features, enable server support where required, and assign scoped command permissions. From the device page, collect an investigation package with a reason, inspect collection status, and download the result through the supported workflow; review collection errors rather than assuming every artifact exists. For example, use the package's autoruns and scheduled-task data to examine persistence after containment. For a missing artifact or suspicious running process, start live response and use supported commands to inspect it, collect a specific file, or run an approved library script with the necessary rights. Verify platform-specific command support before adapting a Windows procedure to Linux. Review action history and preserve relevant outputs in the case, then validate the endpoint's health and access before releasing it from containment.",
+    "lessons": [
+      "endpoint-response"
+    ],
+    "sources": [
+      {
+        "title": "Device response actions and investigation packages",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/respond-machine-alerts"
+      },
+      {
+        "title": "Live response prerequisites and command permissions",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/live-response"
+      },
+      {
+        "title": "Endpoint AIR September 2026 transition",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/autoir-investigation-results"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-13",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Perform evidence and entity investigation",
+    "explanation": "Evidence investigation evaluates the artifacts supporting a detection; entity investigation expands context around the associated file, device, identity, URL, or domain. A file page can expose hashes, signatures, prevalence, related alerts, and observed devices, while a domain or URL page can connect network and email evidence where available. The exam decision depends on the question: use a stable hash to locate the same file, process relationships to explain execution, and related devices or identities to establish scope. Low prevalence, an unsigned file, or a suspicious-looking domain increases interest but is not a complete malicious verdict. A signed tool can still be abused. Separate the evidence verdict from remediation state: malicious evidence may remain pending or unsuccessfully remediated, while completed cleanup does not make the original detection a false positive. Check the supporting events before selecting the response.",
+    "soc": "The SOC uses entity pivots to avoid investigating each alert in isolation. With the appropriate scoped access, open the alert's evidence and process context, select the file or network entity, and review its organizational observations and related alerts. For example, a file named updater.exe could be a legitimate utility on hundreds of endpoints or a different binary sharing the name; compare the hash, signer, path, parent process, and observed behavior. If the suspicious hash appears on three devices, examine each device's actual execution before declaring all three compromised. For a phishing domain, inspect related messages and click or endpoint connection evidence rather than equating message presence with a user visit. Record relevant identifiers, time windows, and why the verdict is justified. Choose supported containment or file remediation only when the evidence warrants it, then verify the action result and hunt for alternate filenames, persistence, or related infrastructure that would survive a single-artifact cleanup.",
+    "lessons": [
+      "endpoint-investigation",
+      "incident-triage"
+    ],
+    "sources": [
+      {
+        "title": "Investigate files and organizational observations",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-files"
+      },
+      {
+        "title": "Endpoint alert evidence and process context",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-alerts"
+      },
+      {
+        "title": "Investigate domains and URLs",
+        "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-domain"
+      },
+      {
+        "title": "Legacy incident evidence and remediation states",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-incidents"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-14",
+    "domain": "respond",
+    "group": "Respond to alerts and incidents in Microsoft Defender for Endpoint",
+    "front": "Investigate and remediate incidents identified by automatic attack disruption",
+    "explanation": "Automatic attack disruption uses correlated high-confidence attack signals to contain compromised assets and interrupt active attack progression. Investigating its incident means understanding both the attack evidence and the precise actions already applied, then completing scoping, remediation, and recovery. The best answer varies by affected asset: containing a device, containing a user, disabling an account, and removing malicious email address different access paths. Review the Attack Disruption tag, summary card, related assets, and action details instead of assuming every entity in the incident was automatically remediated. A completed action in history proves that operation ran at that time; it does not necessarily prove the containment policy remains active now. Current preview Activities views expose policy status for that distinction. Also distinguish attack disruption, which reacts to an active attack, from predictive shielding, which applies protective measures against likely progression.",
+    "soc": "The SOC benefits from early automated containment but still owns the final recovery decision. Ensure the relevant workloads, permissions, and response prerequisites are configured, then open the tagged incident and inspect View activities and related assets. Check pending and historical operations in the Action center, and use the Activities policy-status view where available to verify whether protection remains active. For example, a device contained during lateral movement may need credential rotation, persistence removal, and investigation of destination hosts before release. A disabled compromised user may also need cloud-session revocation and application-specific follow-up. For organization-wide review, query DisruptionAndResponseEvents and filter the incident identifier; DeviceEvents containment-related records describe blocked activity resulting from containment, not necessarily the original containment operation. After validated remediation, use the supported action details to release the asset and monitor for recurrence. Record any manual reversal and business rationale so that another responder does not mistake a historical containment record for a currently protected asset.",
+    "lessons": [
+      "endpoint-response",
+      "incident-triage"
+    ],
+    "sources": [
+      {
+        "title": "Attack disruption results, current policy status and hunting",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/autoad-results"
+      },
+      {
+        "title": "Unified Action center and response history",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/m365d-action-center"
+      },
+      {
+        "title": "Automatic attack disruption overview",
+        "url": "https://learn.microsoft.com/en-us/defender-xdr/automatic-attack-disruption"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-15",
+    "domain": "respond",
+    "group": "Investigate Microsoft 365 activities to identify threats",
+    "front": "Investigate threats by using Microsoft Purview Audit",
+    "explanation": "Microsoft Purview Audit records audited user and administrative activity across Microsoft services, helping answer who performed an operation, when, and on which object. Choose Audit for activity evidence, rather than eDiscovery Content search when the requirement is to retrieve the underlying message or document. Search by time range, user, activity, workload, and available object details, then inspect the event properties rather than inferring intent from the operation name. Availability depends on auditing, the activity's support, permissions, licensing, and retention; an empty search is not proof nothing happened. Audit Standard generally provides 180-day retention for current records, while eligible Premium users receive longer retention for specified workloads and can have licensed custom policies. The license of the user generating the event matters, so a tenant's Premium subscription does not automatically give every user's every event identical retention.",
+    "soc": "The SOC needs an auditable record of cloud activity to scope compromise and explain operational changes. Verify auditing and assign Audit Reader or an appropriately scoped role group containing View-Only Audit Logs or Audit Logs; configure retention policies with authorized administrators before historical evidence expires. In Purview Audit, create a named search with a bounded UTC time range, relevant user, and activities, then inspect and export useful results. For example, after account compromise, examine mailbox-rule changes and SharePoint access around the suspicious sign-in to identify persistence and exposed content. In a separate administrator-change investigation, compare the recorded actor and operation with the approved change window. Broaden a narrow search when the attacker could use another account, activity name, or time zone. Preserve the query parameters and original records in the case and distinguish successful actions from attempted or differently classified events. A completed search job can be revisited without leaving the browser open while it runs.",
+    "lessons": [
+      "purview-graph"
+    ],
+    "sources": [
+      {
+        "title": "Search and interpret Purview audit records",
+        "url": "https://learn.microsoft.com/en-us/purview/audit-search"
+      },
+      {
+        "title": "Audit setup, roles and Standard retention",
+        "url": "https://learn.microsoft.com/en-us/purview/audit-get-started"
+      },
+      {
+        "title": "Audit retention policies and per-user licensing",
+        "url": "https://learn.microsoft.com/en-us/purview/audit-log-retention-policies"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-16",
+    "domain": "respond",
+    "group": "Investigate Microsoft 365 activities to identify threats",
+    "front": "Investigate threats by using Content search in Microsoft Purview eDiscovery",
+    "explanation": "Content search in Microsoft Purview eDiscovery finds relevant Microsoft 365 content such as messages and files across selected data sources. Use it when the exam asks to locate or collect the actual content; use Audit when it asks which user performed an activity. The current experience places content searches in the Content search eDiscovery case, replacing the retired classic Content Search experience. Scope locations and query conditions carefully: the content-search language is Keyword Query Language, now called KeyQL in current guidance, and is different from Kusto Query Language used in hunting. A search does not automatically place data on hold, and a result count is not proof that every potentially relevant item was fully indexed. Permissions, case access, source selection, indexing, and licensing determine what the investigator can search, preview, preserve, or export.",
+    "soc": "The SOC uses content search when incident response needs to inspect malicious correspondence or identify sensitive documents associated with suspected exposure. Assign the appropriate eDiscovery role group and case membership, then open the relevant case or Content Search case, create a named search, and select the users, mailboxes, sites, and other supported locations that the question requires. Build the query with the condition builder or KeyQL, run it, and review statistics and representative results before collection or export. For example, search a targeted mailbox and date range for a specific phishing subject and sender, then validate the results against the known message details. For suspected document exfiltration, scope the affected SharePoint site and content terms, while using Audit separately to determine access activity. If preservation is required, apply the appropriate hold workflow instead of treating the search as preservation. Document location exclusions and partially indexed-item choices, including export settings, so that an apparently clean result is not overstated.",
+    "lessons": [
+      "purview-graph"
+    ],
+    "sources": [
+      {
+        "title": "eDiscovery components and the Content Search case",
+        "url": "https://learn.microsoft.com/en-us/purview/edisc-features-components"
+      },
+      {
+        "title": "Create scoped eDiscovery searches with KeyQL",
+        "url": "https://learn.microsoft.com/en-us/purview/edisc-search-query"
+      },
+      {
+        "title": "eDiscovery role groups and case permissions",
+        "url": "https://learn.microsoft.com/en-us/purview/edisc-permissions"
+      }
+    ]
+  },
+  {
+    "id": "fc-respond-17",
+    "domain": "respond",
+    "group": "Investigate Microsoft 365 activities to identify threats",
+    "front": "Investigate threats by using Microsoft Graph activity logs",
+    "explanation": "Microsoft Graph activity logs record API requests processed for a tenant, helping identify which application or user called which endpoint, from where, and with what result. Choose these logs for API-level behavior; they differ from Entra sign-in logs, which describe authentication, and directory audit logs, which describe supported directory changes. For the exam, inspect RequestUri, RequestMethod, ResponseStatusCode, AppId, ServicePrincipalId, UserId, IPAddress, and relevant token or session identifiers. A 403 indicates denied access, not a successful read; a successful response alone does not reveal the content of every returned object or establish malicious intent. Application and delegated permissions also change the identity interpretation. Collection covers the resource tenant rather than revealing all activity of a multitenant app in other tenants, and ingestion delay means these logs should not be assumed to be instantaneous.",
+    "soc": "The SOC uses Graph activity to investigate consent abuse, excessive enumeration, suspicious changes, and unusual application access. With Entra ID P1 or P2 and an Azure destination, have a supported administrator configure diagnostic settings to send MicrosoftGraphActivityLogs to Log Analytics, storage, or Event Hubs; grant analysts access to the destination. In KQL, bound TimeGenerated, filter the suspected AppId or user, summarize request paths and response codes, and correlate with sign-ins using the documented identifiers when available. For example, investigate a newly consented app making repeated successful mailbox API requests from an unfamiliar network, then coordinate permission and app remediation. In contrast, a burst of 429 responses from an approved inventory tool can indicate throttling rather than exfiltration, while repeated 403 requests may show unsuccessful probing. Compare normal application behavior and retain request identifiers for follow-up. Do not assume every Microsoft-app request has a matching sign-in event or that diagnostic settings can filter individual requests before collection.",
+    "lessons": [
+      "purview-graph",
+      "cloud-apps"
+    ],
+    "sources": [
+      {
+        "title": "Graph activity logs setup, uses and limitations",
+        "url": "https://learn.microsoft.com/en-us/graph/microsoft-graph-activity-logs-overview"
+      },
+      {
+        "title": "MicrosoftGraphActivityLogs request and identity schema",
+        "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/microsoftgraphactivitylogs"
+      }
+    ]
+  }
+]
